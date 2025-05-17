@@ -12,7 +12,7 @@ endif()
 project ("FarmGame")
 
 # Add source to this project's executable.
-add_executable (FarmGame "FarmGame.cpp" "FarmGame.h")
+add_executable (FarmGame "FarmGame.cpp"  "classes/Farm.cpp" "headers/Farm.h" "classes/GameTile.cpp" "headers/GameTile.h" "headers/Inventory.h" "headers/Plot.h" "headers/Animal.h" "headers/Barley.h" "headers/Chicken.h" "headers/Entity.h" "headers/Plant.h" "headers/Sheep.h" "headers/Shop.h" "headers/Wheat.h" "classes/Animal.cpp" "classes/Barley.cpp" "classes/Chicken.cpp" "classes/Entity.cpp" "classes/Inventory.cpp" "classes/Plant.cpp" "classes/Plot.cpp" "classes/Sheep.cpp" "classes/Shop.cpp" "classes/Wheat.cpp")
 
 target_link_libraries(FarmGame D:/C++Project/FarmGame/library/sfml-graphics.lib)
 target_link_libraries(FarmGame D:/C++Project/FarmGame/library/sfml-audio.lib)
@@ -29,6 +29,7 @@ file(COPY ${CMAKE_SOURCE_DIR}/dir/sfml-window-2.dll DESTINATION ${CMAKE_BINARY_D
 include_directories(D:/C++Project/FarmGame/include)
 
 file(COPY ${CMAKE_SOURCE_DIR}/sprites DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY ${CMAKE_SOURCE_DIR}/diagrams/Silkscreen DESTINATION ${CMAKE_BINARY_DIR})
 
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
