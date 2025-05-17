@@ -7,11 +7,16 @@
 #include <string>
 #include "headers/Farm.h"
 #include "headers/GameTile.h"
-
-/*ninchompoop2*/  // (Примечание: это похоже на случайный текст, возможно, шутка или placeholder)
+#include <Windows.h>
 
 int main()
 {
+    //setlocale(LC_ALL,"Rus");
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
+    //sf::RenderWindow window(sf::VideoMode(320, 320), "FarmVille!", sf::Style::Fullscreen);
+    
     sf::RenderWindow window(sf::VideoMode(320, 320), "FarmVille!");
     Farm farm = Farm();
     int showInv = -1;      // Флаг отображения инвентаря (-1 - скрыт, 1 - показан)
@@ -20,6 +25,11 @@ int main()
     sf::Vector2f relevantWindowSize;  // Актуальный размер окна
     sf::Vector2f mousePressPos;       // Позиция нажатия мыши
     sf::Vector2f selectedGametile;    // Выбранная клетка на поле
+
+
+    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
+    window.setSize(sf::Vector2u(800, 800));
+
 
     while (window.isOpen())
     {

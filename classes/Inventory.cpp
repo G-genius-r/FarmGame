@@ -254,7 +254,7 @@ bool Inventory::show(sf::RenderWindow* window)
 void Inventory::displayInvText(sf::RenderWindow* window, std::string displayString, int x, int y)
 {
     sf::Font font;
-    font.loadFromFile("Silkscreen/slkscr.ttf");
+    font.loadFromFile("Silkscreen/arialmt.ttf");
 
     sf::Text text;
     text.setFont(font);
