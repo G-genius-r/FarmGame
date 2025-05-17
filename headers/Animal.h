@@ -12,69 +12,69 @@
 #include <iostream>
 #include "Entity.h"
 #include "Inventory.h"
-// #include "Chicken.h"
-// #include "Sheep.h"
 
+// Класс Animal, наследуемый от Entity, представляет базовый класс для всех животных в игре
 class Animal : public Entity
 {
 protected:
-    // Type of the animal
+    // Тип животного (например, "курица", "овца")
     std::string type;
 
-    // Lifespan of the animal
+    // Продолжительность жизни животного (в днях)
     int lifespan;
 
-    // Hungry status is a measure of how full an animal is, decreases daily
+    // Уровень сытости животного (уменьшается каждый день)
     int hungryStatus;
 
-    // Textures associated with the animal
+    // Текстуры, связанные с животным
     std::vector<std::string> textures;
 
 public:
-    // Constructor to initialize an Animal object
+    // Конструктор для инициализации объекта Animal
     Animal();
-    // Check if the animal has died
-    // Output: True if the animal has died, false otherwise
+
+    // Проверяет, умерло ли животное
+    // Возвращает: true, если животное умерло, иначе false
     bool checkDeath();
 
-    // Feed the animal with grain, incrementing hungry status
-    // Input: Animal - Pointer to the animal to feed
-    // Output: True if the animal is successfully fed, false otherwise
+    // Кормит животное зерном из инвентаря
+    // Параметр: Inventory - указатель на инвентарь
+    // Возвращает: true, если животное успешно накормлено, иначе false
     bool eatGrain(Inventory* Inventory);
 
-    // Getter for the age of the animal
-    // Output: The age of the animal
+    // Получает текущий возраст животного
+    // Возвращает: возраст животного
     int get_age();
 
-    // Setter for the age of the animal
-    // Input: _age - The age to set for the animal
+    // Устанавливает возраст животного
+    // Параметр: _age - возраст для установки
     void set_age(int _age);
 
-    // Virtual function to get the type of the animal (to be implemented by derived classes)
-    // Output: The type of the animal (e.g., specific animal type)
+    // Виртуальная функция для получения типа животного (должна быть реализована в производных классах)
+    // Возвращает: тип животного (например, 1 - курица, 2 - овца)
     virtual int get_type() = 0;
 
-    // Getter for the lifespan of the animal
-    // Output: The lifespan of the animal
+    // Получает продолжительность жизни животного
+    // Возвращает: продолжительность жизни
     int get_lifespan();
 
-    // Setter for the lifespan of the animal
-    // Input: _lifespan - The lifespan to set for the animal
+    // Устанавливает продолжительность жизни животного
+    // Параметр: _lifespan - продолжительность жизни для установки
     void set_lifespan(int _lifespan);
 
-    // Getter for the hungry status of the animal
-    // Output: The hungry status of the animal
+    // Получает текущий уровень сытости животного
+    // Возвращает: уровень сытости
     int get_hungryStatus();
 
-    // Setter for the hungry status of the animal
-    // Input: _hungryStatus - The hungry status to set for the animal
+    // Устанавливает уровень сытости животного
+    // Параметр: _hungryStatus - уровень сытости для установки
     void set_hungryStatus(int _hungryStatus);
 
-    bool grow() = 0;
-    // Destructor for the Animal class
+    // Виртуальная функция для роста животного (должна быть реализована в производных классах)
+    virtual bool grow() = 0;
+
+    // Деструктор класса Animal
     ~Animal();
 };
-
-
 
 #endif

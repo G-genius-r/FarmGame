@@ -2,27 +2,29 @@
 #define BARLEY_H
 #include "Plant.h"
 
+// Класс Barley, представляющий ячмень в игре (наследуется от Plant)
 class Barley : public Plant
 {
 private:
 
 public:
-    // Constructor to initialize a Barley object
+    // Конструктор для инициализации объекта Barley
     Barley();
 
-    // Implementation of the virtual function to get the type of the plant
-    // Output: The type of the plant (in this case, type 2 for Barley)
+    // Реализация виртуальной функции для получения типа растения
+    // Возвращает: тип растения (в данном случае 2 для ячменя)
     int get_type();
 
-    // Implementation of the virtual function to simulate growth of the plant
-    // Output: True if the plant has grown, false otherwise
+    // Реализация виртуальной функции для симуляции роста растения
+    // Возвращает: true, если растение выросло, иначе false
     bool grow();
 
-    // Implementation of the virtual function to water the plant
+    // Реализация виртуальной функции для полива растения
     void water();
 
-    //max watering level for barley is 4
+    // Получение максимального уровня полива для ячменя
+    // Возвращает: максимальный уровень полива (для ячменя - 4)
     int get_maxWateringLevel() { return(4); };
 };
 
-#endif#pragma once
+#endif

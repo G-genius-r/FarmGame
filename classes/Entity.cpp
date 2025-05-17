@@ -1,94 +1,94 @@
 #include "../headers/Entity.h"
 
-// Constructor for Entity class
+// Конструктор класса Entity
 Entity::Entity() {
-    // Default constructor, no specific initialization needed for Entity
+    // Конструктор по умолчанию, не требует специальной инициализации
 }
 
-// Function to get the growth stage of the entity
+// Получение текущей стадии роста сущности
 int Entity::get_growthStage() {
-    return growthStage; // Return the growth stage
+    return growthStage; // Возвращает стадию роста
 }
 
-// Function to get the watering level of the entity
+// Получение уровня полива сущности
 int Entity::get_isWatered() {
-    return wateringLevel; // Return the watering level
+    return wateringLevel; // Возвращает уровень полива
 }
 
-// Function to set the growth stage of the entity
+// Установка стадии роста сущности
 void Entity::set_growthStage(int _growthStage) {
-    growthStage = _growthStage; // Set the growth stage
+    growthStage = _growthStage; // Устанавливает стадию роста
 }
 
-// Function to set the watering level of the entity
+// Установка уровня полива сущности
 void Entity::set_isWatered(int _wateringLevel) {
-    wateringLevel = _wateringLevel; // Set the watering level
+    wateringLevel = _wateringLevel; // Устанавливает уровень полива
 }
 
-// Function to get the number of eggs (not applicable for all entities)
+// Получение количества яиц (не для всех сущностей)
 int Entity::getEggs() {
-    std::cout << "Cannot get eggs, entity is not a chicken" << std::endl;
-    return 0; // Return 0 as it's not a chicken
+    std::cout << "Нельзя получить яйца - сущность не является курицей" << std::endl;
+    return 0; // Возвращает 0, так как это не курица
 }
 
-// Function to get the presence of wool (not applicable for all entities)
+// Проверка наличия шерсти (не для всех сущностей)
 bool Entity::getWool() {
-    std::cout << "Cannot get wool, entity is not a sheep" << std::endl;
-    return 0; // Return false as it's not a sheep
+    std::cout << "Нельзя получить шерсть - сущность не является овцой" << std::endl;
+    return 0; // Возвращает false, так как это не овца
 }
 
-// Function to set the number of eggs (not applicable for all entities)
+// Установка количества яиц (не для всех сущностей)
 void Entity::setEggs(int _Eggs) {
-    _Eggs = isPlant; // Incorrect assignment, likely meant to be isPlant = _Eggs;
+    _Eggs = isPlant; // Некорректное присваивание (вероятно, должно быть isPlant = _Eggs)
     isPlant = _Eggs;
-    std::cout << "Cannot get eggs, entity is not a chicken" << std::endl;
+    std::cout << "Нельзя установить яйца - сущность не является курицей" << std::endl;
 }
 
-// Function to set the presence of wool (not applicable for all entities)
+// Установка наличия шерсти (не для всех сущностей)
 void Entity::setWool(bool _Wool) {
-    _Wool = isPlant; // Incorrect assignment, likely meant to be isPlant = _Wool;
+    _Wool = isPlant; // Некорректное присваивание (вероятно, должно быть isPlant = _Wool)
     isPlant = _Wool;
-    std::cout << "Cannot set wool, entity is not a sheep" << std::endl;
+    std::cout << "Нельзя установить шерсть - сущность не является овцой" << std::endl;
 }
 
-// Function to set whether the entity is a plant or not
+// Установка флага "является растением"
 void Entity::set_isPlant(bool _isPlant) {
-    isPlant = _isPlant; // Set the flag for being a plant
+    isPlant = _isPlant; // Устанавливает флаг растения
 }
 
-// Function to set whether the entity is an animal or not
+// Установка флага "является животным"
 void Entity::set_isAnimal(bool _isAnimal) {
-    isAnimal = _isAnimal; // Set the flag for being an animal
+    isAnimal = _isAnimal; // Устанавливает флаг животного
 }
 
-// Function to get whether the entity is a plant or not
+// Проверка, является ли сущность растением
 bool Entity::get_isPlant() {
-    return isPlant; // Return whether the entity is a plant
+    return isPlant; // Возвращает флаг растения
 }
 
-// Function to get whether the entity is an animal or not
+// Проверка, является ли сущность животным
 bool Entity::get_isAnimal() {
-    return isAnimal; // Return whether the entity is an animal
+    return isAnimal; // Возвращает флаг животного
 }
 
-// Function to simulate eating grain (not applicable for all entities)
+// Симуляция поедания зерна (не для всех сущностей)
 bool Entity::eatGrain(Inventory*) {
-    return false; // Return false as eating grain is not applicable
+    return false; // Возвращает false, так как поедание зерна не применимо
 }
 
-// Function to get the correct filename for the entity's texture
+// Получение корректного имени файла текстуры для сущности
 std::string Entity::getCorrectFilename()
 {
-    if (this->get_type() == 4) { // if it's a sheep, a special case for sheep
-        if (this->getWool() == true) // has wool
-            return(textureFilenames[1]); // Return wool texture filename
+    if (this->get_type() == 4) { // Если это овца (специальный случай)
+        if (this->getWool() == true) // Если есть шерсть
+            return(textureFilenames[1]); // Возвращает текстуру с шерстью
         else
-            return(textureFilenames[0]); // Return regular texture filename
+            return(textureFilenames[0]); // Возвращает обычную текстуру
     }
-    return(textureFilenames[growthStage]); // Return texture based on growth stage
+    return(textureFilenames[growthStage]); // Возвращает текстуру в зависимости от стадии роста
 }
 
-// Function to simulate fertilizing (not applicable for all entities)
+// Симуляция удобрения (не для всех сущностей)
 void Entity::fertilise(Inventory* Inventory) {
-    Inventory->eggsAdd(0); // Add eggs (incorrectly named function, should be wool or plant-related)
+    Inventory->eggsAdd(0); // Добавляет яйца (некорректное название функции, должно быть связано с шерстью или растениями)
 }

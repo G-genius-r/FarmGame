@@ -4,38 +4,43 @@
 
 #include "Animal.h"
 
-// Chicken class, inheriting from Animal
+// Класс Chicken (Курица), наследуемый от Animal
 class Chicken : public Animal
 {
 private:
-    int eggs; // Number of eggs the chicken has
+    int eggs; // Количество яиц у курицы
 
 public:
-    // Constructor for Chicken
+    // Конструктор класса Chicken
     Chicken();
 
-    // Lay an egg and return true if successful, false otherwise
+    // Отложить яйцо
+    // Возвращает: true если успешно, false если достигнут максимум яиц
     bool layEgg();
 
-    // Get the current number of eggs
+    // Получить текущее количество яиц
     int getEggs();
 
-    // Set the number of eggs for the chicken
+    // Установить количество яиц
+    // Параметр: _eggs - количество яиц для установки
     void setEggs(int _eggs);
 
-    // Get the type of the entity (inherited from Animal)
+    // Получить тип сущности (переопределение виртуальной функции)
+    // Возвращает: тип курицы (константное значение)
     int get_type();
 
-    // Simulate growth of the chicken (inherited from Animal)
+    // Симулировать рост курицы (переопределение виртуальной функции)
+    // Возвращает: true если рост произошел
     bool grow();
 
-    // Simulate watering the chicken (inherited from Animal)
+    // Полить курицу (переопределение виртуальной функции)
     void water();
 
-    // Get the maximum watering level for the chicken
+    // Получить максимальный уровень полива
+    // Возвращает: 3 (максимальный уровень полива для курицы)
     int get_maxWateringLevel() { return 3; };
 
-    // Destructor for Chicken
+    // Деструктор класса Chicken
     ~Chicken() {};
 };
 

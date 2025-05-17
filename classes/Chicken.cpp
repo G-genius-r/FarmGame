@@ -1,74 +1,74 @@
 #include "../headers/Chicken.h"
 
-// Constructor for Chicken class
+// Конструктор класса Chicken
 Chicken::Chicken() {
-    eggs = 0; // Initialize egg count to 0
-    growthStage = 0; // Initialize growth stage to 0
-    lifespan = 10; // Set the lifespan of the chicken
+    eggs = 0; // Инициализация количества яиц значением 0
+    growthStage = 0; // Инициализация стадии роста значением 0
+    lifespan = 10; // Установка продолжительности жизни курицы
     for (int i = 0; i < 11; i++) {
-        textureFilenames.push_back("sprites/chickenSprite/chickenSprite1.png"); // Add chicken sprite filenames
+        textureFilenames.push_back("sprites/chickenSprite/chickenSprite1.png"); // Добавление имен файлов спрайтов курицы
     }
-    isAnimal = true; // Set isAnimal to true
-    isPlant = false; // Set isPlant to false
-    hungryStatus = 0; // Initialize hungry status to 0
-    wateringLevel = 0; // Initialize watering level to 0
+    isAnimal = true; // Установка isAnimal в true
+    isPlant = false; // Установка isPlant в false
+    hungryStatus = 0; // Инициализация уровня голода значением 0
+    wateringLevel = 0; // Инициализация уровня полива значением 0
 }
 
-// Function to get the type of the animal (inherited from Animal class)
+// Функция для получения типа животного (унаследована от класса Animal)
 int Chicken::get_type() {
-    return 3; // Return the type for Chicken
+    return 3; // Возвращает тип для курицы
 }
 
-// Function to simulate the chicken laying eggs
+// Функция для симуляции откладывания яиц курицей
 bool Chicken::layEgg() {
     if (eggs >= 3) {
-        return false; // Return false if maximum egg count reached
+        return false; // Возвращает false, если достигнуто максимальное количество яиц
     }
     else {
-        eggs++; // Increment egg count
-        return true; // Return true after laying an egg
+        eggs++; // Увеличивает количество яиц
+        return true; // Возвращает true после откладывания яйца
     }
 }
 
-// Function to get the number of eggs the chicken has
+// Функция для получения количества яиц у курицы
 int Chicken::getEggs() {
-    return eggs; // Return the egg count
+    return eggs; // Возвращает количество яиц
 }
 
-// Function to set the number of eggs for the chicken
+// Функция для установки количества яиц для курицы
 void Chicken::setEggs(int _eggs) {
-    eggs = _eggs; // Set the egg count
+    eggs = _eggs; // Устанавливает количество яиц
 }
 
-// Function to simulate the growth of the chicken
+// Функция для симуляции роста курицы
 bool Chicken::grow() {
-    // For animals, the grow function does not change sprite
+    // Для животных функция grow не меняет спрайт
 
-    // Check conditions for laying eggs
+    // Проверка условий для откладывания яиц
     if (wateringLevel == 3 && hungryStatus == 3) {
         layEgg();
-        std::cout << "A chicken has laid an egg" << std::endl;
+        std::cout << "Курица отложила яйцо" << std::endl;
     }
 
-    wateringLevel--; // Decrease watering level
+    wateringLevel--; // Уменьшает уровень полива
     if (wateringLevel < 0) wateringLevel = 0;
 
-    hungryStatus--; // Decrease hungry status
+    hungryStatus--; // Уменьшает уровень голода
     if (hungryStatus < 0) hungryStatus = 0;
 
-    growthStage++; // Increment growth stage
-    std::cout << "A chicken has grown to age: " << growthStage << std::endl;
-    return true; // Return true to indicate growth
+    growthStage++; // Увеличивает стадию роста
+    std::cout << "Курица выросла до возраста: " << growthStage << std::endl;
+    return true; // Возвращает true для подтверждения роста
 }
 
-// Function to simulate providing water to the chicken
+// Функция для симуляции полива курицы
 void Chicken::water() {
     if (wateringLevel < 3) {
-        wateringLevel++; // Increment watering level
-        std::cout << "Chicken watered to hydration level: " << wateringLevel << std::endl;
+        wateringLevel++; // Увеличивает уровень полива
+        std::cout << "Уровень полива курицы: " << wateringLevel << std::endl;
         return;
     }
     else {
-        std::cout << "Watering level = " << wateringLevel << " (chicken has been watered)" << std::endl;
+        std::cout << "Уровень полива = " << wateringLevel << " (курица уже полита)" << std::endl;
     }
 }

@@ -5,42 +5,41 @@
 #include "../headers/Farm.h"
 #include <vector>
 
-// Constructor for Farm class
+// Конструктор класса Farm
 Farm::Farm()
 {
-    gridLength = 10; // Set the grid length
-    dayCounter = 0; // Initialize day counter
-    setBackTiles(); // Set the background tiles
-    setPlots(); // Set the farm plots
-    shop = new Shop(); // Initialize the shop
-    inventory = new Inventory(); // Initialize the inventory
-    help_x = 20; // Set help x-coordinate
-    help_y = 0; // Set help y-coordinate
+    gridLength = 10; // Установка размера сетки
+    dayCounter = 0;  // Инициализация счетчика дней
+    setBackTiles();  // Создание фоновых клеток
+    setPlots();      // Создание участков земли
+    shop = new Shop(); // Инициализация магазина
+    inventory = new Inventory(); // Инициализация инвентаря
+    help_x = 20;     // Позиция меню помощи по X
+    help_y = 0;      // Позиция меню помощи по Y
 }
 
-// Function to set the farm plots
+// Создание участков земли
 void Farm::setPlots()
 {
-    plots.clear(); // Clear existing plots
-    sf::Vector2f start(2, 3); // Set the starting position for plots
-    sf::Vector2f end(7, 6); // Set the ending position for plots
+    plots.clear(); // Очистка существующих участков
+    sf::Vector2f start(2, 3); // Начальная координата участков
+    sf::Vector2f end(7, 6);   // Конечная координата участков
 
-    int x_size = end.x - start.x; // Calculate x size of plots
-    int y_size = end.y - start.y; // Calculate y size of plots
-    for (int x = 0; x <= x_size; x++)
+    // Создание сетки участков
+    for (int x = 0; x <= end.x - start.x; x++)
     {
         std::vector<Plot*> pRow;
-        for (int y = 0; y <= y_size; y++)
+        for (int y = 0; y <= end.y - start.y; y++)
         {
-            Plot* plotToAdd = new Plot("sprites/Transparent.png", 32 * (start.x + x), 32 * (start.y + y));
-            plotToAdd->setUpFrontSprite("sprites/Transparent.png");
-            pRow.push_back(plotToAdd);
+            Plot* plot = new Plot("sprites/Transparent.png", 32 * (start.x + x), 32 * (start.y + y));
+            plot->setUpFrontSprite("sprites/Transparent.png");
+            pRow.push_back(plot);
         }
         plots.push_back(pRow);
     }
 }
 
-// Function to set the background tiles
+// Создание фоновых клеток
 void Farm::setBackTiles()
 {
     tiles.clear();
@@ -53,152 +52,177 @@ void Farm::setBackTiles()
         }
         tiles.push_back(row);
     }
-    std::cout << "completed Farm.setUpTiles() " << std::endl;
+    std::cout << "Фоновые клетки созданы" << std::endl;
 }
 
-// Function to pass time and simulate a day on the farm
+// Переход на следующий день
 void Farm::passTime(sf::RenderWindow* window)
 {
     dayCounter++;
-    std::cout << "the farm is now on day " << dayCounter << ". Congratulations!" << std::endl;
-    for (int i = 0; i < (int)plots.size(); i++)
-    {
-        for (int j = 0; j < (int)plots[i].size(); j++)
-        {
-            if (plots[i][j]->isEmpty() == false)
-            {
-                if (plots[i][j]->checkDeath() == false)
-                {                              // if the plant has not died on this day yet:
-                    plots[i][j]->growEntity(); // entity may only grow when certain conditions are met
-                    plots[i][j]->updateSprite();
+    std::cout << "На ферме теперь день " << dayCounter << std::endl;
 
-                }
+    // Обновление всех участков
+    for (auto& row : plots)
+    {
+        for (auto& plot : row)
+        {
+            if (!plot->isEmpty() && !plot->checkDeath())
+            {
+                plot->growEntity(); // Рост растения/животного
+                plot->updateSprite();
             }
         }
     }
-    sf::RectangleShape blackScreen;
-    blackScreen.setFillColor(sf::Color::White);
-    blackScreen.setSize(sf::Vector2f(350, 350));
-    window->draw(blackScreen);
-    displayFarmText(window, "day: ", 140, 150);
+
+    // Анимация перехода дня
+    sf::RectangleShape dayScreen;
+    dayScreen.setFillColor(sf::Color::White);
+    dayScreen.setSize(sf::Vector2f(350, 350));
+    window->draw(dayScreen);
+    displayFarmText(window, "День: ", 140, 150);
     displayFarmText(window, std::to_string(dayCounter), 175, 150);
     window->display();
-    pause(2);
+    pause(2); // Пауза 2 секунды
 }
 
-/*pauses the game for a set amount of seconds*/
+// Пауза в игре
 void Farm::pause(int num_seconds)
 {
     sf::Clock clock;
-    sf::Time time = sf::seconds(0);
-    while (num_seconds > time.asSeconds())
-        time = clock.getElapsedTime();
+    while (clock.getElapsedTime().asSeconds() < num_seconds);
 }
 
-// Function to change the background sprite for a given tile
+// Изменение фонового спрайта
 bool Farm::changeBackSprite(int x, int y, std::string textureFilename)
 {
-    if (tiles[y][x]->setUpBackSprite(textureFilename))
-        return (1);
-    return (0);
+    return tiles[y][x]->setUpBackSprite(textureFilename);
 }
-//the help menu
+
+// Меню помощи
 bool Farm::get_Help(sf::RenderWindow* window)
 {
-    std::string texture_filename = "sprites/Shop_background.png";
-    if (!Help_texture.loadFromFile(texture_filename))
+    if (!Help_texture.loadFromFile("sprites/Shop_background.png"))
     {
-        std::cout << "error loading from file" << texture_filename << std::endl;
+        std::cout << "Ошибка загрузки текстуры помощи" << std::endl;
         return false;
     }
+
     Help_sprite.setTexture(Help_texture);
-    Help_sprite.setPosition(sf::Vector2f(20, 0));
+    Help_sprite.setPosition(help_x, help_y);
     window->draw(Help_sprite);
-    displayFarmText(window, "HELP MENU", help_x + 110, help_y + 20);
-    displayFarmText(window, "Press 'B' to access the shop menu.", help_x + 25, help_y + 40);
-    displayFarmText(window, "Press 'I' to access the inventory.", help_x + 25, help_y + 60);
-    displayFarmText(window, "Press 'P' to pass a day.", help_x + 25, help_y + 80);
-    displayFarmText(window, "Plants must be watered each day, and ", help_x + 25, help_y + 100);
-    displayFarmText(window, "fertilised only once in their lifetime.", help_x + 25, help_y + 120);
-    displayFarmText(window, "Animals must be watered and fed daily.", help_x + 25, help_y + 140);
-    displayFarmText(window, "To collect eggs or wool,", help_x + 25, help_y + 160);
-    displayFarmText(window, "use the harvest option.", help_x + 25, help_y + 180);
-    displayFarmText(window, "If a plant or animal has either its", help_x + 25, help_y + 200);
-    displayFarmText(window, "wateringlevel or hunger fall to zero", help_x + 25, help_y + 220);
-    displayFarmText(window, "it will perish.", help_x + 25, help_y + 240);
-    displayFarmText(window, "Chickens die after 10 days and Sheep", help_x + 25, help_y + 260);
-    displayFarmText(window, "die after 15. Good Luck!", help_x + 25, help_y + 280);
+
+    // Текст помощи
+    std::vector<std::string> helpText = {
+        "МЕНЮ ПОМОЩИ",
+        "Нажмите 'B' для открытия магазина",
+        "Нажмите 'I' для открытия инвентаря",
+        "Нажмите 'P' для перехода на следующий день",
+        "Растения нужно поливать каждый день,",
+        "удобрять только один раз за жизнь.",
+        "Животных нужно поить и кормить ежедневно.",
+        "Для сбора яиц или шерсти",
+        "используйте опцию 'Собрать'.",
+        "Если растение или животное",
+        "не получает воды или еды - оно погибнет.",
+        "Куры живут 10 дней, овцы - 15 дней.",
+        "Удачи в фермерстве!"
+    };
+
+    // Отрисовка текста помощи
+    for (size_t i = 0; i < helpText.size(); i++)
+    {
+        displayFarmText(window, helpText[i], help_x + 25, help_y + 20 + i * 20);
+    }
+
     return true;
 }
 
-// Function to display options for a selected plot
+// Отображение опций для участка
 void Farm::getPlotOptions(sf::RenderWindow* window, int pos_x, int pos_y)
 {
     pos_x -= 2;
     pos_y -= 3;
-    // std::cout<< pos_x << ", " << pos_y << std::endl;
-    if (plots[pos_x][pos_y]->isEmpty() == true)
+
+    if (plots[pos_x][pos_y]->isEmpty())
     {
-        displayFarmText(window, "This Farmplot is empty.", pos_x * 32, pos_y * 32);
-        displayFarmText(window, "Press 1 to plant wheat(Uses wheat seeds).", pos_x * 32, pos_y * 32 + 15);
-        displayFarmText(window, "Press 2 to plant barley(Uses barley seeds).", pos_x * 32, pos_y * 32 + 30);
-        displayFarmText(window, "Press 3 to place a chicken(Uses 1 chicken).", pos_x * 32, pos_y * 32 + 45);
-        displayFarmText(window, "Press 4 to place a sheep(Uses 1 sheep).", pos_x * 32, pos_y * 32 + 60);
-        return;
+        // Опции для пустого участка
+        std::vector<std::string> options = {
+            "Этот участок пуст.",
+            "1 - Посадить пшеницу (семена пшеницы)",
+            "2 - Посадить ячмень (семена ячменя)",
+            "3 - Посадить курицу (требуется курица)",
+            "4 - Посадить овцу (требуется овца)"
+        };
+        for (size_t i = 0; i < options.size(); i++)
+        {
+            displayFarmText(window, options[i], pos_x * 32, pos_y * 32 + i * 15);
+        }
     }
-    if (plots[pos_x][pos_y]->get_isAnimal() == true)
+    else if (plots[pos_x][pos_y]->get_isAnimal())
     {
-        displayFarmText(window, "Press 1 to give Water.", pos_x * 32, pos_y * 32);
-        displayFarmText(window, "Press 2 to Feed.", pos_x * 32, pos_y * 32 + 15);
-        displayFarmText(window, "Press 3 to Harvest.", pos_x * 32, pos_y * 32 + 30);
-        displayFarmText(window, "Press 4 to Slaughter.", pos_x * 32, pos_y * 32 + 45);
-        return;
+        // Опции для животных
+        std::vector<std::string> options = {
+            "1 - Дать воду",
+            "2 - Покормить",
+            "3 - Собрать (яйца/шерсть)",
+            "4 - Забить"
+        };
+        for (size_t i = 0; i < options.size(); i++)
+        {
+            displayFarmText(window, options[i], pos_x * 32, pos_y * 32 + i * 15);
+        }
     }
-    if (plots[pos_x][pos_y]->get_isPlant() == true)
+    else if (plots[pos_x][pos_y]->get_isPlant())
     {
-        displayFarmText(window, "Press 1 to Water.", pos_x * 32, pos_y * 32);
-        displayFarmText(window, "Press 2 to Fertilise.", pos_x * 32, pos_y * 32 + 15);
-        displayFarmText(window, "Press 3 to Harvest.", pos_x * 32, pos_y * 32 + 30);
-        return;
+        // Опции для растений
+        std::vector<std::string> options = {
+            "1 - Полить",
+            "2 - Удобрить",
+            "3 - Собрать урожай"
+        };
+        for (size_t i = 0; i < options.size(); i++)
+        {
+            displayFarmText(window, options[i], pos_x * 32, pos_y * 32 + i * 15);
+        }
     }
 }
 
-// Function to check if the selected tile is a plot
+// Проверка, является ли клетка участком
 bool Farm::selectedTileIsPlot(sf::Vector2f selectedGametile)
 {
-    int tile_x = (int)selectedGametile.x;
-    int tile_y = (int)selectedGametile.y;
-    if ((tile_x <= 7 && tile_x >= 2) && (tile_y <= 6 && tile_y >= 3))
-        return true;
-    return false;
+    int tile_x = selectedGametile.x;
+    int tile_y = selectedGametile.y;
+    return (tile_x >= 2 && tile_x <= 7 && tile_y >= 3 && tile_y <= 6);
 }
 
-// Function to display text on the farm
-void Farm::displayFarmText(sf::RenderWindow* window, std::string displayString, int x, int y)
+// Отображение текста на ферме
+void Farm::displayFarmText(sf::RenderWindow* window, std::string text, int x, int y)
 {
     sf::Font font;
-    font.loadFromFile("Silkscreen/slkscr.ttf");
+    if (!font.loadFromFile("Silkscreen/slkscr.ttf"))
+    {
+        std::cout << "Ошибка загрузки шрифта" << std::endl;
+        return;
+    }
 
-    sf::Text text;
-    text.setFont(font);
-    text.setString(displayString);
-    text.setCharacterSize(10);
-    text.setFillColor(sf::Color::Black);
-    text.setPosition(x, y);
-    window->draw(text);
+    sf::Text sfText;
+    sfText.setFont(font);
+    sfText.setString(text);
+    sfText.setCharacterSize(10);
+    sfText.setFillColor(sf::Color::Black);
+    sfText.setPosition(x, y);
+    window->draw(sfText);
 }
 
-// Function to draw the farm plots on the window
+// Отрисовка всех участков
 void Farm::drawPlots(sf::RenderWindow* window)
 {
-    int ySize = plots.size();
-    int xSize = plots[0].size();
-    for (int i = 0; i < ySize; i++)
+    for (const auto& row : plots)
     {
-        for (int j = 0; j < xSize; j++)
+        for (const auto& plot : row)
         {
-            window->draw(plots[i][j]->get_backSprite());
-            window->draw(plots[i][j]->get_frontSprite());
+            window->draw(plot->get_backSprite());
+            window->draw(plot->get_frontSprite());
         }
     }
 }

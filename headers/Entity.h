@@ -7,94 +7,95 @@
 #include <vector>
 #include "Inventory.h"
 
-/*The entity class represents anything that can be placed on a gametile, this includes all the plants
-and all the animals. Other feature entities may be added later too.*/
+/* Класс Entity представляет любой объект, который может быть размещен на игровой клетке.
+   Это включает все растения и животных. В дальнейшем могут быть добавлены другие объекты. */
 class Entity
 {
 protected:
-    // Growth stage of the entity
+    // Стадия роста объекта
     int growthStage;
 
-    // Level of watering for the entity
+    // Уровень полива объекта
     int wateringLevel;
 
-    // Flag indicating if the entity is an animal
+    // Флаг, указывающий, является ли объект животным
     bool isAnimal;
 
-    // Flag indicating if the entity is a plant
+    // Флаг, указывающий, является ли объект растением
     bool isPlant;
 
 public:
-    // Filenames for the textures associated with the entity
+    // Имена файлов текстур, связанных с объектом
     std::vector<std::string> textureFilenames;
 
-    // Constructor to initialize an entity object
+    // Конструктор для инициализации объекта Entity
     Entity();
 
-    // Getter for the flag indicating if the entity is a plant
-    // Output: True if the entity is a plant, false otherwise
+    // Геттер для флага, указывающего, является ли объект растением
+    // Возвращает: true, если объект является растением, иначе false
     bool get_isPlant();
 
-    // Getter for the flag indicating if the entity is an animal
-    // Output: True if the entity is an animal, false otherwise
+    // Геттер для флага, указывающего, является ли объект животным
+    // Возвращает: true, если объект является животным, иначе false
     bool get_isAnimal();
 
-    // Setter for the flag indicating if the entity is a plant
-    // Input: _isPlant - Boolean value to set if the entity is a plant
+    // Сеттер для флага, указывающего, является ли объект растением
+    // Параметр: _isPlant - булево значение, устанавливающее, является ли объект растением
     void set_isPlant(bool _isPlant);
 
-    // Setter for the flag indicating if the entity is an animal
-    // Input: _isAnimal - Boolean value to set if the entity is an animal
+    // Сеттер для флага, указывающего, является ли объект животным
+    // Параметр: _isAnimal - булево значение, устанавливающее, является ли объект животным
     void set_isAnimal(bool _isAnimal);
 
-    // Getter for the growth stage of the entity
-    // Output: The growth stage of the entity
+    // Геттер для стадии роста объекта
+    // Возвращает: стадию роста объекта
     int get_growthStage();
 
-    // Getter for the watering level of the entity
-    // Output: The watering level of the entity
+    // Геттер для уровня полива объекта
+    // Возвращает: уровень полива объекта
     int get_isWatered();
 
-    // Setter for the growth stage of the entity
-    // Input: _growthStage - The growth stage to set for the entity
+    // Сеттер для стадии роста объекта
+    // Параметр: _growthStage - стадия роста, которую нужно установить для объекта
     void set_growthStage(int _growthStage);
 
-    // Setter for the watering level of the entity
-    // Input: _wateringLevel - The watering level to set for the entity
+    // Сеттер для уровня полива объекта
+    // Параметр: _wateringLevel - уровень полива, который нужно установить для объекта
     void set_isWatered(int _wateringLevel);
 
-    // Virtual function to water the entity (to be implemented by derived classes)
+    // Виртуальная функция для полива объекта (должна быть реализована в производных классах)
     virtual void water() = 0;
 
-    // Virtual function to check if the entity has died (to be implemented by derived classes)
-    // Output: True if the entity has died, false otherwise
+    // Виртуальная функция для проверки, умер ли объект (должна быть реализована в производных классах)
+    // Возвращает: true, если объект умер, иначе false
     virtual bool checkDeath() = 0;
 
-    // Virtual function to get the type of the entity (to be implemented by derived classes)
-    // Output: The type of the entity
+    // Виртуальная функция для получения типа объекта (должна быть реализована в производных классах)
+    // Возвращает: тип объекта
     virtual int get_type() = 0;
 
-    // Virtual function to simulate growth of the entity (to be implemented by derived classes)
-    // Output: True if the entity has grown, false otherwise
+    // Виртуальная функция для симуляции роста объекта (должна быть реализована в производных классах)
+    // Возвращает: true, если объект вырос, иначе false
     virtual bool grow() = 0;
 
-    // Virtual function to get the maximum watered level of entity
-    // Output: returns the max watering level of the entity wheat:5 barley:4 ...
+    // Виртуальная функция для получения максимального уровня полива объекта
+    // Возвращает: максимальный уровень полива объекта (например, пшеница:5, ячмень:4 ...)
     virtual int get_maxWateringLevel() = 0;
 
-    // Virtual function to fertilize the entity (to be implemented by derived classes)
+    // Виртуальная функция для удобрения объекта (должна быть реализована в производных классах)
     virtual void fertilise(Inventory* Inventory);
 
-    virtual bool eatGrain(Inventory* inventory); // implemented in animal classes
+    // Виртуальная функция для поедания зерна (реализована в классах животных)
+    virtual bool eatGrain(Inventory* inventory);
 
-    // Virtual destructor for the entity class
+    // Виртуальный деструктор для класса Entity
     virtual ~Entity() {};
 
-    // Function to get the correct filename for the entity's texture
-    // Output: The correct filename for the entity's texture
+    // Функция для получения корректного имени файла текстуры объекта
+    // Возвращает: корректное имя файла текстуры объекта
     std::string getCorrectFilename();
 
-    //virtual getters and setters for the animal subclasses
+    // Виртуальные геттеры и сеттеры для подклассов животных
     virtual int getEggs();
     virtual void setEggs(int _Eggs);
     virtual bool getWool();

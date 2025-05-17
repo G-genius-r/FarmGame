@@ -3,20 +3,20 @@
 
 #define BARLEYWATER 4
 
-// Function to get the type of the plant (inherited from Plant class)
+// Функция для получения типа растения (унаследовано от класса Plant)
 int Barley::get_type()
 {
-    return 2; // Return the type for Barley
+    return 2; // Возвращает тип для ячменя
 }
 
-// Constructor for Barley class
+// Конструктор класса Barley
 Barley::Barley()
 {
-    growthStage = 0;      // Initialize growth stage to 0
-    wateringLevel = 0;    // Initialize watering level to 0
-    isFertilised = false; // Initialize isFertilised to false
+    growthStage = 0;      // Инициализация стадии роста значением 0
+    wateringLevel = 0;    // Инициализация уровня полива значением 0
+    isFertilised = false; // Инициализация состояния удобрения значением false
 
-    // Initialize texture filenames for different growth stages and watering levels
+    // Инициализация названий текстур для разных стадий роста и уровней полива
     textureFilenames.push_back("sprites/barleySprite/barley0.png");
     textureFilenames.push_back("sprites/barleySprite/barley1.png");
     textureFilenames.push_back("sprites/barleySprite/barley2.png");
@@ -26,38 +26,38 @@ Barley::Barley()
     textureFilenames.push_back("sprites/barleySprite/barley2watered.png");
     textureFilenames.push_back("sprites/barleySprite/barley3watered.png");
 
-    std::cout << "Barley plant created." << std::endl; // Display creation message
+    std::cout << "Растение ячменя создано." << std::endl; // Вывод сообщения о создании
 }
 
-// Function to simulate the growth of Barley
+// Функция для симуляции роста ячменя
 bool Barley::grow()
 {
-    /* Conditions for growth */
+    /* Условия для роста */
     if (growthStage < 3 && wateringLevel == BARLEYWATER && isFertilised)
     {
         growthStage++;
         wateringLevel--;
-        std::cout << "A barley plant grew to the next stage!" << std::endl;
-        return true; // Return true to indicate successful growth
+        std::cout << "Растение ячменя выросло на следующую стадию!" << std::endl;
+        return true; // Возвращает true при успешном росте
     }
     else if (growthStage == 3)
-        std::cout << "A barley plant is at max growth stage!" << std::endl;
+        std::cout << "Растение ячменя достигло максимальной стадии роста!" << std::endl;
 
-    return false; // Return false if growth conditions are not met
+    return false; // Возвращает false, если условия роста не выполнены
 }
 
-// Function to simulate watering the Barley plant
+// Функция для симуляции полива ячменя
 void Barley::water()
 {
     if (wateringLevel < BARLEYWATER)
     {
         wateringLevel++;
-        std::cout << "Barley plant watered to hydration level: " << wateringLevel << std::endl;
+        std::cout << "Растение ячменя полито. Уровень влаги: " << wateringLevel << std::endl;
         return;
     }
     else
     {
-        std::cout << "Watering level =" << wateringLevel << " (Barley has been watered)" << std::endl;
+        std::cout << "Уровень влаги = " << wateringLevel << " (ячмень уже полит)" << std::endl;
         return;
     }
 }

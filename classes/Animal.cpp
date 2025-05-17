@@ -1,74 +1,77 @@
 #include "../headers/Animal.h"
 
-// Constructor for Animal class
+// Конструктор класса Animal
 Animal::Animal()
 {
-    growthStage = 0;   // Initialize growth stage to 0
-    type = "";         // Initialize type to empty string
-    hungryStatus = 0;  // Initialize hungry status to 0
-    wateringLevel = 0; // Initialize watering level to 0
-    isAnimal = true;   // Set isAnimal to true
-    isPlant = false;   // Set isPlant to false
+    growthStage = 0;   // Инициализация стадии роста значением 0
+    type = "";         // Инициализация типа пустой строкой
+    hungryStatus = 0;  // Инициализация статуса голода значением 0
+    wateringLevel = 0; // Инициализация уровня полива значением 0
+    isAnimal = true;   // Установка флага животного в true
+    isPlant = false;   // Установка флага растения в false
 }
 
-// Function to feed the animal with grain
+// Функция кормления животного зерном
 bool Animal::eatGrain(Inventory* Inventory)
 {
     if (hungryStatus >= 3)
     {
-        std::cout << "Animal is already full" << std::endl;
-        // Display message to the user that the animal has not been fed
-        Inventory->animalFeedAdd(1); // Add animal feed to inventory
-        return false;                // Return false as the animal is already full
+        std::cout << "Животное уже сыто" << std::endl;
+        // Вывод сообщения пользователю, что животное не было накормлено
+        Inventory->animalFeedAdd(1); // Добавление корма в инвентарь
+        return false;                // Возврат false, так как животное уже сыто
     }
     else
     {
-        set_hungryStatus(get_hungryStatus() + 1); // Increment hungry status
-        std::cout << "Animal fed, " << 3 - (get_hungryStatus()) << " feed from full" << std::endl;
-        return true; // Return true after feeding the animal
+        set_hungryStatus(get_hungryStatus() + 1); // Увеличение статуса голода
+        std::cout << "Животное накормлено, до полного насыщения нужно "
+            << 3 - (get_hungryStatus()) << " порций корма" << std::endl;
+        return true; // Возврат true после кормления животного
     }
 }
 
-// Function to check if the animal has died
+// Функция проверки смерти животного
 bool Animal::checkDeath()
 {
-    if (this->get_growthStage() >= this->get_lifespan() || this->get_hungryStatus() == 0 || this->get_isWatered() == 0)
+    if (this->get_growthStage() >= this->get_lifespan() ||
+        this->get_hungryStatus() == 0 ||
+        this->get_isWatered() == 0)
     {
-        isAnimal = false; // Set isAnimal to false as the animal has died
-        std::cout << "An animal has died." << std::endl;
-        return true; // Return true to indicate the animal has died
+        isAnimal = false; // Установка флага животного в false при смерти
+        std::cout << "Животное умерло." << std::endl;
+        return true; // Возврат true, если животное умерло
     }
     else
     {
-        return false; // Return false if the animal is still alive
+        return false; // Возврат false, если животное живо
     }
 }
 
-// Destructor for Animal class
+// Деструктор класса Animal
 Animal::~Animal()
 {
 }
 
-// Function to get the lifespan of the animal
+// Функция получения продолжительности жизни животного
 int Animal::get_lifespan()
 {
-    return lifespan; // Return the lifespan of the animal
+    return lifespan; // Возврат продолжительности жизни животного
 }
 
-// Function to set the lifespan of the animal
+// Функция установки продолжительности жизни животного
 void Animal::set_lifespan(int _lifespan)
 {
-    lifespan = _lifespan; // Set the lifespan of the animal
+    lifespan = _lifespan; // Установка продолжительности жизни животного
 }
 
-// Function to get the hungry status of the animal
+// Функция получения статуса голода животного
 int Animal::get_hungryStatus()
 {
-    return hungryStatus; // Return the hungry status of the animal
+    return hungryStatus; // Возврат статуса голода животного
 }
 
-// Function to set the hungry status of the animal
+// Функция установки статуса голода животного
 void Animal::set_hungryStatus(int _hungryStatus)
 {
-    hungryStatus = _hungryStatus; // Set the hungry status of the animal
+    hungryStatus = _hungryStatus; // Установка статуса голода животного
 }
