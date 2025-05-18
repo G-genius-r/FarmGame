@@ -6,36 +6,39 @@ bool Shop::shopOpen(sf::RenderWindow* window, int money)
     std::string texture_filename = "sprites/Shop_background.png";
     if (!Backdrop_texture.loadFromFile(texture_filename))
     {
-        std::cout << "error loading from file" << texture_filename << std::endl;
+        std::cout << "Ошибка загрузки файла: " << texture_filename << std::endl;
         return false;
     }
     Backdrop_sprite.setTexture(Backdrop_texture);
     Backdrop_sprite.setPosition(sf::Vector2f(shop_pos_x, shop_pos_y));
     window->draw(Backdrop_sprite);
-    displayShopText(window, "SHOP", shop_pos_x + 110, shop_pos_y + 20);
-    displayShopText(window, "Money: ", shop_pos_x + 175, shop_pos_y + 20);
+    displayShopText(window, "МАГАЗИН", shop_pos_x + 110, shop_pos_y + 20);
+    displayShopText(window, "Деньги: ", shop_pos_x + 175, shop_pos_y + 20);
     displayShopText(window, std::to_string(money), shop_pos_x + 230, shop_pos_y + 20);
-    displayShopText(window, "1.Buy Wheat Seeds $2", shop_pos_x + 50, shop_pos_y + 40);
-    displayShopText(window, "2.Buy Barley Seeds $3", shop_pos_x + 50, shop_pos_y + 60);
-    displayShopText(window, "3.Buy a Chicken $15", shop_pos_x + 50, shop_pos_y + 80);
-    displayShopText(window, "4.Buy a Sheep $20", shop_pos_x + 50, shop_pos_y + 100);
-    displayShopText(window, "5.Buy Animal Feed $1", shop_pos_x + 50, shop_pos_y + 120);
-    displayShopText(window, "6.Buy Fertiliser $2", shop_pos_x + 50, shop_pos_y + 140);
-    displayShopText(window, "7.Sell Goods", shop_pos_x + 50, shop_pos_y + 160);
+    displayShopText(window, "1. Купить семена пшеницы $2", shop_pos_x + 50, shop_pos_y + 40);
+    displayShopText(window, "2. Купить семена ячменя $3", shop_pos_x + 50, shop_pos_y + 60);
+    displayShopText(window, "3. Купить курицу $15", shop_pos_x + 50, shop_pos_y + 80);
+    displayShopText(window, "4. Купить овцу $20", shop_pos_x + 50, shop_pos_y + 100);
+    displayShopText(window, "5. Купить корм для животных $1", shop_pos_x + 50, shop_pos_y + 120);
+    displayShopText(window, "6. Купить удобрения $2", shop_pos_x + 50, shop_pos_y + 140);
+    displayShopText(window, "7. Продать товары", shop_pos_x + 50, shop_pos_y + 160);
     return true;
 }
+
 void Shop::set_shopIsOpen(bool _shopIsOpen)
 {
     shopIsOpen = _shopIsOpen;
 }
+
 bool Shop::get_shopIsOpen()
 {
     return shopIsOpen;
 }
+
 void Shop::displayShopText(sf::RenderWindow* window, std::string display_string, int x, int y)
 {
     sf::Font font;
-    font.loadFromFile("Silkscreen/arialmt.ttf");
+    font.loadFromFile("Silkscreen/CyrilicOld.ttf");
 
     sf::Text text;
     text.setFont(font);
@@ -45,33 +48,40 @@ void Shop::displayShopText(sf::RenderWindow* window, std::string display_string,
     text.setPosition(x, y);
     window->draw(text);
 }
+
 Shop::Shop()
 {
     shopIsOpen = false;
     shop_pos_x = 20;
     shop_pos_y = 0;
 }
+
 bool Shop::sellGoods(Inventory* Inventory)
 {
-    /*Eggs sell for 5 money each*/
+    /* Яйца продаются по 5 денег за штуку */
     int Eggs = Inventory->getEggs();
     Inventory->eggsTake(Eggs);
     Inventory->moneyAdd(Eggs * 5);
-    /*Barley sells for 15 money each*/
+
+    /* Ячмень продается по 15 денег за штуку */
     int BarleyGrain = Inventory->getBarleyGrain();
     Inventory->barleyGrainTake(BarleyGrain);
     Inventory->moneyAdd(BarleyGrain * 15);
-    /*Wheat sells for 10 money each*/
+
+    /* Пшеница продается по 10 денег за штуку */
     int WheatGrain = Inventory->getWheatGrain();
     Inventory->wheatGrainTake(WheatGrain);
     Inventory->moneyAdd(WheatGrain * 10);
-    /*Wools sells for 10 money each*/
+
+    /* Шерсть продается по 10 денег за штуку */
     int Wool = Inventory->getWool();
     Inventory->woolTake(Wool);
     Inventory->moneyAdd(Wool * 10);
-    /*Meat sells for 5 money each*/
+
+    /* Мясо продается по 5 денег за штуку */
     int Meat = Inventory->getMeat();
     Inventory->meatTake(Meat);
     Inventory->moneyAdd(Meat * 5);
+
     return true;
 }

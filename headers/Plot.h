@@ -20,75 +20,75 @@
 #define PLOT_H
 
 
-/*the plot is a gametile that can hold an entity eg. plants and animals,
-it has specific functions that are able to access and alter the entity.*/
+/* Грядка (Plot) — это игровая плитка (GameTile), которая может содержать сущность (например, растение или животное).
+   Имеет специальные функции для доступа и изменения этой сущности. */
 class Plot : public GameTile
 {
 protected:
-    // Pointer to the entity (plant or animal) placed on the plot
+    // Указатель на сущность (растение или животное), размещённую на грядке
     Entity* entity;
 
 public:
-    // Constructor to initialize a Plot object
-    // Input: texture_filename - Filename of the texture for the plot
-    //        pos_x - X-coordinate of the position
-    //        pos_y - Y-coordinate of the position
+    // Конструктор для инициализации объекта Plot
+    // Параметры:
+    //    texture_filename - имя файла текстуры грядки
+    //    pos_x - X-координата позиции
+    //    pos_y - Y-координата позиции
     Plot(std::string texture_filename, float pos_x, float pos_y);
 
-    // Place a plant on the plot
-    // Input: _entity - Pointer to the plant entity
-    // Output: True if the plant is successfully placed, false otherwise
+    // Разместить растение на грядке
+    // Параметры:
+    //    _entity - указатель на сущность растения
+    // Возвращает: true, если растение успешно размещено, иначе false
     bool placeEntity(Entity* _entity);
-    // Place an entity on the plot
-    // Input: _entity - Pointer to the animal entity
-    // Output: True if the animal is successfully placed, false otherwise
-    // bool placeAnimal(Entity *_entity);
 
-    // Clear the plot (remove the entity from the plot)
-    // Output: True if the plot is successfully cleared, false otherwise
+    // Очистить грядку (удалить сущность)
+    // Возвращает: true, если грядка успешно очищена, иначе false
     bool clear();
 
-    // Harvest the entity from the plot and add it to the inventory
-    // Input: inventory - Pointer to the player's inventory
-    // Output: True if the entity is successfully harvested and added to the inventory, false otherwise
+    // Собрать урожай с грядки и добавить его в инвентарь
+    // Параметры:
+    //    inventory - указатель на инвентарь игрока
+    // Возвращает: true, если урожай успешно собран и добавлен, иначе false
     bool harvest(Inventory* inventory);
 
-    // Check if the plot is empty (no entity placed)
-    // Output: True if the plot is empty, false otherwise
+    // Проверить, пуста ли грядка (нет размещённой сущности)
+    // Возвращает: true, если грядка пуста, иначе false
     bool isEmpty();
 
-    // Check if the entity on the plot has died
-    // Output: True if the entity has died, false otherwise
+    // Проверить, погибла ли сущность на грядке
+    // Возвращает: true, если сущность погибла, иначе false
     bool checkDeath();
 
-    // Water the entity on the plot
+    // Полить сущность на грядке
     void water();
 
-    // Fertilize the entity on the plot
+    // Удобрить сущность на грядке
     void fertilise(Inventory* Inventory);
 
-    //feeds the animal on the plot
+    // Покормить животное на грядке
     void feed(Inventory* Inventory);
 
-    // Getter for the flag indicating if the plot contains a plant
-    // Output: True if the plot contains a plant, false otherwise
+    // Получить флаг, указывающий, находится ли растение на грядке
+    // Возвращает: true, если на грядке растение, иначе false
     bool get_isPlant();
 
-    // Getter for the flag indicating if the plot contains an animal
-    // Output: True if the plot contains an animal, false otherwise
+    // Получить флаг, указывающий, находится ли животное на грядке
+    // Возвращает: true, если на грядке животное, иначе false
     bool get_isAnimal();
 
-    // Update the sprite of the plot based on the entity type
-    // Output: True if the sprite is successfully updated, false otherwise
+    // Обновить спрайт грядки в зависимости от типа сущности
+    // Возвращает: true, если спрайт успешно обновлён, иначе false
     bool updateSprite();
 
-    // Simulate growth of the entity on the plot
-    // Output: True if the entity has grown, false otherwise
+    // Симулировать рост сущности на грядке
+    // Возвращает: true, если сущность выросла, иначе false
     bool growEntity();
 
-    // Reset the plot (clear entity and reset sprite)
+    // Сбросить грядку (очистить сущность и восстановить спрайт)
     void plotReset();
-    //function for slaughtering animals
+
+    // Функция для забоя животных
     void Slaughter(Inventory* Inventory);
 };
 

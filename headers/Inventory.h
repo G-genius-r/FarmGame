@@ -8,86 +8,88 @@
 #include <SFML/System.hpp>
 #include <iostream>
 
-/*the inventory class holds all the farm's resources and determines what
-the player is allowed to plant and what the player cannot plant. The inventory
-can be saved when the player exits the game.*/
+/*Класс Inventory хранит все ресурсы фермы и определяет,
+что игрок может посадить, а что нет. Инвентарь
+можно сохранять при выходе из игры.*/
 class Inventory
 {
 private:
-    /*resources*/
-    int money;
-    int fertiliser;
-    int animalFeed;
+    /*Ресурсы*/
+    int money;          // Деньги
+    int fertiliser;     // Удобрения
+    int animalFeed;     // Корм для животных
 
-    /*Sellable items*/
-    int wheatGrain;
-    int barleyGrain;
-    int wool;
-    int eggs;
-    int meat;
+    /*Товары для продажи*/
+    int wheatGrain;     // Зерно пшеницы
+    int barleyGrain;   // Зерно ячменя
+    int wool;          // Шерсть
+    int eggs;          // Яйца
+    int meat;          // Мясо
 
-    /*seeds*/
-    int wheatSeed;
-    int barleySeed;
+    /*Семена*/
+    int wheatSeed;      // Семена пшеницы
+    int barleySeed;    // Семена ячменя
 
-    /*animals*/
-    int sheep;
-    int chickens;
+    /*Животные*/
+    int sheep;         // Овцы
+    int chickens;      // Куры
 
-    /*specific to inventory class*/
-    sf::Texture backdrop_texture;
-    sf::Sprite  backdrop_sprite;
-    int inventoryPos_x;
-    int inventoryPos_y;
+    /*Специфичные для класса Inventory элементы*/
+    sf::Texture backdrop_texture;  // Текстура фона инвентаря
+    sf::Sprite  backdrop_sprite;   // Спрайт фона инвентаря
+    int inventoryPos_x;            // Позиция инвентаря по X
+    int inventoryPos_y;            // Позиция инвентаря по Y
 
 public:
-    /*constructor*/
+    /*Конструктор*/
     Inventory();
 
-    /*saving and loading from a file*/
-    bool saveDataToFile(const std::string& filename);
-    bool loadDataFromFile(const std::string& filename);
+    /*Сохранение и загрузка из файла*/
+    bool saveDataToFile(const std::string& filename);    // Сохранить данные в файл
+    bool loadDataFromFile(const std::string& filename);  // Загрузить данные из файла
 
-    /*functions to access and change private inventory members*/
-    void moneyAdd(int amount);
-    bool moneyTake(int amount);
-    void fertiliserAdd(int amount);
-    bool fertiliserTake(int amount);
-    void wheatGrainAdd(int amount);
-    bool wheatGrainTake(int amount);
-    void barleyGrainAdd(int amount);
-    bool barleyGrainTake(int amount);
-    void wheatSeedAdd(int amount);
-    bool wheatSeedTake(int amount);
-    void barleySeedAdd(int amount);
-    bool barleySeedTake(int amount);
-    void woolAdd(int amount);
-    bool woolTake(int amount);
-    void eggsAdd(int amount);
-    bool eggsTake(int amount);
-    void ChickenAdd(int amount);
-    bool ChickenTake(int amount);
-    void SheepAdd(int amount);
-    bool SheepTake(int amount);
-    void animalFeedAdd(int amount);
-    bool animalFeedTake(int amount);
-    void meatAdd(int amount);
-    bool meatTake(int amount);
-    //getters for sellable objects + money
+    /*Функции для доступа и изменения приватных членов инвентаря*/
+    void moneyAdd(int amount);            // Добавить деньги
+    bool moneyTake(int amount);           // Списать деньги (если возможно)
+    void fertiliserAdd(int amount);       // Добавить удобрения
+    bool fertiliserTake(int amount);      // Использовать удобрения (если возможно)
+    void wheatGrainAdd(int amount);       // Добавить зерно пшеницы
+    bool wheatGrainTake(int amount);      // Использовать зерно пшеницы
+    void barleyGrainAdd(int amount);      // Добавить зерно ячменя
+    bool barleyGrainTake(int amount);     // Использовать зерно ячменя
+    void wheatSeedAdd(int amount);        // Добавить семена пшеницы
+    bool wheatSeedTake(int amount);       // Использовать семена пшеницы
+    void barleySeedAdd(int amount);       // Добавить семена ячменя
+    bool barleySeedTake(int amount);      // Использовать семена ячменя
+    void woolAdd(int amount);            // Добавить шерсть
+    bool woolTake(int amount);           // Использовать шерсть
+    void eggsAdd(int amount);            // Добавить яйца
+    bool eggsTake(int amount);          // Использовать яйца
+    void ChickenAdd(int amount);        // Добавить кур
+    bool ChickenTake(int amount);      // Убрать кур (продать/забить)
+    void SheepAdd(int amount);         // Добавить овец
+    bool SheepTake(int amount);       // Убрать овец (продать/забить)
+    void animalFeedAdd(int amount);    // Добавить корм для животных
+    bool animalFeedTake(int amount);   // Использовать корм для животных
+    void meatAdd(int amount);         // Добавить мясо
+    bool meatTake(int amount);        // Использовать мясо
+
+    // Геттеры для товаров и денег
     int getMoney();
     int getWool();
     int getEggs();
     int getWheatGrain();
     int getBarleyGrain();
     int getMeat();
-    int getFertiliser() { return(fertiliser); };
-    int getWheatSeed() { return(wheatSeed); };
-    int getBarleySeed() { return(barleySeed); };
-    int getSheep() { return(sheep); };
-    int getChickens() { return(chickens); };
-    /*functions to show the inventory*/
-    bool show(sf::RenderWindow* window);
-    void displayInvText(sf::RenderWindow* window, std::string displayString, int x, int y);
+    int getFertiliser() { return(fertiliser); };    // Получить количество удобрений
+    int getWheatSeed() { return(wheatSeed); };      // Получить количество семян пшеницы
+    int getBarleySeed() { return(barleySeed); };    // Получить количество семян ячменя
+    int getSheep() { return(sheep); };             // Получить количество овец
+    int getChickens() { return(chickens); };       // Получить количество кур
+
+    /*Функции для отображения инвентаря*/
+    bool show(sf::RenderWindow* window);                      // Показать инвентарь
+    void displayInvText(sf::RenderWindow* window, std::string displayString, int x, int y); // Отобразить текст в инвентаре
 };
 
 #endif

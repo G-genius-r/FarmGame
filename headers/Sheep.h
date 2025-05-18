@@ -4,39 +4,39 @@
 
 #include "Animal.h"
 
-// Declare the Sheep class, which inherits from the Animal class
+// Объявление класса Sheep (Овца), который наследуется от класса Animal (Животное)
 class Sheep : public Animal
 {
 private:
-    bool wool;  // Private member variable to store if the sheep has wool
+	bool wool; // Приватная переменная-член, указывающая, есть ли у овцы шерсть
 
 public:
-    // Constructor for the Sheep class
-    Sheep();
+	// Конструктор класса Sheep
+	Sheep();
 
-    // Method to simulate the sheep producing wool
-    void produceWool();
+	// Метод для имитации производства шерсти овцой  
+	void produceWool();
 
-    // Getter method to retrieve the wool status
-    bool getWool();
+	// Геттер для получения статуса наличия шерсти  
+	bool getWool();
 
-    // Setter method to set the wool status
-    void setWool(bool _wool);
+	// Сеттер для установки статуса наличия шерсти  
+	void setWool(bool _wool);
 
-    // Method to get the type of animal (assuming it's defined in the Animal class)
-    int get_type();
+	// Метод для получения типа животного (предполагается, что он определен в классе Animal)  
+	int get_type();
 
-    // Method to simulate the growth of the sheep
-    bool grow();
+	// Метод для имитации роста овцы  
+	bool grow();
 
-    // Method to provide water to the sheep
-    void water();
+	// Метод для полива овцы  
+	void water();
 
-    // Getter method to retrieve the maximum watering level for the sheep
-    int get_maxWateringLevel() { return 3; };
+	// Геттер для получения максимального уровня полива овцы  
+	int get_maxWateringLevel() { return 3; };
 
-    // Destructor for the Sheep class
-    ~Sheep() {};
+	// Деструктор класса Sheep  
+	~Sheep() {};
 };
 
-#endif  // End of the include guard to prevent multiple inclusions
+#endif  

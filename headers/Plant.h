@@ -16,30 +16,30 @@
 class Plant : public Entity
 {
 protected:
-    // Flag indicating if the plant has been fertilized
+    // Флаг, указывающий, было ли растение удобрено
     bool isFertilised;
 
 public:
-    // Constructor to initialize a Plant object
+    // Конструктор для инициализации объекта Plant
     Plant();
 
-    // Function to fertilize the plant
+    // Функция для удобрения растения
     void fertilise(Inventory* Inventory);
 
-    // Function to check if the plant has died
-    // Output: True if the plant has died, false otherwise
+    // Функция для проверки, погибло ли растение
+    // Возвращает: true, если растение погибло, иначе false
     bool checkDeath();
 
-    // Function to get the correct filename for the plant's texture
-    // Output: The correct filename for the plant's texture
+    // Функция для получения корректного имени файла текстуры растения
+    // Возвращает: корректное имя файла текстуры растения
     std::string getCorrectFilename();
 
-    // Virtual function to get the type of the plant (to be implemented by derived classes)
-    // Output: The type of the plant (e.g., 1 for Wheat, 2 for Barley, etc.)
+    // Виртуальная функция для получения типа растения (должна быть реализована в производных классах)
+    // Возвращает: тип растения (например, 1 — Пшеница, 2 — Ячмень и т. д.)
     virtual int get_type() = 0;
 
-    // Virtual function to simulate growth of the plant (to be implemented by derived classes)
-    // Output: True if the plant has grown, false otherwise
+    // Виртуальная функция для симуляции роста растения (должна быть реализована в производных классах)
+    // Возвращает: true, если растение выросло, иначе false
     virtual bool grow() = 0;
 };
 

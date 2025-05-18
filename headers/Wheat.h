@@ -3,26 +3,27 @@
 #define WHEAT_H
 #include "Plant.h"
 
-class Wheat : public Plant
+class Wheat : public Plant  // Класс Wheat (Пшеница), наследуемый от Plant
 {
 private:
 
 public:
-    // Constructor to initialize a Wheat object
+    // Конструктор для инициализации объекта Wheat
     Wheat();
 
-    // Implementation of the virtual function to get the type of the plant
-    // Output: The type of the plant (in this case, type 1 for Wheat)
+    // Реализация виртуальной функции для получения типа растения
+    // Возвращает: тип растения (в данном случае 1 для Пшеницы)
     int get_type();
 
-    // Implementation of the virtual function to water the plant
+    // Реализация виртуальной функции полива растения
     void water();
 
-    //implementation of virtual function of water for wheat
-    int get_maxWateringLevel() { return(5); }; //max for wheat is 5
+    // Реализация виртуальной функции получения максимального уровня полива
+    // Возвращает: максимальный уровень полива для пшеницы (5)
+    int get_maxWateringLevel() { return(5); };
 
-    // Implementation of the virtual function to simulate growth of the plant
-    // Output: True if the plant has grown, false otherwise
+    // Реализация виртуальной функции роста растения
+    // Возвращает: true если растение выросло, false в противном случае
     bool grow();
 };
 

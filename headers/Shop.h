@@ -10,49 +10,49 @@
 #define SHOP_H
 
 
-/*the shop is where the player can buy and sell their resources.
-Progression is made in the game as the player gains money and is able
-to trade more expensive items like sheep.*/
+/*Магазин - это место, где игрок может покупать и продавать свои ресурсы.
+Прогресс в игре достигается по мере заработка денег, что позволяет
+торговать более дорогими товарами, например, овцами.*/
 class Shop
 {
 private:
-    // Texture and sprite for the shop backdrop
+    // Текстура и спрайт фона магазина
     sf::Texture Backdrop_texture;
     sf::Sprite Backdrop_sprite;
 
-    // Flag indicating if the shop is open
+    // Флаг, указывающий, открыт ли магазин
     bool shopIsOpen;
 
-    // Position of the shop
+    // Позиция магазина
     int shop_pos_x;
     int shop_pos_y;
 
 public:
-    // Constructor to initialize a Shop object
+    // Конструктор для инициализации объекта Shop
     Shop();
 
-    // Getter for the flag indicating if the shop is open
-    // Output: True if the shop is open, false otherwise
+    // Геттер для флага открытия магазина
+    // Возвращает: true, если магазин открыт, иначе false
     bool get_shopIsOpen();
 
-    // Display shop-related text on the window
-    // Input: window - Pointer to the SFML render window.
-    //        display_string - Text to display.
-    //        x - X-coordinate for text positioning.
-    //        y - Y-coordinate for text positioning.
+    // Отображение текста магазина на окне
+    // Параметры: window - Указатель на окно рендеринга SFML.
+    //            display_string - Текст для отображения.
+    //            x - Координата X для позиционирования текста.
+    //            y - Координата Y для позиционирования текста.
     void displayShopText(sf::RenderWindow* window, std::string display_string, int x, int y);
 
-    // Setter for the flag indicating if the shop is open
-    // Input: _shopIsOpen - Boolean value to set if the shop is open
+    // Сеттер для флага открытия магазина
+    // Параметры: _shopIsOpen - Логическое значение, указывающее, открыт ли магазин
     void set_shopIsOpen(bool _shopIsOpen);
 
-    // Open the shop and allow the player to interact with it
-    // Input: window - Pointer to the SFML render window.
-    //        money - Amount of money the player has
-    // Output: True if the shop is open and the player interacted, false otherwise
+    // Открыть магазин и позволить игроку взаимодействовать с ним
+    // Параметры: window - Указатель на окно рендеринга SFML.
+    //            money - Количество денег у игрока
+    // Возвращает: true, если магазин открыт и игрок взаимодействовал, иначе false
     bool shopOpen(sf::RenderWindow* window, int money);
 
-    //function that sells all sellable items in the inventory
+    // Функция для продажи всех товаров в инвентаре
     bool sellGoods(Inventory* Inventory);
 };
 

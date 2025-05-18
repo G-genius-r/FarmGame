@@ -1,45 +1,45 @@
 #include "../headers/Plant.h"
 
-// Constructor for Plant class
+// Конструктор класса Plant
 Plant::Plant() {
-    growthStage = 0; // Рост
-    wateringLevel = 0; // Уровень воды
-    isFertilised = false; // Initialize fertilization status to false
-    isPlant = true; // Set the flag for being a plant
-    isAnimal = false; // Set the flag for not being an animal
+    growthStage = 0; // Стадия роста  
+    wateringLevel = 0; // Уровень полива
+    isFertilised = false; // Инициализация статуса удобрения как false  
+    isPlant = true; // Установка флага, что это растение  
+    isAnimal = false; // Установка флага, что это не животное  
 }
 
-// Function to fertilize the plant
+// Функция для удобрения растения  
 void Plant::fertilise(Inventory* Inventory) {
     if (isFertilised == true) {
-        std::cout << "Plant was already fertilised." << std::endl;
-        Inventory->fertiliserAdd(1); // Add fertiliser to inventory
+        std::cout << "Растение уже было удобрено." << std::endl;
+        Inventory->fertiliserAdd(1); // Добавление удобрения в инвентарь  
         return;
     }
-    isFertilised = true; // Mark the plant as fertilized
-    std::cout << "Plant has been fertilised." << std::endl;
+    isFertilised = true; // Отметка, что растение удобрено  
+    std::cout << "Растение было удобрено." << std::endl;
 }
 
-// Function to simulate the growth of the plant
+// Функция для симуляции роста растения  
 bool Plant::grow() {
     if (wateringLevel == 5 && isFertilised) {
-        growthStage++; // Increment growth stage
-        wateringLevel--; // Decrease watering level
-        return true; // Return true to indicate successful growth
+        growthStage++; // Увеличение стадии роста  
+        wateringLevel--; // Уменьшение уровня полива  
+        return true; // Возврат true, если рост успешен  
     }
-    wateringLevel--; // Decrease watering level
-    return false; // Return false if growth conditions are not met
+    wateringLevel--; // Уменьшение уровня полива  
+    return false; // Возврат false, если условия для роста не выполнены  
 }
 
-// Function to check if the plant has died due to lack of water
+// Функция для проверки, погибло ли растение из-за недостатка воды  
 bool Plant::checkDeath() {
     if (this->get_isWatered() == 0) {
-        std::cout << "Oh no! A plant has died." << std::endl;
-        return true; // Return true to indicate the plant has died
+        std::cout << "О нет! Растение погибло." << std::endl;
+        return true; // Возврат true, если растение погибло  
     }
     else {
-        return false; // Return false if the plant is still alive
+        return false; // Возврат false, если растение еще живо  
     }
 }
 
-//returns the correct texture filename found in the texture filenames member of the class according to the growth stage
+// возвращает корректное имя файла текстуры из textures filenames класса в соответствии со стадией роста

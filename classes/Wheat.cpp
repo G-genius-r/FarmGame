@@ -12,7 +12,7 @@ Wheat::Wheat() {
     textureFilenames.push_back("sprites/wheatSprite/wheat0watered.png");
     textureFilenames.push_back("sprites/wheatSprite/wheat1watered.png");
     textureFilenames.push_back("sprites/wheatSprite/wheat2watered.png");
-    std::cout << "Wheat plant created." << std::endl;
+    std::cout << "Создано растение пшеницы." << std::endl;
 }
 
 int Wheat::get_type() {
@@ -22,23 +22,25 @@ int Wheat::get_type() {
 void Wheat::water() {
     if (wateringLevel < 5) {
         wateringLevel++;
-        std::cout << "wheat plant watered to hydration level: " << wateringLevel << std::endl;
+        std::cout << "Растение пшеницы полито. Уровень влаги: " << wateringLevel << std::endl;
         return;
     }
     else {
-        std::cout << "watering level =" << wateringLevel << " (wheat has been watered)" << std::endl;
+        std::cout << "Уровень влаги = " << wateringLevel << " (пшеница уже полита)" << std::endl;
     }
 }
 
 bool Wheat::grow() {
-    /*conditions for growth*/
+    /* Условия для роста */
     if (growthStage < 3 && wateringLevel == 5 && isFertilised) {
         growthStage++;
-        std::cout << "a wheat plant grew to the next stage!" << std::endl;
+        std::cout << "Растение пшеницы выросло на следующую стадию!" << std::endl;
         wateringLevel--;
         return true;
     }
-    else if (growthStage == 3) std::cout << "a wheat plant is at max growth stage!" << std::endl;
+    else if (growthStage == 3) {
+        std::cout << "Растение пшеницы достигло максимальной стадии роста!" << std::endl;
+    }
     wateringLevel--;
     return false;
 }

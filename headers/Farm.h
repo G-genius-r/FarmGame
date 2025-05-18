@@ -13,92 +13,92 @@
 #include "Plot.h"
 #include "Shop.h"
 
-/*The Farm class represents the virtual farm.
-It serves as a central entity that encapsulates various functionalities related to the farm
--> inventory
--> gametiles
--> landplots
+/* Класс Farm представляет виртуальную ферму.
+Он служит центральной сущностью, которая инкапсулирует различные функции, связанные с фермой:
+-> инвентарь
+-> игровые тайлы
+-> грядки
 */
 class Farm
 {
 private:
-    //* Helper function to set the background tiles for the farm.
+    //* Вспомогательная функция для установки фоновых тайлов фермы.
     void setBackTiles();
 
-    //* Helper function to set the initial plots on the farm.
+    //* Вспомогательная функция для установки начальных грядок на ферме.
     void setPlots();
 
-    //* Number of grid cells along one side of the farm (assuming a square farm).
+    //* Количество ячеек сетки по одной стороне фермы (предполагается квадратная ферма).
     int gridLength;
 
-    //* Counter to keep track of days.
+    //* Счетчик для отслеживания дней.
     int dayCounter;
 
-    //textures and sprites for the help menu
+    //текстуры и спрайты для меню помощи
     sf::Texture Help_texture;
     sf::Sprite Help_sprite;
-    //coordinates of the help menu
+    //координаты меню помощи
     int help_x;
     int help_y;
 
 public:
-    //* Pointer to the player's inventory in the game.
+    //* Указатель на инвентарь игрока в игре.
     Inventory* inventory;
 
-    //* Pointer to the in-game shop for purchasing items.
+    //* Указатель на внутриигровой магазин для покупки предметов.
     Shop* shop;
 
-    //* 2D vector to store the grid tiles for the farm.
+    //* 2D вектор для хранения тайлов сетки фермы.
     std::vector<std::vector<GameTile*> > tiles;
 
-    //* 2D vector to store the plots on the farm.
+    //* 2D вектор для хранения грядок на ферме.
     std::vector<std::vector<Plot*> > plots;
 
-    //* Constructor to initialize a farm object.
+    //* Конструктор для инициализации объекта фермы.
     Farm();
 
-    //* Displays available actions for a selected plot on the farm.
-    //* Input: window - SFML window to render the plot options.
-    //*        pos_x - x-coordinate of the selected plot.
-    //*        pos_y - y-coordinate of the selected plot.
+    //* Отображает доступные действия для выбранной грядки на ферме.
+    //* Входные параметры: window - окно SFML для отрисовки опций грядки.
+    //*                   pos_x - x-координата выбранной грядки.
+    //*                   pos_y - y-координата выбранной грядки.
     void getPlotOptions(sf::RenderWindow* window, int pos_x, int pos_y);
 
-    //* Renders the grid tiles and plots on the game window.
-    //* Input: window - SFML window to render the farm layout.
+    //* Отрисовывает тайлы сетки и грядки в игровом окне.
+    //* Входной параметр: window - окно SFML для отрисовки макета фермы.
     void drawPlots(sf::RenderWindow* window);
 
-    //* Advances the game time, simulating the passage of time in the game.
-    //* Input: window - SFML window to display the time passing effect.
+    //* Продвигает игровое время, симулируя течение времени в игре.
+    //* Входной параметр: window - окно SFML для отображения эффекта течения времени.
     void passTime(sf::RenderWindow* window);
 
-    //* Pauses the game for num_seconds. -> it freezes the game basically
-    //* Input: num_seconds - Number of seconds to pause the game.
+    //* Приостанавливает игру на num_seconds. -> по сути замораживает игру
+    //* Входной параметр: num_seconds - количество секунд для приостановки игры.
     void pause(int num_seconds);
 
-    //* Changes the background sprite of a specific grid tile on the farm.
-    //* Input: x - x-coordinate of the tile to change.
-    //*        y - y-coordinate of the tile to change.
-    //*        textureFilename - Filename of the new texture for the tile.
-    //* Output: True if the sprite was successfully changed, false otherwise.
+    //* Изменяет фоновый спрайт конкретного тайла на ферме.
+    //* Входные параметры: x - x-координата тайла для изменения.
+    //*                    y - y-координата тайла для изменения.
+    //*                    textureFilename - имя файла новой текстуры для тайла.
+    //* Выходное значение: True, если спрайт успешно изменен, false в противном случае.
     bool changeBackSprite(int x, int y, std::string textureFilename);
 
-    //* Displays farm-related text on the game window.
-    //* Input: window - SFML window to display the text.
-    //*        displayString - Text to display.
-    //*        x - x-coordinate for text positioning.
-    //*        y - y-coordinate for text positioning.
+    //* Отображает текст, связанный с фермой, в игровом окне.
+    //* Входные параметры: window - окно SFML для отображения текста.
+    //*                    displayString - текст для отображения.
+    //*                    x - x-координата для позиционирования текста.
+    //*                    y - y-координата для позиционирования текста.
     void displayFarmText(sf::RenderWindow* window, std::string displayString, int x, int y);
 
-    //* Checks if the selected game tile is a plot (for interaction).
-    //* Input: selectedGametile - Position of the selected game tile.
-    //* Output: True if the selected tile is a plot, false otherwise.
+    //* Проверяет, является ли выбранный игровой тайл грядкой (для взаимодействия).
+    //* Входной параметр: selectedGametile - позиция выбранного игрового тайла.
+    //* Выходное значение: True, если выбранный тайл является грядкой, false в противном случае.
     bool selectedTileIsPlot(sf::Vector2f selectedGametile);
 
-    //* Getter for the grid length (number of cells along one side of the farm).
-    //* Output: The grid length.
+    //* Геттер для длины сетки (количество ячеек по одной стороне фермы).
+    //* Выходное значение: длина сетки.
     int get_GridLength() { return gridLength; };
 
-    //* Brings up a menu that gives the user information about the game when they press h.
+    //* Открывает меню, которое предоставляет пользователю информацию об игре при нажатии клавиши h.
     bool get_Help(sf::RenderWindow* window);
 };
 

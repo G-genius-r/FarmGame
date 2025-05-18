@@ -1,60 +1,60 @@
 #include "../headers/Sheep.h"
 
-// Constructor for Sheep class
+// Конструктор класса Sheep
 Sheep::Sheep() {
-    wool = false; // Initialize wool production to false
-    growthStage = 0; // Initialize growth stage to 0
-    lifespan = 20; // Set the lifespan of the sheep
-    textureFilenames.push_back("./sprites/sheepSprite/sheepShornSprite.png"); // Load shorn sheep texture
-    textureFilenames.push_back("./sprites/sheepSprite/sheepSprite.png"); // Load full wool sheep texture
-    isAnimal = true; // Set the flag for being an animal
-    hungryStatus = 0; // Initialize hungry status to 0
-    wateringLevel = 0; // Initialize watering level to 0
+    wool = false; // Инициализация наличия шерсти как false
+    growthStage = 0; // Инициализация стадии роста значением 0
+    lifespan = 20; // Установка продолжительности жизни овцы
+    textureFilenames.push_back("./sprites/sheepSprite/sheepShornSprite.png"); // Загрузка текстуры стриженой овцы
+    textureFilenames.push_back("./sprites/sheepSprite/sheepSprite.png"); // Загрузка текстуры овцы с шерстью
+    isAnimal = true; // Установка флага, что это животное
+    hungryStatus = 0; // Инициализация статуса голода значением 0
+    wateringLevel = 0; // Инициализация уровня полива значением 0
 }
 
-// Function to simulate wool production by the sheep
+// Функция имитации производства шерсти овцой
 void Sheep::produceWool() {
-    wool = true; // Set wool production to true
+    wool = true; // Установка наличия шерсти в true
 }
 
-// Function to check if the sheep has wool
+// Функция проверки наличия шерсти у овцы
 bool Sheep::getWool() {
     return wool;
 }
 
-// Function to set the wool production of the sheep
+// Функция установки статуса шерсти у овцы
 void Sheep::setWool(bool _wool) {
     wool = _wool;
 }
 
-// Function to get the type of the entity (sheep)
+// Функция получения типа сущности (овца)
 int Sheep::get_type() {
     return 4;
 }
 
-// Function to simulate the growth of the sheep
+// Функция имитации роста овцы
 bool Sheep::grow() {
     if (wateringLevel == 3 && hungryStatus == 3) {
-        produceWool(); // Simulate wool production if well-watered and fed
-        std::cout << "A sheep is ready for shearing" << std::endl;
+        produceWool(); // Имитация производства шерсти при хорошем поливе и кормлении
+        std::cout << "Овца готова к стрижке" << std::endl;
     }
     wateringLevel--;
     if (wateringLevel < 0) wateringLevel = 0;
     hungryStatus--;
     if (hungryStatus < 0) hungryStatus = 0;
     growthStage++;
-    std::cout << "A sheep has grown to age:" << growthStage << std::endl;
+    std::cout << "Овца выросла до возраста:" << growthStage << std::endl;
     return true;
 }
 
-// Function to water the sheep
+// Функция полива овцы
 void Sheep::water() {
     if (wateringLevel < 3) {
         wateringLevel++;
-        std::cout << "Sheep watered to hydration level: " << wateringLevel << std::endl;
+        std::cout << "Овца напоена до уровня: " << wateringLevel << std::endl;
         return;
     }
     else {
-        std::cout << "Watering level =" << wateringLevel << " (sheep has been watered)" << std::endl;
+        std::cout << "Уровень полива =" << wateringLevel << " (овца уже напоена)" << std::endl;
     }
 }

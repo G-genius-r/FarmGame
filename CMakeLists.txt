@@ -31,7 +31,6 @@ include_directories(D:/C++Project/FarmGame/include)
 file(COPY ${CMAKE_SOURCE_DIR}/sprites DESTINATION ${CMAKE_BINARY_DIR})
 file(COPY ${CMAKE_SOURCE_DIR}/diagrams/Silkscreen DESTINATION ${CMAKE_BINARY_DIR})
 
-
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET FarmGame PROPERTY CXX_STANDARD 20)
   set_property(TARGET FarmGame PROPERTY CXX_STANDART_REQUIRED ON)
