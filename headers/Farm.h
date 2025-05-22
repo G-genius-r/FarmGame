@@ -61,7 +61,7 @@ public:
     //* ¬ходные параметры: window - окно SFML дл€ отрисовки опций гр€дки.
     //*                   pos_x - x-координата выбранной гр€дки.
     //*                   pos_y - y-координата выбранной гр€дки.
-    void getPlotOptions(sf::RenderWindow* window, int pos_x, int pos_y);
+    void getPlotOptions(sf::RenderWindow* window, float pos_x, float pos_y);
 
     //* ќтрисовывает тайлы сетки и гр€дки в игровом окне.
     //* ¬ходной параметр: window - окно SFML дл€ отрисовки макета фермы.

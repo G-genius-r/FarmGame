@@ -296,7 +296,7 @@ int main()
         // Отображение опций для выбранной клетки
         if (farm.selectedTileIsPlot(selectedGametile))
         {
-            farm.getPlotOptions(&window, (int)selectedGametile.x, (int)selectedGametile.y);
+            farm.getPlotOptions(&window, (float)selectedGametile.x, (float)selectedGametile.y);
             farm.tiles[(int)selectedGametile.x][(int)selectedGametile.y]->drawSelectionBox(&window);
         }
 

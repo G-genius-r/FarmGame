@@ -138,10 +138,10 @@ bool Farm::get_Help(sf::RenderWindow* window)
 }
 
 // Отображение опций для участка
-void Farm::getPlotOptions(sf::RenderWindow* window, int pos_x, int pos_y)
+void Farm::getPlotOptions(sf::RenderWindow* window, float pos_x, float pos_y)
 {
     pos_x -= 2;
-    pos_y -= 3;
+    pos_y -= 2.3;
 
     if (plots[pos_x][pos_y]->isEmpty())
     {
