@@ -1,38 +1,49 @@
-#include "../headers/MusicMenu.h"
+﻿#include "../headers/MusicMenu.h"
 #include <iostream>
 #ifdef _WIN32
 #include <Windows.h>
 #endif
 
-MusicMenu::MusicMenu(sf::RenderWindow& window) : state(CLOSED) {
+MusicMenu::MusicMenu(sf::RenderWindow& window) : state(CLOSED), pendingAction(NONE) {
     if (!font.loadFromFile("Silkscreen/CyrilicOld.ttf")) {
-        std::cerr << "�� ������� ��������� ����� ��� ���� ������!" << std::endl;
+        std::cerr << "Не удалось загрузить шрифт для меню музыки!" << std::endl;
     }
 
     menuButton.setSize(sf::Vector2f(40, 40));
-    menuButton.setFillColor(sf::Color(180, 180, 220));
+    menuButton.setFillColor(sf::Color(155, 212, 195, 240));
     menuButton.setOutlineThickness(2);
-    menuButton.setOutlineColor(sf::Color::Black);
-
-    menuText.setFont(font);
-    menuText.setCharacterSize(24);
-    menuText.setString("?");
-    menuText.setFillColor(sf::Color::Black);
+    menuButton.setOutlineColor(sf::Color(100, 100, 180));
 
     menuPanel.setSize(sf::Vector2f(170, 120));
-    menuPanel.setFillColor(sf::Color(230, 230, 255, 240));
+    menuPanel.setFillColor(sf::Color(155, 212, 195, 240));
     menuPanel.setOutlineThickness(2);
     menuPanel.setOutlineColor(sf::Color(100, 100, 180));
 
     musicOnText.setFont(font);
     musicOnText.setCharacterSize(18);
-    musicOnText.setString("������");
-    musicOnText.setFillColor(sf::Color::Black);
+    musicOnText.setString("Музыка");
+    musicOnText.setFillColor(sf::Color(100, 100, 180));
+
+    mainMenuText.setFont(font);
+    mainMenuText.setCharacterSize(18);
+    mainMenuText.setString("Главное меню");
+    mainMenuText.setFillColor(sf::Color(100, 100, 180));
 
     exitGameText.setFont(font);
     exitGameText.setCharacterSize(18);
-    exitGameText.setString("����� �� ����");
-    exitGameText.setFillColor(sf::Color::Black);
+    exitGameText.setString("Выход из игры");
+    exitGameText.setFillColor(sf::Color(100, 100, 180));
+
+    if (!iconTexture.loadFromFile("sprites/music_icon.png")) { 
+        std::cerr << "Не удалось загрузить иконку для меню музыки!" << std::endl;
+    }
+    iconSprite.setTexture(iconTexture);
+
+    float iconSize = 40.0f;
+    iconSprite.setScale(
+        iconSize / iconTexture.getSize().x,
+        iconSize / iconTexture.getSize().y
+    );
 
     updatePositions(window);
 }
@@ -41,11 +52,19 @@ void MusicMenu::updatePositions(sf::RenderWindow& window) {
     menuButton.setPosition(window.getSize().x - 50, 10);
     menuText.setPosition(window.getSize().x - 42, 11);
     menuPanel.setPosition(window.getSize().x - 180, 60);
-    musicOnText.setPosition(window.getSize().x - 170, 70);
-    exitGameText.setPosition(window.getSize().x - 170, 110);
+    iconSprite.setPosition(window.getSize().x - 55 + 8, 5 + 8);
 
-    musicOnBtnRect = sf::FloatRect(window.getSize().x - 170, 70, 160, 30);
-    exitGameBtnRect = sf::FloatRect(window.getSize().x - 170, 110, 160, 30);
+    // Сдвигаем пункты ближе друг к другу, уменьшаем общую высоту
+    float startY = 70;
+    float step = 35; // расстояние между пунктами
+
+    musicOnText.setPosition(window.getSize().x - 170, startY);
+    mainMenuText.setPosition(window.getSize().x - 170, startY + step);
+    exitGameText.setPosition(window.getSize().x - 170, startY + 2 * step);
+
+    musicOnBtnRect = sf::FloatRect(window.getSize().x - 170, startY, 160, 25);
+    mainMenuBtnRect = sf::FloatRect(window.getSize().x - 170, startY + step, 160, 25);
+    exitGameBtnRect = sf::FloatRect(window.getSize().x - 170, startY + 2 * step, 160, 25);
 }
 
 void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf::Music& music, bool& isMusicOn) {
@@ -68,7 +87,11 @@ void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf
                     isMusicOn = true;
                 }
             }
+            if (mainMenuBtnRect.contains(mousePosF)) {
+                pendingAction = MAIN_MENU;
+            }
             if (exitGameBtnRect.contains(mousePosF)) {
+                pendingAction = EXIT_GAME;
                 window.close();
             }
         }
@@ -77,18 +100,26 @@ void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf
 
 void MusicMenu::draw(sf::RenderWindow& window, bool isMusicOn) {
     window.draw(menuButton);
+    window.draw(iconSprite);
     window.draw(menuText);
 
     if (state == OPEN) {
         window.draw(menuPanel);
         window.draw(musicOnText);
+        window.draw(mainMenuText);
         window.draw(exitGameText);
 
         if (!isMusicOn) {
-            sf::Text offText("���������", font, 14);
-            offText.setFillColor(sf::Color::Red);
+            sf::Text offText("Отключено", font, 14);
+            offText.setFillColor(sf::Color(100, 100, 180));
             offText.setPosition(window.getSize().x - 90, 73);
             window.draw(offText);
         }
     }
+}
+
+MusicMenu::Action MusicMenu::pollAction() {
+    Action ret = pendingAction;
+    pendingAction = NONE;
+    return ret;
 }

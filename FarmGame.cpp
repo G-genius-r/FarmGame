@@ -88,6 +88,19 @@ int main()
         {
             musicMenu.handleEvent(event, window, music, isMusicOn);
 
+            MusicMenu::Action musicAction = musicMenu.pollAction();
+            if (musicAction == MusicMenu::MAIN_MENU) {
+                music.pause();
+                bool startGame = showMenu(window);
+                if (!startGame) {
+                    window.close();
+                    break;
+                }
+                else if (musicAction == MusicMenu::EXIT_GAME) {
+                    window.close();
+                    break;
+                }
+            }
             if (event.type == sf::Event::Closed)
                 window.close();
 

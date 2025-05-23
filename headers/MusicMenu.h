@@ -1,37 +1,36 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include <string>
-
-enum MusicMenuState {
-    MUSIC_MENU_CLOSED,
-    MUSIC_MENU_OPEN
-};
 
 class MusicMenu {
 public:
-    enum State {
-        CLOSED,
-        OPEN
-    };
+    enum State { CLOSED, OPEN };
+    enum Action { NONE, EXIT_GAME, MAIN_MENU };
 
     MusicMenu(sf::RenderWindow& window);
+    void updatePositions(sf::RenderWindow& window);
     void handleEvent(const sf::Event& event, sf::RenderWindow& window, sf::Music& music, bool& isMusicOn);
     void draw(sf::RenderWindow& window, bool isMusicOn);
     bool isOpen() const { return state == OPEN; }
+    Action pollAction();
 
 private:
     State state;
+    Action pendingAction;
+
+    sf::Texture iconTexture;
+    sf::Sprite iconSprite;
+
     sf::Font font;
     sf::RectangleShape menuButton;
     sf::Text menuText;
 
     sf::RectangleShape menuPanel;
     sf::Text musicOnText;
+    sf::Text mainMenuText;
     sf::Text exitGameText;
 
     sf::FloatRect musicOnBtnRect;
+    sf::FloatRect mainMenuBtnRect;
     sf::FloatRect exitGameBtnRect;
-
-    void updatePositions(sf::RenderWindow& window);
 };
