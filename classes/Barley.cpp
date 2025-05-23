@@ -15,6 +15,7 @@ Barley::Barley()
     growthStage = 0;      // Инициализация стадии роста значением 0
     wateringLevel = 0;    // Инициализация уровня полива значением 0
     isFertilised = false; // Инициализация состояния удобрения значением false
+    
 
     // Инициализация названий текстур для разных стадий роста и уровней полива
     textureFilenames.push_back("sprites/barleySprite/barley0.png");
@@ -52,12 +53,31 @@ void Barley::water()
     if (wateringLevel < BARLEYWATER)
     {
         wateringLevel++;
-        std::cout << "Растение ячменя полито. Уровень влаги: " << wateringLevel << std::endl;
-        return;
+        showWaterLevel();
     }
-    else
-    {
-        std::cout << "Уровень влаги = " << wateringLevel << " (ячмень уже полит)" << std::endl;
-        return;
+    // В любом случае показываем уровень влаги над растением
+    waterLevelToDisplay = wateringLevel;
+    waterDisplayClock.restart();
+}
+void Barley::showWaterLevel() {
+    waterLevelToDisplay = wateringLevel;
+    waterDisplayClock.restart();
+}
+
+void Barley::drawWaterLevel(sf::RenderWindow& window, float x, float y) {
+    if (waterLevelToDisplay != -1 && waterDisplayClock.getElapsedTime().asSeconds() < 1.0f) {
+        static sf::Font font;
+        static bool fontLoaded = false;
+        if (!fontLoaded) {
+            font.loadFromFile("Silkscreen/CyrilicOld.ttf");
+            fontLoaded = true;
+        }
+        sf::Text txt("Влага: " + std::to_string(wateringLevel), font, 10);
+        txt.setFillColor(sf::Color::Blue);
+        txt.setPosition(x, y - 45);
+        window.draw(txt);
+    }
+    else if (waterLevelToDisplay != -1) {
+        waterLevelToDisplay = -1;
     }
 }

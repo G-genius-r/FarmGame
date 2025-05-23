@@ -75,7 +75,7 @@ public:
     bool meatTake(int amount);        // Использовать мясо
 
     // Геттеры для товаров и денег
-    int getMoney();
+    unsigned int getMoney();
     int getWool();
     int getEggs();
     int getWheatGrain();

@@ -8,7 +8,9 @@
 #include "headers/Farm.h"
 #include "headers/GameTile.h"
 #include "headers/menu.h"
+#include "headers/MoneyPanel.h"
 #include <Windows.h>
+#include "../headers/MessagePanel.h"
 
 enum MusicMenuState {
     MUSIC_MENU_CLOSED,
@@ -32,7 +34,7 @@ int main()
     SetWindowPos(menuHwnd, HWND_TOP, menuPosX, menuPosY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
     if (!showMenu(menuWindow))
-        return 0; // Если пользователь закрыл меню — выход
+        return 0;
 
     menuWindow.close(); // Закрываем меню
 
@@ -62,6 +64,23 @@ int main()
     bool isMusicOn = true;
     // --- End Music Setup ---
 
+    // Устанавливаем view на весь экран (чтобы контент занимал всё окно)
+    sf::View view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
+    window.setView(view);
+
+    // --- Music Setup ---
+    sf::Music music;
+    if (!music.openFromFile("audio/menuMusic.ogg")) {
+        std::cerr << "Не удалось загрузить музыку!" << std::endl;
+    }
+    else {
+        music.setLoop(true);
+        music.setVolume(60); // громкость по умолчанию
+        music.play();
+    }
+    bool isMusicOn = true;
+    // --- End Music Setup ---
+
     Farm farm = Farm();
     int showInv = -1;      // Флаг отображения инвентаря (-1 - скрыт, 1 - показан)
     int showShop = -1;     // Флаг отображения магазина
@@ -69,6 +88,7 @@ int main()
     sf::Vector2f relevantWindowSize(window.getSize());  // Актуальный размер окна
     sf::Vector2f mousePressPos;       // Позиция нажатия мыши
     sf::Vector2f selectedGametile;    // Выбранная клетка на поле
+    MessagePanel messagePanel;
 
     sf::Font font;
     if (!font.loadFromFile("Silkscreen/CyrilicOld.ttf")) {
@@ -113,9 +133,43 @@ int main()
     float scaleY = window.getSize().y / static_cast<float>(backgroundTexture.getSize().y);
     background.setScale(scaleX, scaleY);
 
+    sf::Text musicMenuText("♫", font, 24);
+    musicMenuText.setFillColor(sf::Color::Black);
+    musicMenuText.setPosition(window.getSize().x - 42, 11);
+
+    MusicMenuState musicMenuState = MUSIC_MENU_CLOSED;
+    sf::RectangleShape musicMenuPanel(sf::Vector2f(170, 120));
+    musicMenuPanel.setFillColor(sf::Color(230, 230, 255, 240));
+    musicMenuPanel.setOutlineThickness(2);
+    musicMenuPanel.setOutlineColor(sf::Color(100, 100, 180));
+    musicMenuPanel.setPosition(window.getSize().x - 180, 60);
+
+    sf::Text musicOnText("Вкл/Выкл музыку", font, 18);
+    musicOnText.setFillColor(sf::Color::Black);
+    musicOnText.setPosition(window.getSize().x - 170, 70);
+
+    sf::Text exitGameText("Выход из игры", font, 18);
+    exitGameText.setFillColor(sf::Color::Black);
+    exitGameText.setPosition(window.getSize().x - 170, 110);
+
+    // Области кнопок (для обработки кликов)
+    sf::FloatRect musicOnBtnRect(window.getSize().x - 170, 70, 160, 30);
+    sf::FloatRect exitGameBtnRect(window.getSize().x - 170, 110, 160, 30);
+
+    // Загрузка фонового изображения (делаем это один раз)
+    sf::Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("sprites/main.png")) {
+        std::cerr << "Не удалось загрузить фон main.png!" << std::endl;
+    }
+    sf::Sprite background(backgroundTexture);
+    float scaleX = window.getSize().x / static_cast<float>(backgroundTexture.getSize().x);
+    float scaleY = window.getSize().y / static_cast<float>(backgroundTexture.getSize().y);
+    background.setScale(scaleX, scaleY);
+
     while (window.isOpen())
     {
         sf::Event event;
+
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -177,69 +231,69 @@ int main()
                     // Покупка семян пшеницы (цена: 2)
                     if (farm.inventory->moneyTake(2) == true) {
                         farm.inventory->wheatSeedAdd(1);
-                        std::cout << "Успешно куплено 1 семя пшеницы" << std::endl;
+                        messagePanel.addMessage("Успешно куплено 1 семя пшеницы");
                     }
                     else {
-                        std::cout << "Недостаточно денег для покупки семян пшеницы" << std::endl;
+                        messagePanel.addMessage("Недостаточно денег для покупки семян пшеницы");
                     }
                 }
                 if (event.key.code == sf::Keyboard::Num2) {
                     // Покупка семян ячменя (цена: 3)
                     if (farm.inventory->moneyTake(3) == true) {
                         farm.inventory->barleySeedAdd(1);
-                        std::cout << "Успешно куплено 1 семя ячменя" << std::endl;
+                        messagePanel.addMessage("Успешно куплено 1 семя ячменя");
                     }
                     else {
-                        std::cout << "Недостаточно денег для покупки семян ячменя" << std::endl;
+                        messagePanel.addMessage("Недостаточно денег для покупки семян ячменя");
                     }
                 }
                 if (event.key.code == sf::Keyboard::Num3) {
                     // Покупка курицы (цена: 15)
                     if (farm.inventory->moneyTake(15) == true) {
                         farm.inventory->ChickenAdd(1);
-                        std::cout << "Успешно куплена 1 курица" << std::endl;
+                        messagePanel.addMessage("Успешно куплена 1 курица");
                     }
                     else {
-                        std::cout << "Недостаточно денег для покупки курицы" << std::endl;
+                        messagePanel.addMessage("Недостаточно денег для покупки курицы");
                     }
                 }
                 if (event.key.code == sf::Keyboard::Num4) {
                     // Покупка овцы (цена: 20)
                     if (farm.inventory->moneyTake(20) == true) {
                         farm.inventory->SheepAdd(1);
-                        std::cout << "Успешно куплена 1 овца" << std::endl;
+                        messagePanel.addMessage("Успешно куплена 1 овца");
                     }
                     else {
-                        std::cout << "Недостаточно денег для покупки овцы" << std::endl;
+                        messagePanel.addMessage("Недостаточно денег для покупки овцы");
                     }
                 }
                 if (event.key.code == sf::Keyboard::Num5) {
                     // Покупка корма для животных (цена: 1)
                     if (farm.inventory->moneyTake(1) == true) {
                         farm.inventory->animalFeedAdd(1);
-                        std::cout << "Успешно куплен 1 корм для животных" << std::endl;
+                        messagePanel.addMessage("Успешно куплен 1 корм для животных");
                     }
                     else {
-                        std::cout << "Недостаточно денег для покупки корма" << std::endl;
+                        messagePanel.addMessage("Недостаточно денег для покупки корма");
                     }
                 }
                 if (event.key.code == sf::Keyboard::Num6) {
                     // Покупка удобрения (цена: 2)
                     if (farm.inventory->moneyTake(2) == true) {
                         farm.inventory->fertiliserAdd(1);
-                        std::cout << "Успешно куплено 1 удобрение" << std::endl;
+                        messagePanel.addMessage("Успешно куплено 1 удобрение");
                     }
                     else {
-                        std::cout << "Недостаточно денег для покупки удобрения" << std::endl;
+                        messagePanel.addMessage("Недостаточно денег для покупки удобрения");
                     }
                 }
                 if (event.key.code == sf::Keyboard::Num7) {
                     // Продажа всех товаров
                     if (farm.shop->sellGoods(farm.inventory) == true) {
-                        std::cout << "Успешно проданы все товары" << std::endl;
+                        messagePanel.addMessage("Успешно проданы все товары");
                     }
                     else {
-                        std::cout << "Ошибка при продаже товаров" << std::endl;
+                        messagePanel.addMessage("Ошибка при продаже товаров");
                     }
                 }
             }
@@ -258,7 +312,7 @@ int main()
                             farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->placeEntity(newWheat);
                         }
                         else {
-                            std::cout << "Нельзя посадить пшеницу: нет семян." << std::endl;
+                            messagePanel.addMessage("Нельзя посадить пшеницу: нет семян.");
                         }
                     }
                     else if (farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->isEmpty() == false)
@@ -280,7 +334,7 @@ int main()
                             farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->placeEntity(newBarley);
                         }
                         else {
-                            std::cout << "Нельзя посадить ячмень: нет семян" << std::endl;
+                            messagePanel.addMessage("Нельзя посадить ячмень : нет семян");
                         }
                     }
                     else if (farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->get_isPlant() == true) {
@@ -289,7 +343,7 @@ int main()
                             farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->fertilise(farm.inventory);
                         }
                         else {
-                            std::cout << "Нельзя удобрить: нет удобрений." << std::endl;
+                            messagePanel.addMessage("Нельзя удобрить: нет удобрений.");
                         }
                     }
                     else if (farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->get_isAnimal() == true) {
@@ -298,7 +352,7 @@ int main()
                             farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->feed(farm.inventory);
                         }
                         else {
-                            std::cout << "Нельзя покормить: нет корма." << std::endl;
+                            messagePanel.addMessage("Нельзя покормить: нет корма.");
                         }
                     }
                 }
@@ -320,7 +374,7 @@ int main()
                         farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->placeEntity(newChicken);
                     }
                     else {
-                        std::cout << "Нельзя разместить курицу: нет куриц в инвентаре" << std::endl;
+                        messagePanel.addMessage("Нельзя разместить курицу: нет куриц в инвентаре");
                     }
                 }
             }
@@ -340,7 +394,7 @@ int main()
                         farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->placeEntity(newSheep);
                     }
                     else {
-                        std::cout << "Нельзя разместить овцу: нет овец в инвентаре" << std::endl;
+                        messagePanel.addMessage("Нельзя разместить овцу: нет овец в инвентаре");
                     }
                 }
             }
@@ -361,11 +415,11 @@ int main()
             {
                 if (farm.inventory->saveDataToFile("InventoryData.txt"))
                 {
-                    std::cout << "Данные инвентаря успешно сохранены." << std::endl;
+                    messagePanel.addMessage("Данные инвентаря успешно сохранены.");
                 }
                 else
                 {
-                    std::cerr << "Ошибка сохранения данных инвентаря." << std::endl;
+                    messagePanel.addMessage("Ошибка сохранения данных инвентаря.");
                 }
             }
 
@@ -374,11 +428,11 @@ int main()
             {
                 if (farm.inventory->loadDataFromFile("InventoryData.txt"))
                 {
-                    std::cout << "Данные инвентаря успешно загружены." << std::endl;
+                    messagePanel.addMessage("Данные инвентаря успешно загружены.");
                 }
                 else
                 {
-                    std::cerr << "Ошибка загрузки данных инвентаря." << std::endl;
+                    messagePanel.addMessage("Ошибка загрузки данных инвентаря.");
                 }
             }
         }
@@ -435,6 +489,8 @@ int main()
         if (showHelp == 1) {
             farm.get_Help(&window);
         }
+
+        messagePanel.draw(window);
 
         window.display();
     }

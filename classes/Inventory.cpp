@@ -376,7 +376,7 @@ bool Inventory::eggsTake(int amount)
     eggs -= amount;
     return true;
 }
-int Inventory::getMoney()
+unsigned int Inventory::getMoney()
 {
     return money;
 }
