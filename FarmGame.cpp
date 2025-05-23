@@ -8,6 +8,7 @@
 #include "headers/Farm.h"
 #include "headers/GameTile.h"
 #include "headers/menu.h"
+#include "headers/MoneyPanel.h"
 #include <Windows.h>
 
 int main()
@@ -52,10 +53,10 @@ int main()
     HWND hwnd = window.getSystemHandle();
     SetWindowPos(hwnd, HWND_TOP, winPosX, winPosY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
-
     while (window.isOpen())
     {
         sf::Event event;
+
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -309,6 +310,15 @@ int main()
         sf::Sprite background(backgroundTexture);
         background.setPosition(0, 0);
         window.draw(background);
+
+        MoneyPanel moneyPanel;
+
+        if (!moneyPanel.loadResources()) {
+            std::cerr << "Ошибка загрузки ресурсов MoneyPanel!" << std::endl;
+        }
+        moneyPanel.setPosition(210, 10); // Позиция на экране
+        moneyPanel.setInventory(farm.inventory); // Начальное количество денег
+        moneyPanel.draw(window);
 
         // Отображение подсказки о справке
         farm.displayFarmText(&window, "Нажмите H для открытия справки!", 0, 0);
