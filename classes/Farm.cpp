@@ -223,6 +223,16 @@ void Farm::drawPlots(sf::RenderWindow* window)
         {
             window->draw(plot->get_backSprite());
             window->draw(plot->get_frontSprite());
+
+            // ВАЖНО: вот тут проверяем Barley
+            if (plot->getEntity()) {
+                Barley* barley = dynamic_cast<Barley*>(plot->getEntity());
+                if (barley) {
+                    float px = plot->get_frontSprite().getPosition().x;
+                    float py = plot->get_frontSprite().getPosition().y;
+                    barley->drawWaterLevel(*window, px, py);
+                }
+            }
         }
     }
 }

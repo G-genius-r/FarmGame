@@ -36,6 +36,8 @@ public:
     //    pos_y - Y-координата позиции
     Plot(std::string texture_filename, float pos_x, float pos_y);
 
+    Entity* getEntity() const { return entity; }
+
     // Разместить растение на грядке
     // Параметры:
     //    _entity - указатель на сущность растения
