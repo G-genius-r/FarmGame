@@ -10,12 +10,8 @@
 #include "headers/menu.h"
 #include "headers/MoneyPanel.h"
 #include <Windows.h>
+#include "../headers/MusicMenu.h"
 #include "../headers/MessagePanel.h"
-
-enum MusicMenuState {
-    MUSIC_MENU_CLOSED,
-    MUSIC_MENU_OPEN
-};
 
 int main()
 {
@@ -62,7 +58,8 @@ int main()
         music.play();
     }
     bool isMusicOn = true;
-    // --- End Music Setup ---
+
+    MusicMenu musicMenu(window);
 
     Farm farm = Farm();
     int showInv = -1;      // Флаг отображения инвентаря (-1 - скрыт, 1 - показан)
@@ -72,28 +69,6 @@ int main()
     sf::Vector2f mousePressPos;       // Позиция нажатия мыши
     sf::Vector2f selectedGametile;    // Выбранная клетка на поле
     MessagePanel messagePanel;
-
-    sf::Font font;
-    if (!font.loadFromFile("Silkscreen/CyrilicOld.ttf")) {
-        std::cerr << "Не удалось загрузить шрифт для меню музыки!" << std::endl;
-    }
-    sf::RectangleShape musicMenuButton(sf::Vector2f(40, 40));
-    musicMenuButton.setFillColor(sf::Color(180, 180, 220));
-    musicMenuButton.setOutlineThickness(2);
-    musicMenuButton.setOutlineColor(sf::Color::Black);
-    musicMenuButton.setPosition(window.getSize().x - 50, 10);
-
-    sf::Text musicOnText("Вкл/Выкл музыку", font, 18);
-    musicOnText.setFillColor(sf::Color::Black);
-    musicOnText.setPosition(window.getSize().x - 170, 70);
-
-    sf::Text exitGameText("Выход из игры", font, 18);
-    exitGameText.setFillColor(sf::Color::Black);
-    exitGameText.setPosition(window.getSize().x - 170, 110);
-
-    // Области кнопок (для обработки кликов)
-    sf::FloatRect musicOnBtnRect(window.getSize().x - 170, 70, 160, 30);
-    sf::FloatRect exitGameBtnRect(window.getSize().x - 170, 110, 160, 30);
 
     // Загрузка фонового изображения (делаем это один раз)
     sf::Texture backgroundTexture;
@@ -105,45 +80,14 @@ int main()
     float scaleY = window.getSize().y / static_cast<float>(backgroundTexture.getSize().y);
     background.setScale(scaleX, scaleY);
 
-    sf::Text musicMenuText("♫", font, 24);
-    musicMenuText.setFillColor(sf::Color::Black);
-    musicMenuText.setPosition(window.getSize().x - 42, 11);
-
-    MusicMenuState musicMenuState = MUSIC_MENU_CLOSED;
-    sf::RectangleShape musicMenuPanel(sf::Vector2f(170, 120));
-    musicMenuPanel.setFillColor(sf::Color(230, 230, 255, 240));
-    musicMenuPanel.setOutlineThickness(2);
-    musicMenuPanel.setOutlineColor(sf::Color(100, 100, 180));
-    musicMenuPanel.setPosition(window.getSize().x - 180, 60);
-
-    //sf::Text musicOnText("Вкл/Выкл музыку", font, 18);
-    //musicOnText.setFillColor(sf::Color::Black);
-    //musicOnText.setPosition(window.getSize().x - 170, 70);
-
-   /* sf::Text exitGameText("Выход из игры", font, 18);
-    exitGameText.setFillColor(sf::Color::Black);
-    exitGameText.setPosition(window.getSize().x - 170, 110);*/
-
-    // Области кнопок (для обработки кликов)
-  /*  sf::FloatRect musicOnBtnRect(window.getSize().x - 170, 70, 160, 30);
-    sf::FloatRect exitGameBtnRect(window.getSize().x - 170, 110, 160, 30);*/
-
-    // Загрузка фонового изображения (делаем это один раз)
-   /* sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("sprites/main.png")) {
-        std::cerr << "Не удалось загрузить фон main.png!" << std::endl;
-    }
-    sf::Sprite background(backgroundTexture);
-    float scaleX = window.getSize().x / static_cast<float>(backgroundTexture.getSize().x);
-    float scaleY = window.getSize().y / static_cast<float>(backgroundTexture.getSize().y);
-    background.setScale(scaleX, scaleY);*/
-
     while (window.isOpen())
     {
         sf::Event event;
 
         while (window.pollEvent(event))
         {
+            musicMenu.handleEvent(event, window, music, isMusicOn);
+
             if (event.type == sf::Event::Closed)
                 window.close();
 
@@ -158,32 +102,12 @@ int main()
                 background.setScale(scaleX, scaleY);
             }
 
+            if (musicMenu.isOpen()) continue;
+
             if (event.type == sf::Event::MouseButtonPressed)
             {
                 sf::Vector2f mousePosF = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                mousePressPos = mousePosF; // Используем только одну систему координат!
-
-                // Проверка нажатия на меню музыки
-                if (musicMenuButton.getGlobalBounds().contains(mousePosF)) {
-                    musicMenuState = (musicMenuState == MUSIC_MENU_CLOSED) ? MUSIC_MENU_OPEN : MUSIC_MENU_CLOSED;
-                }
-                // Обработка кнопок в меню музыки
-                if (musicMenuState == MUSIC_MENU_OPEN) {
-                    if (musicOnBtnRect.contains(mousePosF)) {
-                        // Вкл/Выкл музыку
-                        if (isMusicOn) {
-                            music.pause();
-                            isMusicOn = false;
-                        }
-                        else {
-                            music.play();
-                            isMusicOn = true;
-                        }
-                    }
-                    if (exitGameBtnRect.contains(mousePosF)) {
-                        window.close();
-                    }
-                }
+                mousePressPos = mousePosF;                  
             }
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::I)
@@ -427,23 +351,7 @@ int main()
         moneyPanel.setInventory(farm.inventory); // Начальное количество денег
         moneyPanel.draw(window);
 
-        // --- Рисуем кнопку меню музыки ---
-        window.draw(musicMenuButton);
-        window.draw(musicMenuText);
-
-        // --- Если меню музыки открыто, рисуем панель и кнопки ---
-        if (musicMenuState == MUSIC_MENU_OPEN) {
-            window.draw(musicMenuPanel);
-            window.draw(musicOnText);
-            window.draw(exitGameText);
-            // Можно добавить визуальный фидбек для кнопок
-            if (!isMusicOn) {
-                sf::Text offText("Отключено", font, 14);
-                offText.setFillColor(sf::Color::Red);
-                offText.setPosition(window.getSize().x - 50, 70);
-                window.draw(offText);
-            }
-        }
+        musicMenu.draw(window, isMusicOn);
 
         // Отображение подсказки о справке
         farm.displayFarmText(&window, "Нажмите H для открытия справки!", 0, 0);
