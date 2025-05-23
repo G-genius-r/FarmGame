@@ -60,7 +60,7 @@ public:
     //                    pos_x - X-координата позиции.
     //                    pos_y - Y-координата позиции.
     // ¬озвращаемое значение: true, если спрайт переднего плана успешно настроен, иначе false.
-    bool setUpFrontSprite(std::string frontTextureFilename, int pos_x, int pos_y);
+    bool setUpFrontSprite(std::string frontTextureFilename, float cellWidth, float cellHeight);
 
     // ќтрисовка рамки выделени€ на клетке с использованием предоставленного окна
     // ¬ходные параметры: window - указатель на окно рендеринга SFML.
@@ -70,6 +70,8 @@ public:
     // ¬ходные параметры: pos_x - X-координата новой позиции.
     //                    pos_y - Y-координата новой позиции.
     void set_pos(float pos_x, float pos_y);
+
+    void setScale(float width, float height);
 
     // ѕолучение позиции клетки
     // ¬озвращаемое значение: позици€ клетки в виде 2D вектора.

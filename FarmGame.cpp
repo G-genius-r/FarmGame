@@ -10,6 +10,11 @@
 #include "headers/menu.h"
 #include <Windows.h>
 
+enum MusicMenuState {
+    MUSIC_MENU_CLOSED,
+    MUSIC_MENU_OPEN
+};
+
 int main()
 {
     SetConsoleCP(1251);
@@ -31,20 +36,8 @@ int main()
 
     menuWindow.close(); // Закрываем меню
 
-    sf::RenderWindow window(sf::VideoMode(320,320), "FarmVille!", sf::Style::Titlebar | sf::Style::Close);
-
-    Farm farm = Farm();
-    int showInv = -1;      // Флаг отображения инвентаря (-1 - скрыт, 1 - показан)
-    int showShop = -1;     // Флаг отображения магазина
-    int showHelp = -1;     // Флаг отображения справки
-    sf::Vector2f relevantWindowSize;  // Актуальный размер окна
-    sf::Vector2f mousePressPos;       // Позиция нажатия мыши
-    sf::Vector2f selectedGametile;    // Выбранная клетка на поле
-
-
-    sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-    window.setSize(sf::Vector2u(800, 800));
-
+    sf::RenderWindow window(sf::VideoMode(800, 800), "FarmVille!", sf::Style::Titlebar | sf::Style::Close);
+    // Центрирование окна на экране
     int winWidth = 800;
     int winHeight = 800;
     int winPosX = (desktop.width - winWidth) / 2;
@@ -52,6 +45,73 @@ int main()
     HWND hwnd = window.getSystemHandle();
     SetWindowPos(hwnd, HWND_TOP, winPosX, winPosY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
+    // Устанавливаем view на весь экран (чтобы контент занимал всё окно)
+    sf::View view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
+    window.setView(view);
+
+    // --- Music Setup ---
+    sf::Music music;
+    if (!music.openFromFile("audio/menuMusic.ogg")) {
+        std::cerr << "Не удалось загрузить музыку!" << std::endl;
+    }
+    else {
+        music.setLoop(true);
+        music.setVolume(60); // громкость по умолчанию
+        music.play();
+    }
+    bool isMusicOn = true;
+    // --- End Music Setup ---
+
+    Farm farm = Farm();
+    int showInv = -1;      // Флаг отображения инвентаря (-1 - скрыт, 1 - показан)
+    int showShop = -1;     // Флаг отображения магазина
+    int showHelp = -1;     // Флаг отображения справки
+    sf::Vector2f relevantWindowSize(window.getSize());  // Актуальный размер окна
+    sf::Vector2f mousePressPos;       // Позиция нажатия мыши
+    sf::Vector2f selectedGametile;    // Выбранная клетка на поле
+
+    sf::Font font;
+    if (!font.loadFromFile("Silkscreen/CyrilicOld.ttf")) {
+        std::cerr << "Не удалось загрузить шрифт для меню музыки!" << std::endl;
+    }
+    sf::RectangleShape musicMenuButton(sf::Vector2f(40, 40));
+    musicMenuButton.setFillColor(sf::Color(180, 180, 220));
+    musicMenuButton.setOutlineThickness(2);
+    musicMenuButton.setOutlineColor(sf::Color::Black);
+    musicMenuButton.setPosition(window.getSize().x - 50, 10);
+
+    sf::Text musicMenuText("♫", font, 24);
+    musicMenuText.setFillColor(sf::Color::Black);
+    musicMenuText.setPosition(window.getSize().x - 42, 11);
+
+    MusicMenuState musicMenuState = MUSIC_MENU_CLOSED;
+    sf::RectangleShape musicMenuPanel(sf::Vector2f(170, 120));
+    musicMenuPanel.setFillColor(sf::Color(230, 230, 255, 240));
+    musicMenuPanel.setOutlineThickness(2);
+    musicMenuPanel.setOutlineColor(sf::Color(100, 100, 180));
+    musicMenuPanel.setPosition(window.getSize().x - 180, 60);
+
+    sf::Text musicOnText("Вкл/Выкл музыку", font, 18);
+    musicOnText.setFillColor(sf::Color::Black);
+    musicOnText.setPosition(window.getSize().x - 170, 70);
+
+    sf::Text exitGameText("Выход из игры", font, 18);
+    exitGameText.setFillColor(sf::Color::Black);
+    exitGameText.setPosition(window.getSize().x - 170, 110);
+
+    // Области кнопок (для обработки кликов)
+    sf::FloatRect musicOnBtnRect(window.getSize().x - 170, 70, 160, 30);
+    sf::FloatRect exitGameBtnRect(window.getSize().x - 170, 110, 160, 30);
+
+    // Загрузка фонового изображения (делаем это один раз)
+    sf::Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("sprites/main.png")) {
+        std::cerr << "Не удалось загрузить фон main.png!" << std::endl;
+    }
+    sf::Sprite background(backgroundTexture);
+    float scaleX = window.getSize().x / static_cast<float>(backgroundTexture.getSize().x);
+    float scaleY = window.getSize().y / static_cast<float>(backgroundTexture.getSize().y);
+    background.setScale(scaleX, scaleY);
 
     while (window.isOpen())
     {
@@ -61,17 +121,43 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
 
-            if (event.type == sf::Event::Resized)
-            {
-                // Обработка изменения позиции мыши при изменении размера окна
-                relevantWindowSize = sf::Vector2f(event.size.width, event.size.height);
+            if (event.type == sf::Event::Resized) {
+                sf::View newView;
+                newView.setSize(event.size.width, event.size.height);
+                newView.setCenter(event.size.width / 2.f, event.size.height / 2.f);
+                window.setView(newView);
+
+                float scaleX = event.size.width / static_cast<float>(backgroundTexture.getSize().x);
+                float scaleY = event.size.height / static_cast<float>(backgroundTexture.getSize().y);
+                background.setScale(scaleX, scaleY);
             }
 
             if (event.type == sf::Event::MouseButtonPressed)
             {
-                // Запись позиции мыши при нажатии кнопки (с учетом масштабирования)
-                mousePressPos.x = sf::Mouse::getPosition(window).x * (window.getDefaultView().getSize().x / relevantWindowSize.x);
-                mousePressPos.y = sf::Mouse::getPosition(window).y * (window.getDefaultView().getSize().y / relevantWindowSize.y);
+                sf::Vector2f mousePosF = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                mousePressPos = mousePosF; // Используем только одну систему координат!
+
+                // Проверка нажатия на меню музыки
+                if (musicMenuButton.getGlobalBounds().contains(mousePosF)) {
+                    musicMenuState = (musicMenuState == MUSIC_MENU_CLOSED) ? MUSIC_MENU_OPEN : MUSIC_MENU_CLOSED;
+                }
+                // Обработка кнопок в меню музыки
+                if (musicMenuState == MUSIC_MENU_OPEN) {
+                    if (musicOnBtnRect.contains(mousePosF)) {
+                        // Вкл/Выкл музыку
+                        if (isMusicOn) {
+                            music.pause();
+                            isMusicOn = false;
+                        }
+                        else {
+                            music.play();
+                            isMusicOn = true;
+                        }
+                    }
+                    if (exitGameBtnRect.contains(mousePosF)) {
+                        window.close();
+                    }
+                }
             }
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::I)
@@ -303,12 +389,26 @@ int main()
 
         window.clear();
 
-        /*Отрисовка фона*/
-        sf::Texture backgroundTexture; // Загрузка фонового изображения (main.png)
-        backgroundTexture.loadFromFile("sprites/main.png");
-        sf::Sprite background(backgroundTexture);
-        background.setPosition(0, 0);
+        // Отрисовка фона
         window.draw(background);
+
+        // --- Рисуем кнопку меню музыки ---
+        window.draw(musicMenuButton);
+        window.draw(musicMenuText);
+
+        // --- Если меню музыки открыто, рисуем панель и кнопки ---
+        if (musicMenuState == MUSIC_MENU_OPEN) {
+            window.draw(musicMenuPanel);
+            window.draw(musicOnText);
+            window.draw(exitGameText);
+            // Можно добавить визуальный фидбек для кнопок
+            if (!isMusicOn) {
+                sf::Text offText("Отключено", font, 14);
+                offText.setFillColor(sf::Color::Red);
+                offText.setPosition(window.getSize().x - 50, 70);
+                window.draw(offText);
+            }
+        }
 
         // Отображение подсказки о справке
         farm.displayFarmText(&window, "Нажмите H для открытия справки!", 0, 0);
