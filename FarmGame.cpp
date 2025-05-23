@@ -12,68 +12,72 @@
 bool showMenu(sf::RenderWindow& window) {
     sf::Font font;
     if (!font.loadFromFile("Silkscreen/CyrilicOld.ttf")) {
-        return false; // Ошибка загрузки шрифта
+        return false;
     }
 
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("sprites/menuBackground.png")) {
-        return false; // Ошибка загрузки фона
+        return false;
     }
     sf::Sprite background(backgroundTexture);
     background.setScale(
         static_cast<float>(window.getSize().x) / backgroundTexture.getSize().x,
         static_cast<float>(window.getSize().y) / backgroundTexture.getSize().y);
 
-    // Функция для отрисовки текста с тенью
-    auto drawTextWithShadow = [&](sf::Text& text) {
-        sf::Text shadow = text;
-        shadow.setFillColor(sf::Color(16, 16, 16, 200)); // Тёмно-серый цвет с прозрачностью
-        shadow.setPosition(text.getPosition().x + 3, text.getPosition().y + 3); // Смещение
-        window.draw(shadow);
+    // Функция для отрисовки текста с обводкой
+    auto drawTextWithOutline = [&](sf::Text& text) {
+        sf::Text outline = text;
+        outline.setFillColor(sf::Color(81, 39, 5, 255)); // Еще более темно-коричневая обводка
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dy = -2; dy <= 2; dy++) {
+                if (dx == 0 && dy == 0) continue;
+                outline.setPosition(text.getPosition().x + dx, text.getPosition().y + dy);
+                window.draw(outline);
+            }
+        }
         window.draw(text);
         };
 
-    // Заголовок
-    sf::Text title("FarmVille", font, 50);
-    title.setFillColor(sf::Color(255, 215, 0, 255));
-    title.setPosition(window.getSize().x / 2 - title.getGlobalBounds().width / 2, 50);
-
-    // Кнопки
+    // Кнопки ниже и ближе друг к другу
     sf::Text playButton("Начать игру", font, 30);
-    playButton.setFillColor(sf::Color(255, 215, 0, 255));
-    playButton.setPosition(window.getSize().x / 2 - playButton.getGlobalBounds().width / 2, 150);
+    playButton.setFillColor(sf::Color::White);
+    playButton.setPosition(window.getSize().x / 2 - playButton.getGlobalBounds().width / 2, 140);
 
     sf::Text exitButton("Выйти", font, 30);
-    exitButton.setFillColor(sf::Color(255, 215, 0, 255)); 
-    exitButton.setPosition(window.getSize().x / 2 - exitButton.getGlobalBounds().width / 2, 220);
+    exitButton.setFillColor(sf::Color::White);
+    exitButton.setPosition(window.getSize().x / 2 - exitButton.getGlobalBounds().width / 2, 180);
 
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                return false; // Если закрыли окно, завершаем программу
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return false;
+            }
 
             if (event.type == sf::Event::MouseButtonPressed) {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
                 sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 
                 if (playButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
-                    return true; // Запускаем игру
+                    return true;
                 }
                 else if (exitButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+                    window.close();
                     return false;
                 }
             }
         }
+        window.setSize(sf::Vector2u(800, 800));
 
         window.clear();
         window.draw(background);
-        drawTextWithShadow(title);
-        drawTextWithShadow(playButton);
-        drawTextWithShadow(exitButton);
+        drawTextWithOutline(playButton);
+        drawTextWithOutline(exitButton);
         window.display();
     }
-    return false; 
+
+    return false;
 }
 
 int main()
@@ -85,6 +89,8 @@ int main()
     sf::RenderWindow window(sf::VideoMode(320, 320), "FarmVille!");
 
     showMenu(window);
+    window.setSize(sf::Vector2u(320, 320));
+
 
     Farm farm = Farm();
     int showInv = -1;      // Флаг отображения инвентаря (-1 - скрыт, 1 - показан)
