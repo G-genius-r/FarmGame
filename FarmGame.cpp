@@ -9,14 +9,83 @@
 #include "headers/GameTile.h"
 #include <Windows.h>
 
+bool showMenu(sf::RenderWindow& window) {
+    sf::Font font;
+    if (!font.loadFromFile("Silkscreen/CyrilicOld.ttf")) {
+        return false; // Ошибка загрузки шрифта
+    }
+
+    sf::Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("sprites/menuBackground.png")) {
+        return false; // Ошибка загрузки фона
+    }
+    sf::Sprite background(backgroundTexture);
+    background.setScale(
+        static_cast<float>(window.getSize().x) / backgroundTexture.getSize().x,
+        static_cast<float>(window.getSize().y) / backgroundTexture.getSize().y);
+
+    // Функция для отрисовки текста с тенью
+    auto drawTextWithShadow = [&](sf::Text& text) {
+        sf::Text shadow = text;
+        shadow.setFillColor(sf::Color(16, 16, 16, 200)); // Тёмно-серый цвет с прозрачностью
+        shadow.setPosition(text.getPosition().x + 3, text.getPosition().y + 3); // Смещение
+        window.draw(shadow);
+        window.draw(text);
+        };
+
+    // Заголовок
+    sf::Text title("FarmVille", font, 50);
+    title.setFillColor(sf::Color(255, 215, 0, 255));
+    title.setPosition(window.getSize().x / 2 - title.getGlobalBounds().width / 2, 50);
+
+    // Кнопки
+    sf::Text playButton("Начать игру", font, 30);
+    playButton.setFillColor(sf::Color(255, 215, 0, 255));
+    playButton.setPosition(window.getSize().x / 2 - playButton.getGlobalBounds().width / 2, 150);
+
+    sf::Text exitButton("Выйти", font, 30);
+    exitButton.setFillColor(sf::Color(255, 215, 0, 255)); 
+    exitButton.setPosition(window.getSize().x / 2 - exitButton.getGlobalBounds().width / 2, 220);
+
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                return false; // Если закрыли окно, завершаем программу
+
+            if (event.type == sf::Event::MouseButtonPressed) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
+
+                if (playButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+                    return true; // Запускаем игру
+                }
+                else if (exitButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+                    return false;
+                }
+            }
+        }
+
+        window.clear();
+        window.draw(background);
+        drawTextWithShadow(title);
+        drawTextWithShadow(playButton);
+        drawTextWithShadow(exitButton);
+        window.display();
+    }
+    return false; 
+}
+
 int main()
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
     //sf::RenderWindow window(sf::VideoMode(320, 320), "FarmVille!", sf::Style::Fullscreen);
-    
     sf::RenderWindow window(sf::VideoMode(320, 320), "FarmVille!");
+
+    showMenu(window);
+
     Farm farm = Farm();
     int showInv = -1;      // Флаг отображения инвентаря (-1 - скрыт, 1 - показан)
     int showShop = -1;     // Флаг отображения магазина
