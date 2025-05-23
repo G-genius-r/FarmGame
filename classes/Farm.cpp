@@ -31,7 +31,7 @@ void Farm::setPlots()
         std::vector<Plot*> pRow;
         for (int y = 0; y <= end.y - start.y; y++)
         {
-            Plot* plot = new Plot("sprites/Transparent.png", 32 * (start.x + x), 32 * (start.y + y));
+            Plot* plot = new Plot("sprites/Transparent.png", 80 * (start.x + x), 80 * (start.y + y));
             plot->setUpFrontSprite("sprites/Transparent.png");
             pRow.push_back(plot);
         }
@@ -48,7 +48,7 @@ void Farm::setBackTiles()
         std::vector<GameTile*> row;
         for (int j = 0; j < gridLength; j++)
         {
-            row.push_back(new GameTile("sprites/Transparent.png", 32 * i, 32 * j));
+            row.push_back(new GameTile("sprites/Transparent.png", 80 * i, 80 * j));
         }
         tiles.push_back(row);
     }
@@ -161,7 +161,7 @@ void Farm::getPlotOptions(sf::RenderWindow* window, float pos_x, float pos_y)
         };
         for (size_t i = 0; i < options.size(); i++)
         {
-            displayFarmText(window, options[i], pos_x * 32, pos_y * 32 + i * 15);
+            displayFarmText(window, options[i], pos_x * 80, pos_y * 80 + i * 15);
         }
     }
     else if (plots[pos_x][pos_y]->get_isAnimal())
@@ -175,7 +175,7 @@ void Farm::getPlotOptions(sf::RenderWindow* window, float pos_x, float pos_y)
         };
         for (size_t i = 0; i < options.size(); i++)
         {
-            displayFarmText(window, options[i], pos_x * 32, pos_y * 32 + i * 15);
+            displayFarmText(window, options[i], pos_x * 80, pos_y * 80 + i * 15);
         }
     }
     else if (plots[pos_x][pos_y]->get_isPlant())
@@ -188,7 +188,7 @@ void Farm::getPlotOptions(sf::RenderWindow* window, float pos_x, float pos_y)
         };
         for (size_t i = 0; i < options.size(); i++)
         {
-            displayFarmText(window, options[i], pos_x * 32, pos_y * 32 + i * 15);
+            displayFarmText(window, options[i], pos_x * 80, pos_y * 80 + i * 15);
         }
     }
 }

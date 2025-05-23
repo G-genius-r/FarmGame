@@ -410,8 +410,8 @@ int main()
         }
 
         // Получение позиции выбранной клетки на основе позиции мыши
-        selectedGametile.x = (int)mousePressPos.x / 32;
-        selectedGametile.y = (int)mousePressPos.y / 32;
+        selectedGametile.x = (int)mousePressPos.x / 80;
+        selectedGametile.y = (int)mousePressPos.y / 80;
 
         window.clear();
 

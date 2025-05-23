@@ -1,6 +1,6 @@
 #include "../headers/GameTile.h"
 
-#define GAMETILE_DIM 32
+#define GAMETILE_DIM 80
 
 GameTile::GameTile(std::string backTextureFilename, float pos_x, float pos_y)
 {
@@ -26,6 +26,11 @@ bool GameTile::setUpBackSprite(std::string backTextureFilename)
 
     backSprite.setTexture(backTexture);
     backSprite.setPosition(pos);
+
+    float scaleX = GAMETILE_DIM / (float)backTexture.getSize().x;
+    float scaleY = GAMETILE_DIM / (float)backTexture.getSize().y;
+    backSprite.setScale(scaleX, scaleY);
+
     return true;
 }
 
@@ -53,6 +58,11 @@ bool GameTile::setUpFrontSprite(std::string frontTextureFilename)
         return false;
     }
     frontSprite.setTexture(frontTexture);
+    frontSprite.setPosition(pos);
+
+    float scaleX = GAMETILE_DIM / (float)frontTexture.getSize().x;
+    float scaleY = GAMETILE_DIM / (float)frontTexture.getSize().y;
+    frontSprite.setScale(scaleX, scaleY);
     return true;
 }
 
@@ -114,5 +124,10 @@ void GameTile::drawSelectionBox(sf::RenderWindow* window)
     }
     selectionBoxSprite.setTexture(selectionBoxTexture);
     selectionBoxSprite.setPosition(pos);
+
+    float scaleX = GAMETILE_DIM / (float)selectionBoxTexture.getSize().x;
+    float scaleY = GAMETILE_DIM / (float)selectionBoxTexture.getSize().y;
+    selectionBoxSprite.setScale(scaleX, scaleY);
+
     window->draw(selectionBoxSprite);
 }
