@@ -9,6 +9,12 @@
 #include "headers/GameTile.h"
 #include <Windows.h>
 
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
 bool showMenu(sf::RenderWindow& window) {
     sf::Font font;
     if (!font.loadFromFile("Silkscreen/CyrilicOld.ttf")) {
@@ -19,16 +25,26 @@ bool showMenu(sf::RenderWindow& window) {
     if (!backgroundTexture.loadFromFile("sprites/menuBackground.png")) {
         return false;
     }
+
     sf::Sprite background(backgroundTexture);
     background.setScale(
         static_cast<float>(window.getSize().x) / backgroundTexture.getSize().x,
-        static_cast<float>(window.getSize().y) / backgroundTexture.getSize().y);
+        static_cast<float>(window.getSize().y) / backgroundTexture.getSize().y
+    );
 
-    // Функция для отрисовки текста с обводкой
+    sf::Music music;
+    if (!music.openFromFile("audio/menuMusic.ogg")) {
+        return false;
+    }
+    music.setLoop(true);
+    music.play();
+
+    bool musicOn = true;
+
     auto drawTextWithOutline = [&](sf::Text& text) {
         sf::Text outline = text;
-        outline.setFillColor(sf::Color(81, 39, 5, 255)); // Еще более темно-коричневая обводка
-        for (int dx = -2; dx <= 2; dx++) {
+        outline.setFillColor(sf::Color(81, 39, 5, 255));
+        for (int dx = -6; dx <= 6; dx++) {
             for (int dy = -2; dy <= 2; dy++) {
                 if (dx == 0 && dy == 0) continue;
                 outline.setPosition(text.getPosition().x + dx, text.getPosition().y + dy);
@@ -38,14 +54,37 @@ bool showMenu(sf::RenderWindow& window) {
         window.draw(text);
         };
 
-    // Кнопки ниже и ближе друг к другу
-    sf::Text playButton("Начать игру", font, 30);
-    playButton.setFillColor(sf::Color::White);
-    playButton.setPosition(window.getSize().x / 2 - playButton.getGlobalBounds().width / 2, 140);
+    // Увеличиваем размер шрифта
+    const unsigned int menuFontSize = 48;
 
-    sf::Text exitButton("Выйти", font, 30);
+    sf::Text playButton("Начать игру", font, menuFontSize);
+    playButton.setFillColor(sf::Color::White);
+
+    sf::Text musicButton("Музыка: Вкл", font, menuFontSize);
+    musicButton.setFillColor(sf::Color::White);
+
+    sf::Text exitButton("Выйти", font, menuFontSize);
     exitButton.setFillColor(sf::Color::White);
-    exitButton.setPosition(window.getSize().x / 2 - exitButton.getGlobalBounds().width / 2, 180);
+
+    // Новые значения для Y и расстояния между кнопками
+    auto centerButtons = [&]() {
+        float w = window.getSize().x;
+        float startY = 350.0f;
+        float spacing = 60.0f; // расстояние между кнопками
+
+        playButton.setPosition(w / 2.0f - playButton.getGlobalBounds().width / 2.0f, startY);
+        musicButton.setPosition(w / 2.0f - musicButton.getGlobalBounds().width / 2.0f,
+            playButton.getPosition().y + playButton.getGlobalBounds().height + spacing);
+        exitButton.setPosition(w / 2.0f - exitButton.getGlobalBounds().width / 2.0f,
+            musicButton.getPosition().y + musicButton.getGlobalBounds().height + spacing);
+        };
+
+    auto updateMusicButton = [&]() {
+        musicButton.setString(musicOn ? "Музыка: Вкл" : "Музыка: Выкл");
+        centerButtons();
+        };
+
+    updateMusicButton();
 
     while (window.isOpen()) {
         sf::Event event;
@@ -54,7 +93,6 @@ bool showMenu(sf::RenderWindow& window) {
                 window.close();
                 return false;
             }
-
             if (event.type == sf::Event::MouseButtonPressed) {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
                 sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
@@ -66,31 +104,48 @@ bool showMenu(sf::RenderWindow& window) {
                     window.close();
                     return false;
                 }
+                else if (musicButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+                    musicOn = !musicOn;
+                    if (musicOn) music.play();
+                    else music.pause();
+                    updateMusicButton();
+                }
             }
         }
-        window.setSize(sf::Vector2u(800, 800));
 
         window.clear();
         window.draw(background);
         drawTextWithOutline(playButton);
+        drawTextWithOutline(musicButton);
         drawTextWithOutline(exitButton);
         window.display();
     }
-
     return false;
 }
+
 
 int main()
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
-    //sf::RenderWindow window(sf::VideoMode(320, 320), "FarmVille!", sf::Style::Fullscreen);
-    sf::RenderWindow window(sf::VideoMode(320, 320), "FarmVille!");
+    int menuWidth = 800;
+    int menuHeight = 800;
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+    int menuPosX = (desktop.width - menuWidth) / 2;
+    int menuPosY = (desktop.height - menuHeight) / 2;
 
-    showMenu(window);
-    window.setSize(sf::Vector2u(320, 320));
+    sf::RenderWindow menuWindow(sf::VideoMode(menuWidth, menuHeight), "FarmVille!", sf::Style::Titlebar | sf::Style::Close);
 
+    HWND menuHwnd = menuWindow.getSystemHandle();
+    SetWindowPos(menuHwnd, HWND_TOP, menuPosX, menuPosY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+
+    if (!showMenu(menuWindow))
+        return 0; // Если пользователь закрыл меню — выход
+
+    menuWindow.close(); // Закрываем меню
+
+    sf::RenderWindow window(sf::VideoMode(320,320), "FarmVille!", sf::Style::Titlebar | sf::Style::Close);
 
     Farm farm = Farm();
     int showInv = -1;      // Флаг отображения инвентаря (-1 - скрыт, 1 - показан)
@@ -103,6 +158,13 @@ int main()
 
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     window.setSize(sf::Vector2u(800, 800));
+
+    int winWidth = 800;
+    int winHeight = 800;
+    int winPosX = (desktop.width - winWidth) / 2;
+    int winPosY = (desktop.height - winHeight) / 2;
+    HWND hwnd = window.getSystemHandle();
+    SetWindowPos(hwnd, HWND_TOP, winPosX, winPosY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
 
     while (window.isOpen())
