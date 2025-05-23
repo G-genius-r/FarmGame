@@ -9,9 +9,6 @@ bool MoneyPanel::loadResources() {
     }
     panelSprite.setTexture(panelTexture);
 
-    // Уменьшение размера в 2 раза (0.5 от оригинального размера)
-    panelSprite.setScale(0.5f, 0.5f); // X и Y масштаб
-
     // Загружаем шрифт для текста
     if (!font.loadFromFile("Silkscreen/CyrilicOld.ttf")) {
         return false;
@@ -19,7 +16,7 @@ bool MoneyPanel::loadResources() {
 
     // Настраиваем текст
     moneyText.setFont(font);
-    moneyText.setCharacterSize(18);
+    moneyText.setCharacterSize(35);
     moneyText.setFillColor(sf::Color::White);
     moneyText.setString(std::to_string(currentMoney));
 
@@ -54,7 +51,7 @@ void MoneyPanel::draw(sf::RenderWindow& window) {
 void MoneyPanel::setPosition(float x, float y) {
     panelSprite.setPosition(x, y);
     // Текст можно позиционировать относительно панели
-    float textOffsetX = 45 * 0.5f; // Умножаем отступы на масштаб
-    float textOffsetY = 2 * 0.5f;
+    float textOffsetX = 100 * 0.5f; // Умножаем отступы на масштаб
+    float textOffsetY = 5 * 0.5f;
     moneyText.setPosition(x + textOffsetX, y + textOffsetY);
 }

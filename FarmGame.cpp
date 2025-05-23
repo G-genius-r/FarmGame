@@ -418,6 +418,15 @@ int main()
         // Отрисовка фона
         window.draw(background);
 
+        MoneyPanel moneyPanel;
+
+        if (!moneyPanel.loadResources()) {
+            std::cerr << "Ошибка загрузки ресурсов MoneyPanel!" << std::endl;
+        }
+        moneyPanel.setPosition(610, 7); // Позиция на экране
+        moneyPanel.setInventory(farm.inventory); // Начальное количество денег
+        moneyPanel.draw(window);
+
         // --- Рисуем кнопку меню музыки ---
         window.draw(musicMenuButton);
         window.draw(musicMenuText);
