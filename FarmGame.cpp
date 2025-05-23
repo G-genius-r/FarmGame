@@ -64,23 +64,6 @@ int main()
     bool isMusicOn = true;
     // --- End Music Setup ---
 
-    // Устанавливаем view на весь экран (чтобы контент занимал всё окно)
-    sf::View view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
-    window.setView(view);
-
-    // --- Music Setup ---
-    sf::Music music;
-    if (!music.openFromFile("audio/menuMusic.ogg")) {
-        std::cerr << "Не удалось загрузить музыку!" << std::endl;
-    }
-    else {
-        music.setLoop(true);
-        music.setVolume(60); // громкость по умолчанию
-        music.play();
-    }
-    bool isMusicOn = true;
-    // --- End Music Setup ---
-
     Farm farm = Farm();
     int showInv = -1;      // Флаг отображения инвентаря (-1 - скрыт, 1 - показан)
     int showShop = -1;     // Флаг отображения магазина
@@ -100,17 +83,6 @@ int main()
     musicMenuButton.setOutlineColor(sf::Color::Black);
     musicMenuButton.setPosition(window.getSize().x - 50, 10);
 
-    sf::Text musicMenuText("♫", font, 24);
-    musicMenuText.setFillColor(sf::Color::Black);
-    musicMenuText.setPosition(window.getSize().x - 42, 11);
-
-    MusicMenuState musicMenuState = MUSIC_MENU_CLOSED;
-    sf::RectangleShape musicMenuPanel(sf::Vector2f(170, 120));
-    musicMenuPanel.setFillColor(sf::Color(230, 230, 255, 240));
-    musicMenuPanel.setOutlineThickness(2);
-    musicMenuPanel.setOutlineColor(sf::Color(100, 100, 180));
-    musicMenuPanel.setPosition(window.getSize().x - 180, 60);
-
     sf::Text musicOnText("Вкл/Выкл музыку", font, 18);
     musicOnText.setFillColor(sf::Color::Black);
     musicOnText.setPosition(window.getSize().x - 170, 70);
@@ -144,27 +116,27 @@ int main()
     musicMenuPanel.setOutlineColor(sf::Color(100, 100, 180));
     musicMenuPanel.setPosition(window.getSize().x - 180, 60);
 
-    sf::Text musicOnText("Вкл/Выкл музыку", font, 18);
-    musicOnText.setFillColor(sf::Color::Black);
-    musicOnText.setPosition(window.getSize().x - 170, 70);
+    //sf::Text musicOnText("Вкл/Выкл музыку", font, 18);
+    //musicOnText.setFillColor(sf::Color::Black);
+    //musicOnText.setPosition(window.getSize().x - 170, 70);
 
-    sf::Text exitGameText("Выход из игры", font, 18);
+   /* sf::Text exitGameText("Выход из игры", font, 18);
     exitGameText.setFillColor(sf::Color::Black);
-    exitGameText.setPosition(window.getSize().x - 170, 110);
+    exitGameText.setPosition(window.getSize().x - 170, 110);*/
 
     // Области кнопок (для обработки кликов)
-    sf::FloatRect musicOnBtnRect(window.getSize().x - 170, 70, 160, 30);
-    sf::FloatRect exitGameBtnRect(window.getSize().x - 170, 110, 160, 30);
+  /*  sf::FloatRect musicOnBtnRect(window.getSize().x - 170, 70, 160, 30);
+    sf::FloatRect exitGameBtnRect(window.getSize().x - 170, 110, 160, 30);*/
 
     // Загрузка фонового изображения (делаем это один раз)
-    sf::Texture backgroundTexture;
+   /* sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("sprites/main.png")) {
         std::cerr << "Не удалось загрузить фон main.png!" << std::endl;
     }
     sf::Sprite background(backgroundTexture);
     float scaleX = window.getSize().x / static_cast<float>(backgroundTexture.getSize().x);
     float scaleY = window.getSize().y / static_cast<float>(backgroundTexture.getSize().y);
-    background.setScale(scaleX, scaleY);
+    background.setScale(scaleX, scaleY);*/
 
     while (window.isOpen())
     {
