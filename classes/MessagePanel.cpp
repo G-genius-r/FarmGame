@@ -2,8 +2,8 @@
 
 MessagePanel::MessagePanel() {
     font.loadFromFile("Silkscreen/CyrilicOld.ttf");
-    panelSize = sf::Vector2f(120, 44);
-    position = sf::Vector2f(190, 266);
+    panelSize = sf::Vector2f(470, 150); 
+    position = sf::Vector2f(300, 640);
 
     background.setFillColor(sf::Color(20, 20, 20, 180));
     background.setOutlineColor(sf::Color::White);
@@ -32,12 +32,12 @@ void MessagePanel::draw(sf::RenderWindow& window) {
     background.setSize(panelSize);
     window.draw(background);
 
-    float lineHeight = 12; // ещё компактнее
-    float y = position.y + 5;
+    float lineHeight = 28; // ещё компактнее
+    float y = position.y + 10;
     int shown = 0;
     for (auto it = messages.rbegin(); it != messages.rend(); ++it) {
-        sf::Text text(it->text, font, 12); // ещё меньше шрифт
-        text.setPosition(position.x + 5, y);
+        sf::Text text(it->text, font, 18); // ещё меньше шрифт
+        text.setPosition(position.x + 10, y);
         text.setFillColor(sf::Color::White);
         window.draw(text);
         y += lineHeight;

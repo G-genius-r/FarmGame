@@ -75,12 +75,17 @@ void Farm::passTime(sf::RenderWindow* window)
     }
 
     // Анимация перехода дня
+    sf::Vector2u windowSize = window->getSize();
+
     sf::RectangleShape dayScreen;
     dayScreen.setFillColor(sf::Color::White);
-    dayScreen.setSize(sf::Vector2f(350, 350));
+    dayScreen.setSize(sf::Vector2f(windowSize.x, windowSize.y));
     window->draw(dayScreen);
-    displayFarmText(window, "День: ", 140, 150);
-    displayFarmText(window, std::to_string(dayCounter), 175, 150);
+
+    // Позиции текста масштабируются под размер окна
+    displayFarmText(window, "День: ", windowSize.x * 0.4, windowSize.y * 0.43);
+    displayFarmText(window, std::to_string(dayCounter), windowSize.x * 0.5, windowSize.y * 0.43);
+
     window->display();
     pause(2); // Пауза 2 секунды
 }
@@ -106,9 +111,10 @@ bool Farm::get_Help(sf::RenderWindow* window)
         std::cout << "Ошибка загрузки текстуры помощи" << std::endl;
         return false;
     }
-
     Help_sprite.setTexture(Help_texture);
-    Help_sprite.setPosition(help_x, help_y);
+    float scaleX = window->getSize().x / static_cast<float>(Help_texture.getSize().x);
+    float scaleY = window->getSize().y / static_cast<float>(Help_texture.getSize().y);
+    Help_sprite.setScale(scaleX, scaleY);
     window->draw(Help_sprite);
 
     // Текст помощи
@@ -205,34 +211,63 @@ void Farm::displayFarmText(sf::RenderWindow* window, std::string text, int x, in
         return;
     }
 
+    sf::Vector2u windowSize = window->getSize();
+
+    unsigned int fontSize = static_cast<unsigned int>(windowSize.y * 0.03f); 
+    if (fontSize < 8) fontSize = 8; 
+
+    float posX = static_cast<float>(x) / 350.0f * windowSize.x;
+    float posY = static_cast<float>(y) / 350.0f * windowSize.y;
+
     sf::Text sfText;
     sfText.setFont(font);
     sfText.setString(text);
-    sfText.setCharacterSize(10);
+    sfText.setCharacterSize(fontSize);
     sfText.setFillColor(sf::Color::Black);
-    sfText.setPosition(x, y);
+    sfText.setPosition(posX, posY);
     window->draw(sfText);
 }
 
 // Отрисовка всех участков
 void Farm::drawPlots(sf::RenderWindow* window)
 {
-    for (const auto& row : plots)
-    {
-        for (const auto& plot : row)
-        {
-            window->draw(plot->get_backSprite());
-            window->draw(plot->get_frontSprite());
+    sf::Vector2u windowSize = window->getSize();
+    int plotsX = plots.size();
+    int plotsY = plots[0].size();
 
-            // ВАЖНО: вот тут проверяем Barley
-            if (plot->getEntity()) {
-                Barley* barley = dynamic_cast<Barley*>(plot->getEntity());
-                if (barley) {
-                    float px = plot->get_frontSprite().getPosition().x;
-                    float py = plot->get_frontSprite().getPosition().y;
-                    barley->drawWaterLevel(*window, px, py);
-                }
-            }
+    // Размер одной клетки (участка) на экране
+    float cellWidth = windowSize.x / static_cast<float>(gridLength);
+    float cellHeight = windowSize.y / static_cast<float>(gridLength);
+
+    // Начальные индексы участков (например, 2,3 как в setPlots)
+    int startX = 2;
+    int startY = 3;
+
+    for (int x = 0; x < plotsX; ++x)
+    {
+        for (int y = 0; y < plotsY; ++y)
+        {
+            Plot* plot = plots[x][y];
+            // Получаем спрайты
+            sf::Sprite backSprite = plot->get_backSprite();
+            sf::Sprite frontSprite = plot->get_frontSprite();
+
+            // Вычисляем позицию для этого участка
+            float posX = (startX + x) * cellWidth;
+            float posY = (startY + y) * cellHeight;
+
+            // Масштабируем спрайты под размер клетки (участка)
+            float scaleX = cellWidth / backSprite.getTextureRect().width;
+            float scaleY = cellHeight / backSprite.getTextureRect().height;
+
+            backSprite.setPosition(posX, posY);
+            backSprite.setScale(scaleX, scaleY);
+
+            frontSprite.setPosition(posX, posY);
+            frontSprite.setScale(scaleX, scaleY);
+
+            window->draw(backSprite);
+            window->draw(frontSprite);
         }
     }
 }
