@@ -118,9 +118,14 @@ sf::Vector2f GameTile::get_pos() {
 
 void GameTile::drawSelectionBox(sf::RenderWindow* window)
 {
-    if (!selectionBoxTexture.loadFromFile("sprites/selectionBox.png"))
-    {
-        std::cout << "ошибка загрузки текстуры рамки выделения из файла." << std::endl;
+    static sf::Texture selectionBoxTexture;
+    static bool textureLoaded = false;
+    if (!textureLoaded) {
+        if (!selectionBoxTexture.loadFromFile("sprites/selectionBox.png")) {
+            std::cout << "ошибка загрузки текстуры рамки выделения из файла." << std::endl;
+            return;
+        }
+        textureLoaded = true;
     }
     selectionBoxSprite.setTexture(selectionBoxTexture);
     selectionBoxSprite.setPosition(pos);

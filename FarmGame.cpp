@@ -349,7 +349,7 @@ int main()
         // Получение позиции выбранной клетки на основе позиции мыши
         selectedGametile.x = (int)mousePressPos.x / 80;
         selectedGametile.y = (int)mousePressPos.y / 80;
-
+       
         window.clear();
 
         // Отрисовка фона

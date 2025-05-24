@@ -59,6 +59,7 @@ void Barley::water()
     waterLevelToDisplay = wateringLevel;
     waterDisplayClock.restart();
 }
+
 void Barley::showWaterLevel() {
     waterLevelToDisplay = wateringLevel;
     waterDisplayClock.restart();

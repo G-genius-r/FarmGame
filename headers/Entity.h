@@ -47,6 +47,8 @@ public:
     // Параметр: _isAnimal - булево значение, устанавливающее, является ли объект животным
     void set_isAnimal(bool _isAnimal);
 
+    virtual void drawWaterLevel(sf::RenderWindow& window, float x, float y) {}
+
     // Геттер для стадии роста объекта
     // Возвращает: стадию роста объекта
     int get_growthStage();

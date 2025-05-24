@@ -4,6 +4,8 @@
 #include <SFML/System.hpp>
 #include "../headers/Farm.h"
 #include <vector>
+#include "../headers/Barley.h"
+#include "../headers/Wheat.h"
 
 // Конструктор класса Farm
 Farm::Farm()
@@ -213,8 +215,8 @@ void Farm::displayFarmText(sf::RenderWindow* window, std::string text, int x, in
 
     sf::Vector2u windowSize = window->getSize();
 
-    unsigned int fontSize = static_cast<unsigned int>(windowSize.y * 0.03f); 
-    if (fontSize < 8) fontSize = 8; 
+    unsigned int fontSize = static_cast<unsigned int>(windowSize.y * 0.03f);
+    if (fontSize < 8) fontSize = 8;
 
     float posX = static_cast<float>(x) / 350.0f * windowSize.x;
     float posY = static_cast<float>(y) / 350.0f * windowSize.y;
@@ -257,24 +259,38 @@ void Farm::drawPlots(sf::RenderWindow* window)
             float posY = (startY + y) * cellHeight;
 
             // Масштабируем спрайты под размер клетки (участка)
-            float scaleX = cellWidth / backSprite.getTextureRect().width;
-            float scaleY = cellHeight / backSprite.getTextureRect().height;
+            const sf::Texture* tex = backSprite.getTexture();
+            if (tex) {
+                float tW = static_cast<float>(tex->getSize().x);
+                float tH = static_cast<float>(tex->getSize().y);
 
-            backSprite.setPosition(posX, posY);
-            backSprite.setScale(scaleX, scaleY);
+                float scaleX = cellWidth / tW;
+                float scaleY = cellHeight / tH;
 
-            frontSprite.setPosition(posX, posY);
-            frontSprite.setScale(scaleX, scaleY);
+                backSprite.setScale(scaleX, scaleY);
+                backSprite.setPosition(posX, posY);
+
+                frontSprite.setScale(scaleX, scaleY);
+                frontSprite.setPosition(posX, posY);
+            }
 
             window->draw(plot->get_backSprite());
             window->draw(plot->get_frontSprite());
 
             if (plot->getEntity()) {
+                // Для Barley
                 Barley* barley = dynamic_cast<Barley*>(plot->getEntity());
                 if (barley) {
                     float px = plot->get_frontSprite().getPosition().x;
                     float py = plot->get_frontSprite().getPosition().y;
                     barley->drawWaterLevel(*window, px, py);
+                }
+                // Для Wheat
+                Wheat* wheat = dynamic_cast<Wheat*>(plot->getEntity());
+                if (wheat) {
+                    float px = plot->get_frontSprite().getPosition().x;
+                    float py = plot->get_frontSprite().getPosition().y;
+                    wheat->drawWaterLevel(*window, px, py);
                 }
             }
         }
