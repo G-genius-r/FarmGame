@@ -72,9 +72,9 @@ void Barley::drawWaterLevel(sf::RenderWindow& window, float x, float y) {
             font.loadFromFile("Silkscreen/CyrilicOld.ttf");
             fontLoaded = true;
         }
-        sf::Text txt("Тырур: " + std::to_string(wateringLevel), font, 10);
+        sf::Text txt("Тырур: " + std::to_string(wateringLevel), font, 20);
         txt.setFillColor(sf::Color::Blue);
-        txt.setPosition(x, y - 45);
+        txt.setPosition(x, y - 25);
         window.draw(txt);
     }
     else if (waterLevelToDisplay != -1) {

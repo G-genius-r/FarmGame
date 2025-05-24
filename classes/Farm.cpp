@@ -266,8 +266,17 @@ void Farm::drawPlots(sf::RenderWindow* window)
             frontSprite.setPosition(posX, posY);
             frontSprite.setScale(scaleX, scaleY);
 
-            window->draw(backSprite);
-            window->draw(frontSprite);
+            window->draw(plot->get_backSprite());
+            window->draw(plot->get_frontSprite());
+
+            if (plot->getEntity()) {
+                Barley* barley = dynamic_cast<Barley*>(plot->getEntity());
+                if (barley) {
+                    float px = plot->get_frontSprite().getPosition().x;
+                    float py = plot->get_frontSprite().getPosition().y;
+                    barley->drawWaterLevel(*window, px, py);
+                }
+            }
         }
     }
 }
