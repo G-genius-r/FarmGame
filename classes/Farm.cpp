@@ -11,7 +11,7 @@
 Farm::Farm()
 {
     gridLength = 10; // Установка размера сетки
-    dayCounter = 0;  // Инициализация счетчика дней
+    dayCounter = 1;  // Инициализация счетчика дней
     setBackTiles();  // Создание фоновых клеток
     setPlots();      // Создание участков земли
     shop = new Shop(); // Инициализация магазина
@@ -61,7 +61,6 @@ void Farm::setBackTiles()
 void Farm::passTime(sf::RenderWindow* window)
 {
     dayCounter++;
-    std::cout << "На ферме теперь день " << dayCounter << std::endl;
 
     // Обновление всех участков
     for (auto& row : plots)
@@ -84,9 +83,21 @@ void Farm::passTime(sf::RenderWindow* window)
     dayScreen.setSize(sf::Vector2f(windowSize.x, windowSize.y));
     window->draw(dayScreen);
 
-    // Позиции текста масштабируются под размер окна
-    displayFarmText(window, "День: ", windowSize.x * 0.4, windowSize.y * 0.43);
-    displayFarmText(window, std::to_string(dayCounter), windowSize.x * 0.5, windowSize.y * 0.43);
+    // Формируем строку "День: N"
+    std::string dayText = "День: " + std::to_string(dayCounter);
+
+    // Получаем ширину и высоту текста (предполагается, что displayFarmText возвращает размер текста)
+    sf::Font font;
+    font.loadFromFile("Silkscreen/CyrilicOld.ttf"); 
+    sf::Text text(dayText, font, 48); 
+    text.setFillColor(sf::Color::Black);
+
+    // Центрируем текст по окну
+    sf::FloatRect textRect = text.getLocalBounds();
+    text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+    text.setPosition(windowSize.x / 2.0f, windowSize.y / 2.0f);
+
+    window->draw(text);
 
     window->display();
     pause(2); // Пауза 2 секунды
@@ -97,6 +108,37 @@ void Farm::pause(int num_seconds)
 {
     sf::Clock clock;
     while (clock.getElapsedTime().asSeconds() < num_seconds);
+}
+
+// отрисовка счетчика дней
+void Farm::drawDayCounter(sf::RenderWindow* window)
+{
+    sf::Font font;
+    if (!font.loadFromFile("Silkscreen/CyrilicOld.ttf"))
+    {
+        std::cout << "Ошибка загрузки шрифта" << std::endl;
+        return;
+    }
+
+    std::string dayText = "День: " + std::to_string(dayCounter);
+
+    sf::Text text(dayText, font, 32);
+    text.setFillColor(sf::Color(220, 185, 138));
+
+    // Обводка
+    text.setOutlineColor(sf::Color::White); // желтая обводка
+    text.setOutlineThickness(3.f); // толщина обводки
+
+    sf::Vector2u windowSize = window->getSize();
+    sf::FloatRect textRect = text.getLocalBounds();
+
+    float rightMargin = 20.f;
+    float posX = windowSize.x - textRect.width - rightMargin;
+    float posY = 70.f;
+
+    text.setPosition(posX, posY);
+
+    window->draw(text);
 }
 
 // Изменение фонового спрайта
@@ -225,7 +267,9 @@ void Farm::displayFarmText(sf::RenderWindow* window, std::string text, int x, in
     sfText.setFont(font);
     sfText.setString(text);
     sfText.setCharacterSize(fontSize);
-    sfText.setFillColor(sf::Color::Black);
+    sfText.setFillColor(sf::Color::White);
+    sfText.setOutlineColor(sf::Color(220, 185, 138)); // желтая обводка
+    sfText.setOutlineThickness(3.f);
     sfText.setPosition(posX, posY);
     window->draw(sfText);
 }

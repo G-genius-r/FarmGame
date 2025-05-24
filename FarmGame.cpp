@@ -332,17 +332,17 @@ int main()
                         messagePanel.addMessage("Нельзя разместить овцу: нет овец в инвентаре");
                     }
                 }
-            }
-
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::H) {
-                // Открытие/закрытие справки по клавише H
-                showHelp *= -1;
-            }
+            }            
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
             {
                 // Пропуск времени по клавише P
                 farm.passTime(&window);
+            }
+
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::H) {
+                // Открытие/закрытие справки по клавише H
+                showHelp *= -1;
             }
 
             // Сохранение данных инвентаря в файл (клавиша S)
@@ -390,8 +390,8 @@ int main()
         moneyPanel.setInventory(farm.inventory); // Начальное количество денег
         moneyPanel.draw(window);
 
-        musicMenu.draw(window, isMusicOn);
-
+        farm.drawDayCounter(&window);
+               
         // Отображение подсказки о справке
         farm.displayFarmText(&window, "Нажмите H для открытия справки!", 0, 0);
 
@@ -404,6 +404,8 @@ int main()
             farm.getPlotOptions(&window, (float)selectedGametile.x, (float)selectedGametile.y);
             farm.tiles[(int)selectedGametile.x][(int)selectedGametile.y]->drawSelectionBox(&window);
         }
+
+        musicMenu.draw(window, isMusicOn);
 
         // Отображение инвентаря (если открыт)
         if (showInv == 1)

@@ -63,6 +63,8 @@ public:
     //*                   pos_y - y-координата выбранной грядки.
     void getPlotOptions(sf::RenderWindow* window, float pos_x, float pos_y);
 
+    void drawDayCounter(sf::RenderWindow* window);
+
     //* Отрисовывает тайлы сетки и грядки в игровом окне.
     //* Входной параметр: window - окно SFML для отрисовки макета фермы.
     void drawPlots(sf::RenderWindow* window);
