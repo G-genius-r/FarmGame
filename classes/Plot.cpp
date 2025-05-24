@@ -176,3 +176,13 @@ bool Plot::updateSprite() {
     }
     return 0;
 }
+
+std::string Plot::getFertiliserSpriteOnPlot() const {
+    if (entity && entity->get_isPlant()) {
+        Plant* plant = dynamic_cast<Plant*>(entity);
+        if (plant) {
+            return plant->getFertiliserSprite();
+        }
+    }
+    return "";
+}

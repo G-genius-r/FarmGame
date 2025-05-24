@@ -92,6 +92,8 @@ public:
 
     // Функция для забоя животных
     void Slaughter(Inventory* Inventory);
+
+    std::string getFertiliserSpriteOnPlot() const;
 };
 
 #endif

@@ -340,3 +340,41 @@ void Farm::drawPlots(sf::RenderWindow* window)
         }
     }
 }
+
+void Farm::drawFertiliserSprites(sf::RenderWindow* window) {
+    sf::Vector2u windowSize = window->getSize();
+    int plotsX = plots.size();
+    int plotsY = plots[0].size();
+
+    float cellWidth = windowSize.x / static_cast<float>(gridLength);
+    float cellHeight = windowSize.y / static_cast<float>(gridLength);
+
+    int startX = 2;
+    int startY = 3;
+
+    static std::map<std::string, sf::Texture> textureCache;
+
+    for (int x = 0; x < plotsX; ++x) {
+        for (int y = 0; y < plotsY; ++y) {
+            Plot* plot = plots[x][y];
+            std::string fertSpritePath = plot->getFertiliserSpriteOnPlot();
+            if (!fertSpritePath.empty()) {
+                if (textureCache.find(fertSpritePath) == textureCache.end()) {
+                    textureCache[fertSpritePath] = sf::Texture();
+                    textureCache[fertSpritePath].loadFromFile(fertSpritePath);
+                }
+                sf::Sprite fertSprite(textureCache[fertSpritePath]);
+                // Масштаб под размер клетки
+                fertSprite.setScale(cellWidth / fertSprite.getTexture()->getSize().x / 3,
+                    cellHeight / fertSprite.getTexture()->getSize().y / 3);
+
+                // Позиция — над растением, чуть выше frontSprite
+                float posX = (startX + x) * cellWidth;
+                float posY = (startY + y) * cellHeight - cellHeight * 0.f;
+                fertSprite.setPosition(posX, posY);
+
+                window->draw(fertSprite);
+            }
+        }
+    }
+}

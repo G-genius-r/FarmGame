@@ -91,6 +91,8 @@ public:
     //*                    y - y-координата дл€ позиционировани€ текста.
     void displayFarmText(sf::RenderWindow* window, std::string displayString, int x, int y);
 
+    void drawFertiliserSprites(sf::RenderWindow* window);
+
     //* ѕровер€ет, €вл€етс€ ли выбранный игровой тайл гр€дкой (дл€ взаимодействи€).
     //* ¬ходной параметр: selectedGametile - позици€ выбранного игрового тайла.
     //* ¬ыходное значение: True, если выбранный тайл €вл€етс€ гр€дкой, false в противном случае.

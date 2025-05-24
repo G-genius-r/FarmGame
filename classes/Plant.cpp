@@ -42,4 +42,9 @@ bool Plant::checkDeath() {
     }
 }
 
-// возвращает корректное имя файла текстуры из textures filenames класса в соответствии со стадией роста
+std::string Plant::getFertiliserSprite() const {
+    if (!isFertilised)
+        return "sprites/inventorySprite/fertiliserSprite.png";
+    else
+        return "";
+}

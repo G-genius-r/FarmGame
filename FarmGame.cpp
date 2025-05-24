@@ -398,6 +398,8 @@ int main()
         // Отрисовка всех клеток фермы
         farm.drawPlots(&window);
 
+        farm.drawFertiliserSprites(&window);
+
         // Отображение опций для выбранной клетки
         if (farm.selectedTileIsPlot(selectedGametile))
         {
