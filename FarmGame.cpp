@@ -10,8 +10,8 @@
 #include "headers/menu.h"
 #include "headers/MoneyPanel.h"
 #include <Windows.h>
-#include "../headers/MusicMenu.h"
-#include "../headers/MessagePanel.h"
+#include "headers/MusicMenu.h"
+#include "headers/MessagePanel.h"
 
 int main()
 {
@@ -29,7 +29,9 @@ int main()
     HWND menuHwnd = menuWindow.getSystemHandle();
     SetWindowPos(menuHwnd, HWND_TOP, menuPosX, menuPosY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
-    if (!showMenu(menuWindow))
+    // --- Передаем сюда musicOn по ссылке ---
+    bool isMusicOn = true;
+    if (!showMenu(menuWindow, isMusicOn))
         return 0;
 
     menuWindow.close(); // Закрываем меню
@@ -55,9 +57,11 @@ int main()
     else {
         music.setLoop(true);
         music.setVolume(60); // громкость по умолчанию
-        music.play();
+        if (isMusicOn)
+            music.play();
+        else
+            music.pause();
     }
-    bool isMusicOn = true;
 
     MusicMenu musicMenu(window);
 
@@ -91,15 +95,21 @@ int main()
             MusicMenu::Action musicAction = musicMenu.pollAction();
             if (musicAction == MusicMenu::MAIN_MENU) {
                 music.pause();
-                bool startGame = showMenu(window);
+                bool startGame = showMenu(window, isMusicOn);
                 if (!startGame) {
                     window.close();
                     break;
                 }
-                else if (musicAction == MusicMenu::EXIT_GAME) {
-                    window.close();
-                    break;
-                }
+                // После возврата из меню обновляем музыку
+                if (isMusicOn)
+                    music.play();
+                else
+                    music.pause();
+                continue;
+            }
+            if (musicAction == MusicMenu::EXIT_GAME) {
+                window.close();
+                break;
             }
             if (event.type == sf::Event::Closed)
                 window.close();
@@ -117,10 +127,26 @@ int main()
 
             if (musicMenu.isOpen()) continue;
 
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+                if (showInv == 1) showInv = -1;
+                if (showShop == 1) showShop = -1;
+                if (showHelp == 1) showHelp = -1;
+                continue;
+            }
+
             if (event.type == sf::Event::MouseButtonPressed)
             {
                 sf::Vector2f mousePosF = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                mousePressPos = mousePosF;                  
+                mousePressPos = mousePosF;
+            }
+
+            if ((event.type == sf::Event::MouseButtonPressed) &&
+                (showInv == 1 || showShop == 1 || showHelp == 1 || musicMenu.isOpen())) {
+                if (showInv == 1) showInv = -1;
+                if (showShop == 1) showShop = -1;
+                if (showHelp == 1) showHelp = -1;
+                if (musicMenu.isOpen()) musicMenu.close();
+                continue;
             }
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::I)
@@ -349,7 +375,7 @@ int main()
         // Получение позиции выбранной клетки на основе позиции мыши
         selectedGametile.x = (int)mousePressPos.x / 80;
         selectedGametile.y = (int)mousePressPos.y / 80;
-       
+
         window.clear();
 
         // Отрисовка фона

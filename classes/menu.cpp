@@ -1,6 +1,7 @@
 #include "../headers/menu.h"
+#include <SFML/Audio.hpp>
 
-bool showMenu(sf::RenderWindow& window) {
+bool showMenu(sf::RenderWindow& window, bool& musicOn) {
     sf::Font font;
     if (!font.loadFromFile("Silkscreen/CyrilicOld.ttf")) {
         return false;
@@ -22,9 +23,10 @@ bool showMenu(sf::RenderWindow& window) {
         return false;
     }
     music.setLoop(true);
-    music.play();
 
-    bool musicOn = true;
+    // musicOn теперь внешний, не локальный!
+    if (musicOn) music.play();
+    else music.pause();
 
     auto drawTextWithOutline = [&](sf::Text& text) {
         sf::Text outline = text;
@@ -39,23 +41,21 @@ bool showMenu(sf::RenderWindow& window) {
         window.draw(text);
         };
 
-    // Увеличиваем размер шрифта
     const unsigned int menuFontSize = 48;
 
     sf::Text playButton("Начать игру", font, menuFontSize);
     playButton.setFillColor(sf::Color::White);
 
-    sf::Text musicButton("Музыка: Вкл", font, menuFontSize);
+    sf::Text musicButton("", font, menuFontSize);
     musicButton.setFillColor(sf::Color::White);
 
     sf::Text exitButton("Выйти", font, menuFontSize);
     exitButton.setFillColor(sf::Color::White);
 
-    // Новые значения для Y и расстояния между кнопками
     auto centerButtons = [&]() {
         float w = window.getSize().x;
         float startY = 350.0f;
-        float spacing = 60.0f; // расстояние между кнопками
+        float spacing = 60.0f;
 
         playButton.setPosition(w / 2.0f - playButton.getGlobalBounds().width / 2.0f, startY);
         musicButton.setPosition(w / 2.0f - musicButton.getGlobalBounds().width / 2.0f,
@@ -83,6 +83,7 @@ bool showMenu(sf::RenderWindow& window) {
                 sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 
                 if (playButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+                    music.stop();
                     return true;
                 }
                 else if (exitButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {

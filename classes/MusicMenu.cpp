@@ -19,6 +19,11 @@ MusicMenu::MusicMenu(sf::RenderWindow& window) : state(CLOSED), pendingAction(NO
     menuPanel.setOutlineThickness(2);
     menuPanel.setOutlineColor(sf::Color(100, 100, 180));
 
+    menuText.setFont(font);
+    menuText.setCharacterSize(18);
+    menuText.setString("");
+    menuText.setFillColor(sf::Color(100, 100, 180));
+
     musicOnText.setFont(font);
     musicOnText.setCharacterSize(18);
     musicOnText.setString("Музыка");
@@ -34,7 +39,7 @@ MusicMenu::MusicMenu(sf::RenderWindow& window) : state(CLOSED), pendingAction(NO
     exitGameText.setString("Выход из игры");
     exitGameText.setFillColor(sf::Color(100, 100, 180));
 
-    if (!iconTexture.loadFromFile("sprites/music_icon.png")) { 
+    if (!iconTexture.loadFromFile("sprites/music_icon.png")) {
         std::cerr << "Не удалось загрузить иконку для меню музыки!" << std::endl;
     }
     iconSprite.setTexture(iconTexture);
@@ -48,15 +53,18 @@ MusicMenu::MusicMenu(sf::RenderWindow& window) : state(CLOSED), pendingAction(NO
     updatePositions(window);
 }
 
+void MusicMenu::close() {
+    state = CLOSED;
+}
+
 void MusicMenu::updatePositions(sf::RenderWindow& window) {
     menuButton.setPosition(window.getSize().x - 50, 10);
     menuText.setPosition(window.getSize().x - 42, 11);
     menuPanel.setPosition(window.getSize().x - 180, 60);
     iconSprite.setPosition(window.getSize().x - 55 + 8, 5 + 8);
 
-    // Сдвигаем пункты ближе друг к другу, уменьшаем общую высоту
     float startY = 70;
-    float step = 35; // расстояние между пунктами
+    float step = 35;
 
     musicOnText.setPosition(window.getSize().x - 170, startY);
     mainMenuText.setPosition(window.getSize().x - 170, startY + step);
@@ -76,7 +84,7 @@ void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf
         if (menuButton.getGlobalBounds().contains(mousePosF)) {
             state = (state == CLOSED) ? OPEN : CLOSED;
         }
-        if (state == OPEN) {
+        else if (state == OPEN) {
             if (musicOnBtnRect.contains(mousePosF)) {
                 if (isMusicOn) {
                     music.pause();
@@ -87,12 +95,16 @@ void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf
                     isMusicOn = true;
                 }
             }
-            if (mainMenuBtnRect.contains(mousePosF)) {
+            else if (mainMenuBtnRect.contains(mousePosF)) {
                 pendingAction = MAIN_MENU;
             }
-            if (exitGameBtnRect.contains(mousePosF)) {
+            else if (exitGameBtnRect.contains(mousePosF)) {
                 pendingAction = EXIT_GAME;
                 window.close();
+            }
+            // Клик вне элементов меню — закрыть меню:
+            else {
+                close();
             }
         }
     }

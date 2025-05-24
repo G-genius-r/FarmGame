@@ -11,6 +11,7 @@ public:
     void updatePositions(sf::RenderWindow& window);
     void handleEvent(const sf::Event& event, sf::RenderWindow& window, sf::Music& music, bool& isMusicOn);
     void draw(sf::RenderWindow& window, bool isMusicOn);
+    void close();
     bool isOpen() const { return state == OPEN; }
     Action pollAction();
 
