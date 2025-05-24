@@ -80,8 +80,12 @@ bool Inventory::loadDataFromFile(const std::string& filename)
 // Отображает инвентарь на экране
 bool Inventory::show(sf::RenderWindow* window)
 {
-    std::string texture_filename = "sprites/Inventory_backdrop.png";
+    constexpr int winW = 800, winH = 800;
+    constexpr int invW = 280, invH = 680;
+    inventoryPos_x = 16; // Левый край, небольшой отступ
+    inventoryPos_y = (winH - invH) / 2;
 
+    std::string texture_filename = "sprites/Inventory_backdrop.png";
     if (!backdrop_texture.loadFromFile(texture_filename))
     {
         std::cout << "Ошибка загрузки текстуры из файла: " << texture_filename << "." << std::endl;
@@ -90,177 +94,74 @@ bool Inventory::show(sf::RenderWindow* window)
 
     backdrop_sprite.setTexture(backdrop_texture);
     backdrop_sprite.setPosition(sf::Vector2f(inventoryPos_x, inventoryPos_y));
+    backdrop_sprite.setScale(
+        float(invW) / backdrop_texture.getSize().x,
+        float(invH) / backdrop_texture.getSize().y
+    );
     window->draw(backdrop_sprite);
 
-    displayInvText(window, "~ИНВЕНТАРЬ~", inventoryPos_x + 30, inventoryPos_y + 20);
+    displayInvText(window, "~ИНВЕНТАРЬ~", inventoryPos_x + 40, inventoryPos_y + 18);
 
-    // Спрайт и текст для денег
-    sf::Texture moneyTexture;
-    if (!moneyTexture.loadFromFile("sprites/inventorySprite/moneySprite.png")) {
-        std::cout << "Ошибка загрузки moneySprite.png" << std::endl;
+    struct ItemEntry {
+        const char* label;
+        const char* iconPath;
+        int* value;
+    } items[] = {
+        {"деньги:", "sprites/inventorySprite/moneySprite.png", &money},
+        {"удобрение:", "sprites/inventorySprite/fertiliserSprite.png", &fertiliser},
+        {"корм для животных:", "sprites/inventorySprite/animalFeed.png", &animalFeed},
+        {"зерно пшеницы:", "sprites/wheatSprite/wheatItem.png", &wheatGrain},
+        {"зерно ячменя:", "sprites/barleySprite/barleyItem.png", &barleyGrain},
+        {"семена пшеницы:", "sprites/wheatSprite/wheatSeed.png", &wheatSeed},
+        {"семена ячменя:", "sprites/barleySprite/barleySeed.png", &barleySeed},
+        {"шерсть:", "sprites/inventorySprite/woolIcon.png", &wool},
+        {"яйца:", "sprites/chickenSprite/eggIcon.png", &eggs},
+        {"куры:", "sprites/chickenSprite/chickenSprite1.png", &chickens},
+        {"овцы:", "sprites/sheepSprite/sheepSprite.png", &sheep},
+        {"мясо:", "sprites/inventorySprite/meatIcon.png", &meat},
+    };
+
+    const int iconSize = 26;
+    const int xIcon = inventoryPos_x + 12;
+    const int xLabel = inventoryPos_x + 46;
+    const int xValue = inventoryPos_x + invW - 44;
+    const int yStart = inventoryPos_y + 52;
+    const int yStep = 50; // Сделано с запасом под шрифт и иконку
+
+    for (int i = 0; i < sizeof(items) / sizeof(ItemEntry); ++i) {
+        int y = yStart + i * yStep;
+
+        // Load icon
+        sf::Texture texture;
+        if (!texture.loadFromFile(items[i].iconPath)) {
+            std::cout << "Ошибка загрузки " << items[i].iconPath << std::endl;
+        }
+        sf::Sprite sprite;
+        sprite.setTexture(texture);
+        sprite.setPosition(xIcon, y);
+        sprite.setScale(float(iconSize) / texture.getSize().x, float(iconSize) / texture.getSize().y);
+        window->draw(sprite);
+
+        // Draw text
+        displayInvText(window, items[i].label, xLabel, y + 4);
+        displayInvText(window, std::to_string(*items[i].value), xValue, y + 4);
     }
-    sf::Sprite moneySprite;
-    moneySprite.setTexture(moneyTexture);
-    moneySprite.setPosition(inventoryPos_x + 8, inventoryPos_y + 38);
-    window->draw(moneySprite);
-
-    displayInvText(window, "деньги: ", inventoryPos_x + 27, inventoryPos_y + 40);
-    displayInvText(window, std::to_string(money), inventoryPos_x + 120, inventoryPos_y + 40);
-
-    // Спрайт и текст для удобрений
-    sf::Texture fertiliserTexture;
-    if (!fertiliserTexture.loadFromFile("sprites/inventorySprite/fertiliserSprite.png")) {
-        std::cout << "Ошибка загрузки fertiliserSprite.png" << std::endl;
-    }
-    sf::Sprite fertiliserSprite;
-    fertiliserSprite.setTexture(fertiliserTexture);
-    fertiliserSprite.setPosition(inventoryPos_x + 8, inventoryPos_y + 58);
-    window->draw(fertiliserSprite);
-
-    displayInvText(window, "удобрение: ", inventoryPos_x + 27, inventoryPos_y + 60);
-    displayInvText(window, std::to_string(fertiliser), inventoryPos_x + 120, inventoryPos_y + 60);
-
-    // Загрузка спрайта и текста для корма животных
-    sf::Texture animalFeedTexture;
-    if (!animalFeedTexture.loadFromFile("sprites/inventorySprite/animalFeed.png")) {
-        std::cout << "Ошибка загрузки wheatSeed.png" << std::endl;
-    }
-    sf::Sprite animalFeedSprite;
-    animalFeedSprite.setTexture(animalFeedTexture);
-    animalFeedSprite.setPosition(inventoryPos_x + 8, inventoryPos_y + 78);
-    window->draw(animalFeedSprite);
-
-    displayInvText(window, "корм для животных: ", inventoryPos_x + 27, inventoryPos_y + 80);
-    displayInvText(window, std::to_string(animalFeed), inventoryPos_x + 120, inventoryPos_y + 80);
-
-    // Загрузка спрайта и текста для зерна пшеницы
-    sf::Texture wheatGrainTexture;
-    if (!wheatGrainTexture.loadFromFile("sprites/wheatSprite/wheatItem.png")) {
-        std::cout << "Ошибка загрузки wheatItem.png" << std::endl;
-    }
-    sf::Sprite wheatGrainSprite;
-    wheatGrainSprite.setTexture(wheatGrainTexture);
-    wheatGrainSprite.setPosition(inventoryPos_x + 8, inventoryPos_y + 98);
-    window->draw(wheatGrainSprite);
-
-    displayInvText(window, "зерно пшеницы: ", inventoryPos_x + 27, inventoryPos_y + 100);
-    displayInvText(window, std::to_string(wheatGrain), inventoryPos_x + 120, inventoryPos_y + 100);
-
-    // Загрузка спрайта и текста для зерна ячменя
-    sf::Texture barleyGrainTexture;
-    if (!barleyGrainTexture.loadFromFile("sprites/barleySprite/barleyItem.png")) {
-        std::cout << "Ошибка загрузки barleyItem.png" << std::endl;
-    }
-    sf::Sprite barleyGrainSprite;
-    barleyGrainSprite.setTexture(barleyGrainTexture);
-    barleyGrainSprite.setPosition(inventoryPos_x + 8, inventoryPos_y + 118);
-    window->draw(barleyGrainSprite);
-
-    displayInvText(window, "зерно ячменя: ", inventoryPos_x + 27, inventoryPos_y + 120);
-    displayInvText(window, std::to_string(barleyGrain), inventoryPos_x + 120, inventoryPos_y + 120);
-
-    // Загрузка спрайта и текста для семян пшеницы
-    sf::Texture wheatSeedTexture;
-    if (!wheatSeedTexture.loadFromFile("sprites/wheatSprite/wheatSeed.png")) {
-        std::cout << "Ошибка загрузки wheatSeed.png" << std::endl;
-    }
-    sf::Sprite wheatSeedSprite;
-    wheatSeedSprite.setTexture(wheatSeedTexture);
-    wheatSeedSprite.setPosition(inventoryPos_x + 8, inventoryPos_y + 138);
-    window->draw(wheatSeedSprite);
-
-    displayInvText(window, "семена пшеницы: ", inventoryPos_x + 27, inventoryPos_y + 140);
-    displayInvText(window, std::to_string(wheatSeed), inventoryPos_x + 120, inventoryPos_y + 140);
-
-    // Загрузка спрайта и текста для семян ячменя
-    sf::Texture barleySeedTexture;
-    if (!barleySeedTexture.loadFromFile("sprites/barleySprite/barleySeed.png")) {
-        std::cout << "Ошибка загрузки barleySeed.png" << std::endl;
-    }
-    sf::Sprite barleySeedSprite;
-    barleySeedSprite.setTexture(barleySeedTexture);
-    barleySeedSprite.setPosition(inventoryPos_x + 8, inventoryPos_y + 158);
-    window->draw(barleySeedSprite);
-
-    displayInvText(window, "семена ячменя: ", inventoryPos_x + 27, inventoryPos_y + 160);
-    displayInvText(window, std::to_string(barleySeed), inventoryPos_x + 120, inventoryPos_y + 160);
-
-    // Загрузка спрайта и текста для шерсти
-    sf::Texture woolIconTexture;
-    if (!woolIconTexture.loadFromFile("sprites/inventorySprite/woolIcon.png")) {
-        std::cout << "Ошибка загрузки woolIcon.png" << std::endl;
-    }
-    sf::Sprite woolIconSprite;
-    woolIconSprite.setTexture(woolIconTexture);
-    woolIconSprite.setPosition(inventoryPos_x + 8, inventoryPos_y + 178);
-    window->draw(woolIconSprite);
-
-    displayInvText(window, "шерсть: ", inventoryPos_x + 27, inventoryPos_y + 180);
-    displayInvText(window, std::to_string(wool), inventoryPos_x + 120, inventoryPos_y + 180);
-
-    // Загрузка спрайта и текста для яиц
-    sf::Texture eggIconTexture;
-    if (!eggIconTexture.loadFromFile("sprites/chickenSprite/eggIcon.png")) {
-        std::cout << "Ошибка загрузки eggIcon.png" << std::endl;
-    }
-    sf::Sprite eggIconSprite;
-    eggIconSprite.setTexture(eggIconTexture);
-    eggIconSprite.setPosition(inventoryPos_x + 8, inventoryPos_y + 198);
-    window->draw(eggIconSprite);
-
-    displayInvText(window, "яйца: ", inventoryPos_x + 27, inventoryPos_y + 200);
-    displayInvText(window, std::to_string(eggs), inventoryPos_x + 120, inventoryPos_y + 200);
-
-    // Загрузка спрайта и текста для кур
-    sf::Texture chickenIconTexture;
-    if (!chickenIconTexture.loadFromFile("sprites/chickenSprite/chickenSprite1.png")) {
-        std::cout << "Ошибка загрузки chickenSprite1.png" << std::endl;
-    }
-    sf::Sprite chickenIconSprite;
-    chickenIconSprite.setTexture(chickenIconTexture);
-    chickenIconSprite.setPosition(inventoryPos_x + 8, inventoryPos_y + 218);
-    window->draw(chickenIconSprite);
-
-    displayInvText(window, "куры: ", inventoryPos_x + 27, inventoryPos_y + 220);
-    displayInvText(window, std::to_string(chickens), inventoryPos_x + 120, inventoryPos_y + 220);
-
-    // Загрузка спрайта и текста для овец
-    sf::Texture sheepIconTexture;
-    if (!sheepIconTexture.loadFromFile("sprites/sheepSprite/sheepSprite.png")) {
-        std::cout << "Ошибка загрузки sheepSprite.png" << std::endl;
-    }
-    sf::Sprite sheepIconSprite;
-    sheepIconSprite.setTexture(sheepIconTexture);
-    sheepIconSprite.setPosition(inventoryPos_x + 8, inventoryPos_y + 238);
-    window->draw(sheepIconSprite);
-
-    displayInvText(window, "овцы: ", inventoryPos_x + 27, inventoryPos_y + 240);
-    displayInvText(window, std::to_string(sheep), inventoryPos_x + 120, inventoryPos_y + 240);
-
-    // Загрузка спрайта и текста для мяса
-    sf::Texture meatIconTexture;
-    if (!meatIconTexture.loadFromFile("sprites/inventorySprite/meatIcon.png")) {
-        std::cout << "Ошибка загрузки meatIcon.png" << std::endl;
-    }
-    sf::Sprite meatIconSprite;
-    meatIconSprite.setTexture(meatIconTexture);
-    meatIconSprite.setPosition(inventoryPos_x + 8, inventoryPos_y + 258);
-    window->draw(meatIconSprite);
-
-    displayInvText(window, "мясо: ", inventoryPos_x + 27, inventoryPos_y + 260);
-    displayInvText(window, std::to_string(meat), inventoryPos_x + 120, inventoryPos_y + 260);
-    return (1);
+    return true;
 }
 
 void Inventory::displayInvText(sf::RenderWindow* window, std::string displayString, int x, int y)
 {
-    sf::Font font;
-    font.loadFromFile("Silkscreen/CyrilicOld.ttf");
+    static sf::Font font;
+    static bool loaded = false;
+    if (!loaded) {
+        font.loadFromFile("Silkscreen/CyrilicOld.ttf");
+        loaded = true;
+    }
 
     sf::Text text;
     text.setFont(font);
     text.setString(displayString);
-    text.setCharacterSize(10);
+    text.setCharacterSize(16); // Четко видно для 800x800
     text.setFillColor(sf::Color::Black);
     text.setPosition(x, y);
     window->draw(text);

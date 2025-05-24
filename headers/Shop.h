@@ -41,6 +41,7 @@ public:
     //            x - Координата X для позиционирования текста.
     //            y - Координата Y для позиционирования текста.
     void displayShopText(sf::RenderWindow* window, std::string display_string, int x, int y);
+    void displayShopText(sf::RenderWindow* window, std::string display_string, int x, int y, int size, sf::Color color);
 
     // Сеттер для флага открытия магазина
     // Параметры: _shopIsOpen - Логическое значение, указывающее, открыт ли магазин
