@@ -22,6 +22,8 @@ int main()
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
 
+    Farm farm;
+    NotificationPanel notifPanel;
     int menuWidth = 800;
     int menuHeight = 800;
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
@@ -34,7 +36,7 @@ int main()
     SetWindowPos(menuHwnd, HWND_TOP, menuPosX, menuPosY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
     bool isMusicOn = true;
-    if (!showMenu(menuWindow, isMusicOn))
+    if (!showMenu(menuWindow, isMusicOn, farm, notifPanel))
         return 0;
 
     menuWindow.close();
@@ -65,12 +67,10 @@ int main()
 
     MusicMenu musicMenu(window);
 
-    Farm farm;
     int showInv = -1;
     int showShop = -1;
     int showHelp = -1;
     sf::Vector2f mousePressPos;
-    NotificationPanel notifPanel;
 
     farm.setNotificationPanel(&notifPanel);
 
@@ -93,7 +93,7 @@ int main()
             MusicMenu::Action musicAction = musicMenu.pollAction();
             if (musicAction == MusicMenu::MAIN_MENU) {
                 music.pause();
-                bool startGame = showMenu(window, isMusicOn);
+                bool startGame = showMenu(window, isMusicOn, farm, notifPanel);
                 if (!startGame) {
                     window.close();
                     break;

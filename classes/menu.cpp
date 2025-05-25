@@ -1,7 +1,22 @@
 #include "../headers/menu.h"
-#include <SFML/Audio.hpp>
 
-bool showMenu(sf::RenderWindow& window, bool& musicOn) {
+#include <SFML/Audio.hpp>
+#include <SFML/Audio.hpp>
+#include <fstream>
+
+// Функция загрузки данных инвентаря
+bool loadInventoryDataFromFile(const std::string& filename, Farm& farm, NotificationPanel& notifPanel) {
+    if (farm.inventory->loadDataFromFile(filename)) {
+        notifPanel.addMessage("Данные инвентаря успешно загружены.");
+        return true;
+    }
+    else {
+        notifPanel.addMessage("Ошибка загрузки данных инвентаря.");
+        return false;
+    }
+}
+
+bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationPanel& notifPanel) {
     sf::Font font;
     if (!font.loadFromFile("Silkscreen/CyrilicOld.ttf")) {
         return false;
@@ -24,7 +39,6 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn) {
     }
     music.setLoop(true);
 
-    // musicOn теперь внешний, не локальный!
     if (musicOn) music.play();
     else music.pause();
 
@@ -43,7 +57,9 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn) {
 
     const unsigned int menuFontSize = 48;
 
-    sf::Text playButton("Начать игру", font, menuFontSize);
+    bool hasSavedData = std::ifstream("InventoryData.txt").good();
+
+    sf::Text playButton(hasSavedData ? "Продолжить игру" : "Начать игру", font, menuFontSize);
     playButton.setFillColor(sf::Color::White);
 
     sf::Text musicButton("", font, menuFontSize);
@@ -84,7 +100,8 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn) {
 
                 if (playButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
                     music.stop();
-                    return true;
+
+                    return loadInventoryDataFromFile("InventoryData.txt", farm, notifPanel);
                 }
                 else if (exitButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
                     window.close();
