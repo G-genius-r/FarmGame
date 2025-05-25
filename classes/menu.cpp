@@ -1,5 +1,4 @@
 #include "../headers/menu.h"
-
 #include <SFML/Audio.hpp>
 #include <SFML/Audio.hpp>
 #include <fstream>
@@ -27,6 +26,92 @@ bool loadInventoryDataFromFile(const std::string& filename, Farm& farm, Notifica
         notifPanel.addMessage("Ошибка загрузки данных инвентаря.");
         return false;
     }
+}
+
+/// Функция для отображения диалога подтверждения
+bool showConfirmationDialog(sf::RenderWindow& window, const sf::Font& font, const std::string& message) {
+    // Создаем диалоговое окно
+    sf::RectangleShape dialogBox(sf::Vector2f(600, 200));
+    dialogBox.setFillColor(sf::Color(50, 50, 50));
+    dialogBox.setOutlineColor(sf::Color::White);
+    dialogBox.setOutlineThickness(2);
+    dialogBox.setPosition(window.getSize().x / 2 - dialogBox.getSize().x / 2,
+        window.getSize().y / 2 - dialogBox.getSize().y / 2);
+
+    // Текст сообщения 
+    sf::Text messageText(message, font, 28);
+    messageText.setFillColor(sf::Color::White);
+
+    std::vector<std::string> lines;
+    size_t pos = 0;
+    size_t prev_pos = 0;
+    while ((pos = message.find('\n', prev_pos)) != std::string::npos) {
+        lines.push_back(message.substr(prev_pos, pos - prev_pos));
+        prev_pos = pos + 1;
+        if (pos == std::string::npos) break;
+    }
+    lines.push_back(message.substr(prev_pos));
+
+    // Кнопки
+    sf::Text yesButton("Да", font, 32);
+    yesButton.setFillColor(sf::Color::White);
+
+    sf::Text noButton("Нет", font, 32);
+    noButton.setFillColor(sf::Color::White);
+
+    // Центрируем текст и кнопки
+    float textY = dialogBox.getPosition().y + 30;
+    for (const auto& line : lines) {
+        messageText.setString(line);
+        messageText.setPosition(dialogBox.getPosition().x + dialogBox.getSize().x / 2 - messageText.getGlobalBounds().width / 2,
+            textY);
+        textY += messageText.getGlobalBounds().height + 10;
+    }
+
+    // Позиционируем кнопки
+    float buttonY = dialogBox.getPosition().y + dialogBox.getSize().y - 60;
+    yesButton.setPosition(dialogBox.getPosition().x + dialogBox.getSize().x / 4 - yesButton.getGlobalBounds().width / 2,
+        buttonY);
+    noButton.setPosition(dialogBox.getPosition().x + 3 * dialogBox.getSize().x / 4 - noButton.getGlobalBounds().width / 2,
+        buttonY);
+
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return false;
+            }
+            if (event.type == sf::Event::MouseButtonPressed) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
+
+                if (yesButton.getGlobalBounds().contains(worldPos)) {
+                    return true;
+                }
+                else if (noButton.getGlobalBounds().contains(worldPos)) {
+                    return false;
+                }
+            }
+        }
+
+        window.draw(dialogBox);
+
+        // Рисуем каждую строку текста
+        textY = dialogBox.getPosition().y + 30;
+        for (const auto& line : lines) {
+            messageText.setString(line);
+            messageText.setPosition(dialogBox.getPosition().x + dialogBox.getSize().x / 2 - messageText.getGlobalBounds().width / 2,
+                textY);
+            window.draw(messageText);
+            textY += messageText.getGlobalBounds().height + 10;
+        }
+
+        window.draw(yesButton);
+        window.draw(noButton);
+        window.display();
+    }
+    return false;
 }
 
 bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationPanel& notifPanel) {
@@ -85,7 +170,7 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
 
     auto centerButtons = [&]() {
         float w = window.getSize().x;
-        float startY = 300.0f;  // "Начать игру" теперь наверху
+        float startY = 300.0f;
         float spacing = 60.0f;
 
         newGameButton.setPosition(w / 2.0f - newGameButton.getGlobalBounds().width / 2.0f, startY);
@@ -116,12 +201,16 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
                 sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 
                 if (newGameButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
-                    music.stop();
-                    return loadDefaultInventoryData("InventoryDataZero.txt", farm, notifPanel); // Загружаем стартовые данные
+                    bool confirmed = showConfirmationDialog(window, font,
+                        "Вы точно хотите начать новую игру?\nВсе ваши прошлые данные будут стерты.");
+                    if (confirmed) {
+                        music.stop();
+                        return loadDefaultInventoryData("InventoryDataZero.txt", farm, notifPanel);
+                    }
                 }
                 else if (playButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
                     music.stop();
-                    return loadInventoryDataFromFile("InventoryData.txt", farm, notifPanel); // Загружаем сохраненные данные
+                    return loadInventoryDataFromFile("InventoryData.txt", farm, notifPanel);
                 }
                 else if (exitButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
                     window.close();
