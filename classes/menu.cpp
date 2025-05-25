@@ -4,9 +4,22 @@
 #include <SFML/Audio.hpp>
 #include <fstream>
 
-// Функция загрузки данных инвентаря
+// Функция загрузки начальных данных инвентаря
+bool loadDefaultInventoryData(const std::string& filename, Farm& farm, NotificationPanel& notifPanel) {
+    if (farm.inventory->loadDataFromFile(filename)) {
+        notifPanel.addMessage("Приветствую, фермер");
+        return true;
+    }
+    else {
+        notifPanel.addMessage("Ошибка загрузки начальных данных инвентаря.");
+        return false;
+    }
+}
+
+// Функция загрузки сохраненных данных инвентаря
 bool loadInventoryDataFromFile(const std::string& filename, Farm& farm, NotificationPanel& notifPanel) {
     if (farm.inventory->loadDataFromFile(filename)) {
+        notifPanel.addMessage("С возвращением, фермер");
         notifPanel.addMessage("Данные инвентаря успешно загружены.");
         return true;
     }
@@ -56,10 +69,12 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
         };
 
     const unsigned int menuFontSize = 48;
-
     bool hasSavedData = std::ifstream("InventoryData.txt").good();
 
-    sf::Text playButton(hasSavedData ? "Продолжить игру" : "Начать игру", font, menuFontSize);
+    sf::Text newGameButton("Новая игра", font, menuFontSize);
+    newGameButton.setFillColor(sf::Color::White);
+
+    sf::Text playButton(hasSavedData ? "Продолжить игру" : "Начать новую игру", font, menuFontSize);
     playButton.setFillColor(sf::Color::White);
 
     sf::Text musicButton("", font, menuFontSize);
@@ -70,10 +85,12 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
 
     auto centerButtons = [&]() {
         float w = window.getSize().x;
-        float startY = 350.0f;
+        float startY = 300.0f;  // "Начать игру" теперь наверху
         float spacing = 60.0f;
 
-        playButton.setPosition(w / 2.0f - playButton.getGlobalBounds().width / 2.0f, startY);
+        newGameButton.setPosition(w / 2.0f - newGameButton.getGlobalBounds().width / 2.0f, startY);
+        playButton.setPosition(w / 2.0f - playButton.getGlobalBounds().width / 2.0f,
+            newGameButton.getPosition().y + newGameButton.getGlobalBounds().height + spacing);
         musicButton.setPosition(w / 2.0f - musicButton.getGlobalBounds().width / 2.0f,
             playButton.getPosition().y + playButton.getGlobalBounds().height + spacing);
         exitButton.setPosition(w / 2.0f - exitButton.getGlobalBounds().width / 2.0f,
@@ -98,10 +115,13 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
                 sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
 
-                if (playButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+                if (newGameButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
                     music.stop();
-
-                    return loadInventoryDataFromFile("InventoryData.txt", farm, notifPanel);
+                    return loadDefaultInventoryData("InventoryDataZero.txt", farm, notifPanel); // Загружаем стартовые данные
+                }
+                else if (playButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+                    music.stop();
+                    return loadInventoryDataFromFile("InventoryData.txt", farm, notifPanel); // Загружаем сохраненные данные
                 }
                 else if (exitButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
                     window.close();
@@ -118,6 +138,7 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
 
         window.clear();
         window.draw(background);
+        drawTextWithOutline(newGameButton);
         drawTextWithOutline(playButton);
         drawTextWithOutline(musicButton);
         drawTextWithOutline(exitButton);
