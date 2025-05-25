@@ -88,7 +88,7 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            musicMenu.handleEvent(event, window, music, isMusicOn);
+            musicMenu.handleEvent(event, window, music, isMusicOn, *(farm.inventory));
 
             MusicMenu::Action musicAction = musicMenu.pollAction();
             if (musicAction == MusicMenu::MAIN_MENU) {

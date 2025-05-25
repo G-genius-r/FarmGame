@@ -1,5 +1,7 @@
 ﻿#include "../headers/MusicMenu.h"
+#include "../headers/Inventory.h"
 #include <iostream>
+
 #ifdef _WIN32
 #include <Windows.h>
 #endif
@@ -75,7 +77,7 @@ void MusicMenu::updatePositions(sf::RenderWindow& window) {
     exitGameBtnRect = sf::FloatRect(window.getSize().x - 170, startY + 2 * step, 160, 25);
 }
 
-void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf::Music& music, bool& isMusicOn) {
+void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf::Music& music, bool& isMusicOn, Inventory& inventory) {
     if (event.type == sf::Event::Resized) {
         updatePositions(window);
     }
@@ -86,23 +88,28 @@ void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf
         }
         else if (state == OPEN) {
             if (musicOnBtnRect.contains(mousePosF)) {
+                isMusicOn = !isMusicOn;
                 if (isMusicOn) {
-                    music.pause();
-                    isMusicOn = false;
+                    music.play();
                 }
                 else {
-                    music.play();
-                    isMusicOn = true;
+                    music.pause();
                 }
             }
             else if (mainMenuBtnRect.contains(mousePosF)) {
+                if (inventory.saveDataToFile("InventoryData.txt")) {
+                    std::cout << "Данные инвентаря успешно сохранены." << std::endl;
+                }
+                else {
+                    std::cerr << "Ошибка сохранения данных инвентаря!" << std::endl;
+                }
+
                 pendingAction = MAIN_MENU;
             }
             else if (exitGameBtnRect.contains(mousePosF)) {
                 pendingAction = EXIT_GAME;
                 window.close();
             }
-            // Клик вне элементов меню — закрыть меню:
             else {
                 close();
             }

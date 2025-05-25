@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "Farm.h"
+#include "NotificationPanel.h"
 
 class MusicMenu {
 public:
@@ -9,7 +11,7 @@ public:
 
     MusicMenu(sf::RenderWindow& window);
     void updatePositions(sf::RenderWindow& window);
-    void handleEvent(const sf::Event& event, sf::RenderWindow& window, sf::Music& music, bool& isMusicOn);
+    void handleEvent(const sf::Event& event, sf::RenderWindow& window, sf::Music& music, bool& isMusicOn, Inventory& inventory);
     void draw(sf::RenderWindow& window, bool isMusicOn);
     void close();
     bool isOpen() const { return state == OPEN; }
