@@ -1,12 +1,14 @@
-#include "../headers/Plot.h"
+п»ї#include "../headers/Plot.h"
 #include <iostream>
 
-// Конструктор класса Plot
-Plot::Plot(std::string texture_filename, float pos_x, float pos_y) : GameTile(texture_filename, pos_x, pos_y) {
-    entity = nullptr; // Инициализация указателя на сущность как nullptr
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєР»Р°СЃСЃР° Plot
+Plot::Plot(std::string texture_filename, float pos_x, float pos_y)
+    : GameTile(texture_filename, pos_x, pos_y) {
+    entity = nullptr;
+    notifPanel = nullptr;
 }
 
-// Проверка, содержит ли участок растение
+// РџСЂРѕРІРµСЂРєР°, СЃРѕРґРµСЂР¶РёС‚ Р»Рё СѓС‡Р°СЃС‚РѕРє СЂР°СЃС‚РµРЅРёРµ
 bool Plot::get_isPlant() {
     if (entity)
         return entity->get_isPlant();
@@ -14,7 +16,7 @@ bool Plot::get_isPlant() {
         return false;
 }
 
-// Проверка, содержит ли участок животное
+// РџСЂРѕРІРµСЂРєР°, СЃРѕРґРµСЂР¶РёС‚ Р»Рё СѓС‡Р°СЃС‚РѕРє Р¶РёРІРѕС‚РЅРѕРµ
 bool Plot::get_isAnimal() {
     if (entity)
         return entity->get_isAnimal();
@@ -22,20 +24,18 @@ bool Plot::get_isAnimal() {
         return false;
 }
 
-// Размещение сущности (растения или животного) на участке
+// Р Р°Р·РјРµС‰РµРЅРёРµ СЃСѓС‰РЅРѕСЃС‚Рё (СЂР°СЃС‚РµРЅРёСЏ РёР»Рё Р¶РёРІРѕС‚РЅРѕРіРѕ) РЅР° СѓС‡Р°СЃС‚РєРµ
 bool Plot::placeEntity(Entity* _entity) {
     if (this->isEmpty() == false) {
-        std::cout << "Сущность не размещена, так как участок занят" << std::endl;
+        if (notifPanel) notifPanel->addMessage("РЎСѓС‰РЅРѕСЃС‚СЊ РЅРµ СЂР°Р·РјРµС‰РµРЅР°, С‚Р°Рє РєР°Рє СѓС‡Р°СЃС‚РѕРє Р·Р°РЅСЏС‚");
         return false;
     }
     setUpBackSprite("sprites/Transparent.png", 16, 0);
     setUpFrontSprite(_entity->textureFilenames[0]);
     this->entity = _entity;
-    std::cout << "Сущность успешно размещена на пустом участке" << std::endl;
-    return true;
 }
 
-// Очистка участка (удаление сущности и сброс флагов)
+// РћС‡РёСЃС‚РєР° СѓС‡Р°СЃС‚РєР° (СѓРґР°Р»РµРЅРёРµ СЃСѓС‰РЅРѕСЃС‚Рё Рё СЃР±СЂРѕСЃ С„Р»Р°РіРѕРІ)
 bool Plot::clear() {
     delete entity;
     entity->set_isAnimal(false);
@@ -43,7 +43,11 @@ bool Plot::clear() {
     return true;
 }
 
-// Полив сущности на участке
+void Plot::setNotificationPanel(NotificationPanel* panel) {
+    notifPanel = panel;
+}
+
+// РџРѕР»РёРІ СЃСѓС‰РЅРѕСЃС‚Рё РЅР° СѓС‡Р°СЃС‚РєРµ
 void Plot::water() {
     this->entity->water();
     if (this->entity->get_isPlant() == true && entity->get_isWatered() == entity->get_maxWateringLevel() && entity->get_growthStage() != 3) {
@@ -51,56 +55,54 @@ void Plot::water() {
     }
 }
 
-// Удобрение сущности на участке
+// РЈРґРѕР±СЂРµРЅРёРµ СЃСѓС‰РЅРѕСЃС‚Рё РЅР° СѓС‡Р°СЃС‚РєРµ
 void Plot::fertilise(Inventory* Inventory) {
     this->entity->fertilise(Inventory);
 }
 
-// Кормление сущности на участке
+// РљРѕСЂРјР»РµРЅРёРµ СЃСѓС‰РЅРѕСЃС‚Рё РЅР° СѓС‡Р°СЃС‚РєРµ
 void Plot::feed(Inventory* Inventory) {
     this->entity->eatGrain(Inventory);
 }
 
-// Сбор урожая с участка и добавление в инвентарь
+// РЎР±РѕСЂ СѓСЂРѕР¶Р°СЏ СЃ СѓС‡Р°СЃС‚РєР° Рё РґРѕР±Р°РІР»РµРЅРёРµ РІ РёРЅРІРµРЅС‚Р°СЂСЊ
 bool Plot::harvest(Inventory* inventory) {
     if (isEmpty() == false) {
-        // Проверка типа сущности и сбор в зависимости от типа
+        // РџСЂРѕРІРµСЂРєР° С‚РёРїР° СЃСѓС‰РЅРѕСЃС‚Рё Рё СЃР±РѕСЂ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ С‚РёРїР°
         switch (entity->get_type())
         {
         case 1:
             if (entity->get_growthStage() == 3) {
-                inventory->wheatGrainAdd(1); // Добавление пшеницы в инвентарь и уничтожение растения
-                std::cout << "Пшеница собрана и добавлена в инвентарь!" << std::endl;
+                inventory->wheatGrainAdd(1); // Р”РѕР±Р°РІР»РµРЅРёРµ РїС€РµРЅРёС†С‹ РІ РёРЅРІРµРЅС‚Р°СЂСЊ Рё СѓРЅРёС‡С‚РѕР¶РµРЅРёРµ СЂР°СЃС‚РµРЅРёСЏ
+                if (notifPanel) notifPanel->addMessage("РџС€РµРЅРёС†Р° СЃРѕР±СЂР°РЅР° Рё РґРѕР±Р°РІР»РµРЅР° РІ РёРЅРІРµРЅС‚Р°СЂСЊ!");
             }
             plotReset();
             return 1;
             break;
         case 2:
             if (entity->get_growthStage() == 3) {
-                inventory->barleyGrainAdd(1); // Добавление ячменя в инвентарь и уничтожение растения
-                std::cout << "Ячмень собран и добавлен в инвентарь" << std::endl;
+                inventory->barleyGrainAdd(1); // Р”РѕР±Р°РІР»РµРЅРёРµ СЏС‡РјРµРЅСЏ РІ РёРЅРІРµРЅС‚Р°СЂСЊ Рё СѓРЅРёС‡С‚РѕР¶РµРЅРёРµ СЂР°СЃС‚РµРЅРёСЏ
+                if (notifPanel) notifPanel->addMessage("РЇС‡РјРµРЅСЊ СЃРѕР±СЂР°РЅ Рё РґРѕР±Р°РІР»РµРЅ РІ РёРЅРІРµРЅС‚Р°СЂСЊ");
             }
             plotReset();
             return 1;
             break;
         case 3:
             if (entity->getEggs() > 0) {
-                std::cout << entity->getEggs() << " яиц добавлено в инвентарь" << std::endl;
+                if (notifPanel) notifPanel->addMessage(std::to_string(entity->getEggs()) + " СЏРёС† РґРѕР±Р°РІР»РµРЅРѕ РІ РёРЅРІРµРЅС‚Р°СЂСЊ");
                 inventory->eggsAdd(entity->getEggs());
                 entity->setEggs(0);
-                std::cout << "Яйца собраны и добавлены в инвентарь" << std::endl;
-                // Добавление накопленных яиц в инвентарь
+                if (notifPanel) notifPanel->addMessage("РЇР№С†Р° СЃРѕР±СЂР°РЅС‹ Рё РґРѕР±Р°РІР»РµРЅС‹ РІ РёРЅРІРµРЅС‚Р°СЂСЊ");
             }
             return 1;
             break;
         case 4:
             if (entity->getWool() > 0) {
-                std::cout << "1 шерсть добавлена в инвентарь" << std::endl;
+                if (notifPanel) notifPanel->addMessage("1 С€РµСЂСЃС‚СЊ РґРѕР±Р°РІР»РµРЅР° РІ РёРЅРІРµРЅС‚Р°СЂСЊ");
                 inventory->woolAdd(entity->getWool());
                 entity->setWool(0);
                 setUpFrontSprite("./sprites/sheepSprite/sheepShornSprite.png");
-                std::cout << "Овца подстрижена, шерсть добавлена в инвентарь" << std::endl;
-                // Добавление накопленной шерсти в инвентарь
+                if (notifPanel) notifPanel->addMessage("РћРІС†Р° РїРѕРґСЃС‚СЂРёР¶РµРЅР°, С€РµСЂСЃС‚СЊ РґРѕР±Р°РІР»РµРЅР° РІ РёРЅРІРµРЅС‚Р°СЂСЊ");
             }
             return 1;
             break;
@@ -113,24 +115,24 @@ bool Plot::harvest(Inventory* inventory) {
     return false;
 }
 
-// Забой животного на участке и добавление мяса в инвентарь
+// Р—Р°Р±РѕР№ Р¶РёРІРѕС‚РЅРѕРіРѕ РЅР° СѓС‡Р°СЃС‚РєРµ Рё РґРѕР±Р°РІР»РµРЅРёРµ РјСЏСЃР° РІ РёРЅРІРµРЅС‚Р°СЂСЊ
 void Plot::Slaughter(Inventory* Inventory) {
     if (entity->get_isPlant() == true) {
-        std::cout << "Ошибка: попытка забоя неживотной сущности" << std::endl;
+        if (notifPanel) notifPanel->addMessage("РћС€РёР±РєР°: РїРѕРїС‹С‚РєР° Р·Р°Р±РѕСЏ РЅРµР¶РёРІРѕС‚РЅРѕР№ СЃСѓС‰РЅРѕСЃС‚Рё");
     }
     else if (entity->get_type() == 3) {
         Inventory->meatAdd(1);
         plotReset();
-        std::cout << "Курица забита" << std::endl;
+        if (notifPanel) notifPanel->addMessage("РљСѓСЂРёС†Р° Р·Р°Р±РёС‚Р°");
     }
     else if (entity->get_type() == 4) {
         Inventory->meatAdd(3);
         plotReset();
-        std::cout << "Овца забита" << std::endl;
+        if (notifPanel) notifPanel->addMessage("РћРІС†Р° Р·Р°Р±РёС‚Р°");
     }
 }
 
-// Сброс участка путем удаления сущности и сброса флагов
+// РЎР±СЂРѕСЃ СѓС‡Р°СЃС‚РєР° РїСѓС‚РµРј СѓРґР°Р»РµРЅРёСЏ СЃСѓС‰РЅРѕСЃС‚Рё Рё СЃР±СЂРѕСЃР° С„Р»Р°РіРѕРІ
 void Plot::plotReset() {
     if (entity)
         delete entity;
@@ -138,7 +140,7 @@ void Plot::plotReset() {
     setUpFrontSprite("sprites/Transparent.png");
 }
 
-// Проверка, пуст ли участок
+// РџСЂРѕРІРµСЂРєР°, РїСѓСЃС‚ Р»Рё СѓС‡Р°СЃС‚РѕРє
 bool Plot::isEmpty() {
     if (entity == nullptr) {
         return true;
@@ -148,7 +150,7 @@ bool Plot::isEmpty() {
     }
 }
 
-// Рост сущности на участке
+// Р РѕСЃС‚ СЃСѓС‰РЅРѕСЃС‚Рё РЅР° СѓС‡Р°СЃС‚РєРµ
 bool Plot::growEntity() {
     if (entity->grow()) {
         return true;
@@ -157,7 +159,7 @@ bool Plot::growEntity() {
         return false;
 }
 
-// Проверка, погибла ли сущность на участке, и сброс при необходимости
+// РџСЂРѕРІРµСЂРєР°, РїРѕРіРёР±Р»Р° Р»Рё СЃСѓС‰РЅРѕСЃС‚СЊ РЅР° СѓС‡Р°СЃС‚РєРµ, Рё СЃР±СЂРѕСЃ РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
 bool Plot::checkDeath() {
     if (entity && entity->checkDeath() == 1) {
         plotReset();
@@ -166,7 +168,7 @@ bool Plot::checkDeath() {
     return 0;
 }
 
-// Обновление спрайта сущности на участке
+// РћР±РЅРѕРІР»РµРЅРёРµ СЃРїСЂР°Р№С‚Р° СЃСѓС‰РЅРѕСЃС‚Рё РЅР° СѓС‡Р°СЃС‚РєРµ
 bool Plot::updateSprite() {
     if (this->isEmpty() == false)
     {

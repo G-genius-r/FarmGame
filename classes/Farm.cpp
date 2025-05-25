@@ -510,8 +510,8 @@ void Farm::createPlotOptionButtons(int plotX, int plotY, NotificationPanel* noti
                 if (inventory->animalFeedTake(1)) { plots[plotX][plotY]->feed(inventory);}
                 else notifPanel->addMessage("Нет корма!");
             }},
-            {"sprites/ui/animal_product.png", [=]() { plots[plotX][plotY]->harvest(inventory); notifPanel->addMessage("Собрано!"); }},
-            {"sprites/ui/slaughter.png", [=]() { plots[plotX][plotY]->Slaughter(inventory); notifPanel->addMessage("Забито!"); }},
+            {"sprites/ui/animal_product.png", [=]() { plots[plotX][plotY]->harvest(inventory);}},
+            {"sprites/ui/slaughter.png", [=]() { plots[plotX][plotY]->Slaughter(inventory); notifPanel->addMessage("Получено мясо!"); }},
         };
     }
 
@@ -536,4 +536,12 @@ bool Farm::handlePlotOptionButtonsEvent(const sf::Event& event, const sf::Vector
 
 void Farm::drawPlotOptionButtons(sf::RenderWindow* window) {
     for (auto& btn : plotOptionButtons) btn->draw(*window);
+}
+
+void Farm::setNotificationPanel(NotificationPanel* panel) {
+    for (auto& row : plots) {
+        for (auto& plot : row) {
+            plot->setNotificationPanel(panel);
+        }
+    }
 }

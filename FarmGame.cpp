@@ -72,6 +72,8 @@ int main()
     sf::Vector2f mousePressPos;
     NotificationPanel notifPanel;
 
+    farm.setNotificationPanel(&notifPanel);
+
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("sprites/main.png")) {
         std::cerr << "Не удалось загрузить фон main.png!" << std::endl;
@@ -369,7 +371,6 @@ int main()
 
         window.clear();
         window.draw(background);
-        notifPanel.draw(window);
 
         MoneyPanel moneyPanel;
         if (!moneyPanel.loadResources()) {
@@ -400,6 +401,9 @@ int main()
             farm.shop->shopOpen(&window, farm.inventory->getMoney());
         if (showHelp == 1)
             farm.get_Help(&window);
+
+        notifPanel.draw(window);
+
 
         window.display();
     }

@@ -44,6 +44,8 @@ private:
 public:    
     Farm();
 
+    void setNotificationPanel(NotificationPanel* panel);
+
     Shop* shop;
     Inventory* inventory;
     int help_x, help_y;

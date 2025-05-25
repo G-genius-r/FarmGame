@@ -15,6 +15,8 @@
 #include "Animal.h"
 #include "Inventory.h"
 #include "Entity.h"
+#include "NotificationPanel.h"
+#include "MessagePanel.h"
 
 #ifndef PLOT_H
 #define PLOT_H
@@ -28,8 +30,11 @@ protected:
     // Указатель на сущность (растение или животное), размещённую на грядке
     Entity* entity;
 
+private:
+    NotificationPanel* notifPanel;
 public:
-    // Конструктор для инициализации объекта Plot
+
+    Plot(std::string texture_filename, float pos_x, float pos_y, NotificationPanel* panel); // Передаем уведомления через конструктор// Конструктор для инициализации объекта Plot
     // Параметры:
     //    texture_filename - имя файла текстуры грядки
     //    pos_x - X-координата позиции
@@ -61,6 +66,8 @@ public:
     // Проверить, погибла ли сущность на грядке
     // Возвращает: true, если сущность погибла, иначе false
     bool checkDeath();
+
+    void setNotificationPanel(NotificationPanel* panel);
 
     // Полить сущность на грядке
     void water();
