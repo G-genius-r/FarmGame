@@ -476,11 +476,11 @@ void Farm::createPlotOptionButtons(int plotX, int plotY, NotificationPanel* noti
     if (plots[plotX][plotY]->isEmpty()) {
         actions = {
             {"sprites/ui/plant_wheat.png", [=]() {
-                if (inventory->wheatSeedTake(1)) { plots[plotX][plotY]->placeEntity(new Wheat()); notifPanel->addMessage("Посажена пшеница!"); }
+                if (inventory->wheatSeedTake(1)) { plots[plotX][plotY]->placeEntity(new Wheat()); }
                 else notifPanel->addMessage("Нет семян пшеницы!");
             }},
             {"sprites/ui/plant_barley.png", [=]() {
-                if (inventory->barleySeedTake(1)) { plots[plotX][plotY]->placeEntity(new Barley()); notifPanel->addMessage("Посажен ячмень!"); }
+                if (inventory->barleySeedTake(1)) { plots[plotX][plotY]->placeEntity(new Barley()); }
                 else notifPanel->addMessage("Нет семян ячменя!");
             }},
             {"sprites/ui/add_chicken.png", [=]() {
@@ -500,7 +500,7 @@ void Farm::createPlotOptionButtons(int plotX, int plotY, NotificationPanel* noti
                 if (inventory->fertiliserTake(1)) { plots[plotX][plotY]->fertilise(inventory);}
                 else notifPanel->addMessage("Нет удобрений!");
             }},
-            {"sprites/ui/harvest.png", [=]() { plots[plotX][plotY]->harvest(inventory); notifPanel->addMessage("Урожай собран!"); }},
+            {"sprites/ui/harvest.png", [=]() { plots[plotX][plotY]->harvest(inventory);}},
         };
     }
     else if (plots[plotX][plotY]->get_isAnimal()) {

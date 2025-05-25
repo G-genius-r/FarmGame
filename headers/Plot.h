@@ -33,8 +33,6 @@ protected:
 private:
     NotificationPanel* notifPanel;
 public:
-
-    Plot(std::string texture_filename, float pos_x, float pos_y, NotificationPanel* panel); // Передаем уведомления через конструктор// Конструктор для инициализации объекта Plot
     // Параметры:
     //    texture_filename - имя файла текстуры грядки
     //    pos_x - X-координата позиции

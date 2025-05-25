@@ -25,6 +25,7 @@ protected:
 
     // “екстуры, св€занные с животным
     std::vector<std::string> textures;
+
 public:
     // ”ровень сытости животного (уменьшаетс€ каждый день)
     int hungryStatus;

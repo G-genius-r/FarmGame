@@ -7,17 +7,22 @@ Plant::Plant() {
     isFertilised = false; // Инициализация статуса удобрения как false  
     isPlant = true; // Установка флага, что это растение  
     isAnimal = false; // Установка флага, что это не животное  
+    notifPanel = nullptr; // Инициализация указателя на панель уведомлений
+}
+
+// Установка панели уведомлений
+void Plant::setNotificationPanel(NotificationPanel* panel) {
+    notifPanel = panel;
 }
 
 // Функция для удобрения растения  
 void Plant::fertilise(Inventory* Inventory) {
     if (isFertilised == true) {
-        std::cout << "Растение уже было удобрено." << std::endl;
+        if (notifPanel) notifPanel->addMessage("Растение уже было удобрено.");
         Inventory->fertiliserAdd(1); // Добавление удобрения в инвентарь  
         return;
     }
     isFertilised = true; // Отметка, что растение удобрено  
-    std::cout << "Растение было удобрено." << std::endl;
 }
 
 // Функция для симуляции роста растения  
@@ -34,7 +39,7 @@ bool Plant::grow() {
 // Функция для проверки, погибло ли растение из-за недостатка воды  
 bool Plant::checkDeath() {
     if (this->get_isWatered() == 0) {
-        std::cout << "О нет! Растение погибло." << std::endl;
+        if (notifPanel) notifPanel->addMessage("О нет! Растение погибло.");
         return true; // Возврат true, если растение погибло  
     }
     else {

@@ -12,16 +12,20 @@
 #include <string>
 #include "Entity.h"
 #include "Inventory.h"
+#include "NotificationPanel.h"
 
 class Plant : public Entity
 {
 protected:
     // Флаг, указывающий, было ли растение удобрено
     bool isFertilised;
-
+private:
+    NotificationPanel* notifPanel;
 public:
     // Конструктор для инициализации объекта Plant
     Plant();
+
+    void setNotificationPanel(NotificationPanel* panel);
 
     // Функция для удобрения растения
     void fertilise(Inventory* Inventory);

@@ -27,12 +27,17 @@ bool Plot::get_isAnimal() {
 // Размещение сущности (растения или животного) на участке
 bool Plot::placeEntity(Entity* _entity) {
     if (this->isEmpty() == false) {
-        if (notifPanel) notifPanel->addMessage("Сущность не размещена, так как участок занят");
+        if (notifPanel) notifPanel->addMessage("Сущность не размещена, участок занят");
         return false;
     }
     setUpBackSprite("sprites/Transparent.png", 16, 0);
     setUpFrontSprite(_entity->textureFilenames[0]);
     this->entity = _entity;
+
+    // Передаем панель уведомлений новой сущности
+    if (Plant* plant = dynamic_cast<Plant*>(_entity)) {
+        plant->setNotificationPanel(notifPanel);
+    }
 }
 
 // Очистка участка (удаление сущности и сброс флагов)
@@ -92,7 +97,6 @@ bool Plot::harvest(Inventory* inventory) {
                 if (notifPanel) notifPanel->addMessage(std::to_string(entity->getEggs()) + " яиц добавлено в инвентарь");
                 inventory->eggsAdd(entity->getEggs());
                 entity->setEggs(0);
-                if (notifPanel) notifPanel->addMessage("Яйца собраны и добавлены в инвентарь");
             }
             return 1;
             break;
@@ -102,7 +106,6 @@ bool Plot::harvest(Inventory* inventory) {
                 inventory->woolAdd(entity->getWool());
                 entity->setWool(0);
                 setUpFrontSprite("./sprites/sheepSprite/sheepShornSprite.png");
-                if (notifPanel) notifPanel->addMessage("Овца подстрижена, шерсть добавлена в инвентарь");
             }
             return 1;
             break;
