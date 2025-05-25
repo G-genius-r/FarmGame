@@ -361,7 +361,6 @@ int main()
             }
         }
 
-        // === ВЫЗЫВАТЬ createPlotOptionButtons КАЖДЫЙ КАДР ===
         if (selectedPlotX != -1 && selectedPlotY != -1 && farm.selectedTileIsPlot(sf::Vector2f(selectedPlotX, selectedPlotY))) {
             int px = selectedPlotX - 2;
             int py = selectedPlotY - 3;
@@ -385,6 +384,7 @@ int main()
 
         farm.drawPlots(&window);
         farm.drawFertiliserSprites(&window);
+        farm.drawHungerSprites(&window);
         farm.drawPlotOptionButtons(&window);
 
         // Подсветка выбранного участка и кнопки вокруг него

@@ -23,13 +23,12 @@ protected:
     // Продолжительность жизни животного (в днях)
     int lifespan;
 
+    // Текстуры, связанные с животным
+    std::vector<std::string> textures;
+public:
     // Уровень сытости животного (уменьшается каждый день)
     int hungryStatus;
 
-    // Текстуры, связанные с животным
-    std::vector<std::string> textures;
-
-public:
     // Конструктор для инициализации объекта Animal
     Animal();
 
@@ -72,6 +71,8 @@ public:
 
     // Виртуальная функция для роста животного (должна быть реализована в производных классах)
     virtual bool grow() = 0;
+
+    std::string getHungerSprite() const;
 
     // Деструктор класса Animal
     ~Animal();

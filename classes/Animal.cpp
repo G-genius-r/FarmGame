@@ -75,3 +75,10 @@ void Animal::set_hungryStatus(int _hungryStatus)
 {
     hungryStatus = _hungryStatus; // Установка статуса голода животного
 }
+
+std::string Animal::getHungerSprite() const {
+    if (this->get_isAnimal()) {
+        return textureFilenames[hungryStatus]; // Используем уровень голода для выбора текстуры
+    }
+    return "";
+}

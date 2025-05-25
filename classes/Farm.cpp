@@ -349,6 +349,20 @@ void Farm::drawPlots(sf::RenderWindow* window)
                     float py = plot->get_frontSprite().getPosition().y;
                     wheat->drawWaterLevel(*window, px, py);
                 }
+                // Для Chicken
+                Chicken* chicken = dynamic_cast<Chicken*>(plot->getEntity());
+                if (chicken) {
+                    float px = plot->get_frontSprite().getPosition().x;
+                    float py = plot->get_frontSprite().getPosition().y;
+                    chicken->drawWaterLevel(*window, px, py);
+                }
+                // Для Sheep
+                Sheep* sheep = dynamic_cast<Sheep*>(plot->getEntity());
+                if (sheep) {
+                    float px = plot->get_frontSprite().getPosition().x;
+                    float py = plot->get_frontSprite().getPosition().y;
+                    sheep->drawWaterLevel(*window, px, py);
+                }
             }
         }
     }
@@ -392,6 +406,64 @@ void Farm::drawFertiliserSprites(sf::RenderWindow* window) {
     }
 }
 
+void Farm::drawHungerSprites(sf::RenderWindow* window) {
+    sf::Vector2u windowSize = window->getSize();
+    float cellWidth = windowSize.x / static_cast<float>(gridLength);
+    float cellHeight = windowSize.y / static_cast<float>(gridLength);
+
+    int startX = 2;
+    int startY = 3;
+
+    for (int x = 0; x < plots.size(); ++x) {
+        for (int y = 0; y < plots[0].size(); ++y) {
+            Plot* plot = plots[x][y];
+
+            if (plot->getEntity() && plot->getEntity()->get_isAnimal()) {
+                Animal* animal = dynamic_cast<Animal*>(plot->getEntity());
+
+                if (animal->get_hungryStatus() < 3) { // Если животное голодное
+                    std::string hungerTexturePath;
+
+                    // Выбираем текстуру в зависимости от уровня голода
+                    if (animal->get_hungryStatus() == 0) {
+                        hungerTexturePath = "sprites/HungerStatus/feed_high.png";
+                    }
+                    else if (animal->get_hungryStatus() == 1) {
+                        hungerTexturePath = "sprites/HungerStatus/feed_medium.png";
+                    }
+                    else if (animal->get_hungryStatus() == 2) {
+                        hungerTexturePath = "sprites/HungerStatus/feed_low.png";
+                    }
+                    else {
+                        continue; // Если статус голода больше 3, не отображаем
+                    }
+
+                    sf::Texture hungerTexture;
+                    if (!hungerTexture.loadFromFile(hungerTexturePath)) {
+                        std::cerr << "Ошибка загрузки текстуры голода: " << hungerTexturePath << std::endl;
+                        continue;
+                    }
+
+                    sf::Sprite hungerSprite(hungerTexture);
+                    hungerSprite.setScale(
+                        cellWidth / hungerTexture.getSize().x / 5,
+                        cellHeight / hungerTexture.getSize().y / 5
+                    );
+
+                    // Позиционирование справа сверху от животного
+                    float posX = (startX + x) * cellWidth + cellWidth * 0.7f;
+                    float posY = (startY + y) * cellHeight - cellHeight * 0.2f;
+                    hungerSprite.setPosition(posX, posY);
+
+                    window->draw(hungerSprite);
+                }
+            }
+        }
+    }
+}
+
+
+
 void Farm::createPlotOptionButtons(int plotX, int plotY, NotificationPanel* notifPanel) {
     plotOptionButtons.clear();
     float btnRadius = 70; // радиус круга вокруг тайла
@@ -412,11 +484,11 @@ void Farm::createPlotOptionButtons(int plotX, int plotY, NotificationPanel* noti
                 else notifPanel->addMessage("Нет семян ячменя!");
             }},
             {"sprites/ui/add_chicken.png", [=]() {
-                if (inventory->ChickenTake(1)) { plots[plotX][plotY]->placeEntity(new Chicken()); notifPanel->addMessage("Курица размещена!"); }
+                if (inventory->ChickenTake(1)) { plots[plotX][plotY]->placeEntity(new Chicken());}
                 else notifPanel->addMessage("Нет куриц в инвентаре!");
             }},
             {"sprites/ui/add_sheep.png", [=]() {
-                if (inventory->SheepTake(1)) { plots[plotX][plotY]->placeEntity(new Sheep()); notifPanel->addMessage("Овца размещена!"); }
+                if (inventory->SheepTake(1)) { plots[plotX][plotY]->placeEntity(new Sheep());}
                 else notifPanel->addMessage("Нет овец в инвентаре!");
             }},
         };
@@ -425,7 +497,7 @@ void Farm::createPlotOptionButtons(int plotX, int plotY, NotificationPanel* noti
         actions = {
             {"sprites/ui/watering_can.png", [=]() { plots[plotX][plotY]->water();}},
             {"sprites/fertilizer.png", [=]() {
-                if (inventory->fertiliserTake(1)) { plots[plotX][plotY]->fertilise(inventory); notifPanel->addMessage("Удобрено!"); }
+                if (inventory->fertiliserTake(1)) { plots[plotX][plotY]->fertilise(inventory);}
                 else notifPanel->addMessage("Нет удобрений!");
             }},
             {"sprites/ui/harvest.png", [=]() { plots[plotX][plotY]->harvest(inventory); notifPanel->addMessage("Урожай собран!"); }},
@@ -433,9 +505,9 @@ void Farm::createPlotOptionButtons(int plotX, int plotY, NotificationPanel* noti
     }
     else if (plots[plotX][plotY]->get_isAnimal()) {
         actions = {
-            {"sprites/ui/water_bucket.png", [=]() { plots[plotX][plotY]->water(); notifPanel->addMessage("Дано воды!"); }},
+            {"sprites/ui/water_bucket.png", [=]() { plots[plotX][plotY]->water();}},
             {"sprites/ui/feed.png", [=]() {
-                if (inventory->animalFeedTake(1)) { plots[plotX][plotY]->feed(inventory); notifPanel->addMessage("Покормлено!"); }
+                if (inventory->animalFeedTake(1)) { plots[plotX][plotY]->feed(inventory);}
                 else notifPanel->addMessage("Нет корма!");
             }},
             {"sprites/ui/animal_product.png", [=]() { plots[plotX][plotY]->harvest(inventory); notifPanel->addMessage("Собрано!"); }},

@@ -67,7 +67,7 @@ bool Entity::get_isPlant() {
 }
 
 // Проверка, является ли сущность животным
-bool Entity::get_isAnimal() {
+bool Entity::get_isAnimal() const{
     return isAnimal; // Возвращает флаг животного
 }
 

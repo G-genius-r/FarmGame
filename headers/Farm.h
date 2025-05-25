@@ -56,6 +56,8 @@ public:
     void createPlotOptionButtons(int plotX, int plotY, NotificationPanel* notifPanel);
     void drawPlotOptionButtons(sf::RenderWindow* window);
 
+    void drawHungerSprites(sf::RenderWindow* window);
+
     void clearPlotOptionButtons();
     int getGridLength() const;
 

@@ -8,8 +8,9 @@
 class Sheep : public Animal
 {
 private:
-	bool wool; // Приватная переменная-член, указывающая, есть ли у овцы шерсть
-
+	bool wool; // Наличие шерсти у овцы
+	int waterLevelToDisplay; // Текущий уровень воды для отображения
+	sf::Clock waterDisplayClock; // Таймер для отображения уровня воды
 public:
 	// Конструктор класса Sheep
 	Sheep();
@@ -32,8 +33,13 @@ public:
 	// Метод для полива овцы  
 	void water();
 
-	// Геттер для получения максимального уровня полива овцы  
-	int get_maxWateringLevel() { return 3; };
+	void showWaterLevel();
+
+	// Отрисовать уровень воды
+	void drawWaterLevel(sf::RenderWindow& window, float x, float y);
+
+	// Получить максимальный уровень полива
+	int get_maxWateringLevel() override { return 3; };
 
 	// Деструктор класса Sheep  
 	~Sheep() {};

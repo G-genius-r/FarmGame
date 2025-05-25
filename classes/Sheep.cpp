@@ -1,60 +1,91 @@
 #include "../headers/Sheep.h"
+#include <iostream>
 
 // Конструктор класса Sheep
 Sheep::Sheep() {
-    wool = false; // Инициализация наличия шерсти как false
-    growthStage = 0; // Инициализация стадии роста значением 0
-    lifespan = 20; // Установка продолжительности жизни овцы
-    textureFilenames.push_back("./sprites/sheepSprite/sheepShornSprite.png"); // Загрузка текстуры стриженой овцы
-    textureFilenames.push_back("./sprites/sheepSprite/sheepSprite.png"); // Загрузка текстуры овцы с шерстью
-    isAnimal = true; // Установка флага, что это животное
-    hungryStatus = 0; // Инициализация статуса голода значением 0
-    wateringLevel = 0; // Инициализация уровня полива значением 0
+    wool = false;
+    growthStage = 0;
+    lifespan = 20;
+    textureFilenames.push_back("./sprites/sheepSprite/sheepShornSprite.png");
+    textureFilenames.push_back("./sprites/sheepSprite/sheepSprite.png");
+    isAnimal = true;
+    hungryStatus = 0;
+    wateringLevel = 0;
+    waterLevelToDisplay = -1;
 }
 
-// Функция имитации производства шерсти овцой
+// Производство шерсти
 void Sheep::produceWool() {
-    wool = true; // Установка наличия шерсти в true
+    wool = true;
+    std::cout << "Овца отрастила шерсть" << std::endl;
 }
 
-// Функция проверки наличия шерсти у овцы
+// Проверка наличия шерсти
 bool Sheep::getWool() {
     return wool;
 }
 
-// Функция установки статуса шерсти у овцы
+// Установка статуса шерсти
 void Sheep::setWool(bool _wool) {
     wool = _wool;
 }
 
-// Функция получения типа сущности (овца)
+// Получение типа животного
 int Sheep::get_type() {
     return 4;
 }
 
-// Функция имитации роста овцы
+// Рост овцы
 bool Sheep::grow() {
-    if (wateringLevel == 3 && hungryStatus == 3) {
-        produceWool(); // Имитация производства шерсти при хорошем поливе и кормлении
-        std::cout << "Овца готова к стрижке" << std::endl;
+    if (wateringLevel == 3 && hungryStatus == 3 && !wool) {
+        produceWool();
     }
+
     wateringLevel--;
     if (wateringLevel < 0) wateringLevel = 0;
+
     hungryStatus--;
     if (hungryStatus < 0) hungryStatus = 0;
+
     growthStage++;
-    std::cout << "Овца выросла до возраста:" << growthStage << std::endl;
+    std::cout << "Овца выросла до возраста: " << growthStage << std::endl;
     return true;
 }
 
-// Функция полива овцы
+// Полив овцы
 void Sheep::water() {
     if (wateringLevel < 3) {
         wateringLevel++;
-        std::cout << "Овца напоена до уровня: " << wateringLevel << std::endl;
-        return;
+        showWaterLevel();
     }
-    else {
-        std::cout << "Уровень полива =" << wateringLevel << " (овца уже напоена)" << std::endl;
+    waterLevelToDisplay = wateringLevel;
+    waterDisplayClock.restart();
+}
+
+// Показать уровень воды
+void Sheep::showWaterLevel() {
+    waterLevelToDisplay = wateringLevel;
+    waterDisplayClock.restart();
+}
+
+// Отрисовка уровня воды
+void Sheep::drawWaterLevel(sf::RenderWindow& window, float x, float y) {
+    if (waterLevelToDisplay != -1 && waterDisplayClock.getElapsedTime().asSeconds() < 1.0f) {
+        static sf::Font font;
+        static bool fontLoaded = false;
+        if (!fontLoaded) {
+            if (font.loadFromFile("Silkscreen/CyrilicOld.ttf")) {
+                fontLoaded = true;
+            }
+        }
+        if (fontLoaded) {
+            sf::Text txt("Вода: " + std::to_string(wateringLevel), font, 20);
+            txt.setFillColor(sf::Color::Blue);
+            txt.setPosition(x, y - 25);
+            window.draw(txt);
+        }
+    }
+    else if (waterLevelToDisplay != -1) {
+        waterLevelToDisplay = -1;
     }
 }

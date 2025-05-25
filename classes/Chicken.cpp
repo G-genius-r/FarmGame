@@ -1,4 +1,5 @@
 #include "../headers/Chicken.h"
+#include <iostream>
 
 // Конструктор класса Chicken
 Chicken::Chicken() {
@@ -12,6 +13,7 @@ Chicken::Chicken() {
     isPlant = false; // Установка isPlant в false
     hungryStatus = 0; // Инициализация уровня голода значением 0
     wateringLevel = 0; // Инициализация уровня полива значением 0
+    waterLevelToDisplay = -1; // Инициализация индикатора уровня воды
 }
 
 // Функция для получения типа животного (унаследована от класса Animal)
@@ -65,10 +67,32 @@ bool Chicken::grow() {
 void Chicken::water() {
     if (wateringLevel < 3) {
         wateringLevel++; // Увеличивает уровень полива
-        std::cout << "Уровень полива курицы: " << wateringLevel << std::endl;
-        return;
+        showWaterLevel();
     }
-    else {
-        std::cout << "Уровень полива = " << wateringLevel << " (курица уже полита)" << std::endl;
+    // В любом случае показываем уровень влаги над курицей
+    waterLevelToDisplay = wateringLevel;
+    waterDisplayClock.restart();
+}
+
+void Chicken::showWaterLevel() {
+    waterLevelToDisplay = wateringLevel;
+    waterDisplayClock.restart();
+}
+
+void Chicken::drawWaterLevel(sf::RenderWindow& window, float x, float y) {
+    if (waterLevelToDisplay != -1 && waterDisplayClock.getElapsedTime().asSeconds() < 1.0f) {
+        static sf::Font font;
+        static bool fontLoaded = false;
+        if (!fontLoaded) {
+            font.loadFromFile("Silkscreen/CyrilicOld.ttf");
+            fontLoaded = true;
+        }
+        sf::Text txt("Вода: " + std::to_string(wateringLevel), font, 20);
+        txt.setFillColor(sf::Color::Blue);
+        txt.setPosition(x, y - 25);
+        window.draw(txt);
+    }
+    else if (waterLevelToDisplay != -1) {
+        waterLevelToDisplay = -1;
     }
 }
