@@ -38,6 +38,9 @@ bool Plot::placeEntity(Entity* _entity) {
     if (Plant* plant = dynamic_cast<Plant*>(_entity)) {
         plant->setNotificationPanel(notifPanel);
     }
+    if (Animal* animal = dynamic_cast<Animal*>(_entity)) {
+        animal->setNotificationPanel(notifPanel);
+    }
 }
 
 // Очистка участка (удаление сущности и сброс флагов)

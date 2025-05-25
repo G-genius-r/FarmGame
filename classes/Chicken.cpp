@@ -49,7 +49,7 @@ bool Chicken::grow() {
     // Проверка условий для откладывания яиц
     if (wateringLevel == 3 && hungryStatus == 3) {
         layEgg();
-        std::cout << "Курица отложила яйцо" << std::endl;
+        if (notifPanel) notifPanel->addMessage("Курица отложила яйцо");
     }
 
     wateringLevel--; // Уменьшает уровень полива
@@ -59,7 +59,7 @@ bool Chicken::grow() {
     if (hungryStatus < 0) hungryStatus = 0;
 
     growthStage++; // Увеличивает стадию роста
-    std::cout << "Курица выросла до возраста: " << growthStage << std::endl;
+    if (notifPanel) notifPanel->addMessage("Курица выросла до возраста: " + std::to_string(growthStage));
     return true; // Возвращает true для подтверждения роста
 }
 

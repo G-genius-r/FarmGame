@@ -12,6 +12,7 @@
 #include <iostream>
 #include "Entity.h"
 #include "Inventory.h"
+#include "NotificationPanel.h"
 
 //  ласс Animal, наследуемый от Entity, представл€ет базовый класс дл€ всех животных в игре
 class Animal : public Entity
@@ -25,8 +26,9 @@ protected:
 
     // “екстуры, св€занные с животным
     std::vector<std::string> textures;
-
 public:
+    NotificationPanel* notifPanel;
+
     // ”ровень сытости животного (уменьшаетс€ каждый день)
     int hungryStatus;
 
@@ -45,6 +47,8 @@ public:
     // ѕолучает текущий возраст животного
     // ¬озвращает: возраст животного
     int get_age();
+
+    void setNotificationPanel(NotificationPanel* panel);
 
     // ”станавливает возраст животного
     // ѕараметр: _age - возраст дл€ установки

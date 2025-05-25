@@ -9,42 +9,37 @@ Animal::Animal()
     wateringLevel = 0; // Инициализация уровня полива значением 0
     isAnimal = true;   // Установка флага животного в true
     isPlant = false;   // Установка флага растения в false
+    notifPanel = nullptr;
 }
 
 // Функция кормления животного зерном
-bool Animal::eatGrain(Inventory* Inventory)
-{
-    if (hungryStatus >= 3)
-    {
-        std::cout << "Животное уже сыто" << std::endl;
-        // Вывод сообщения пользователю, что животное не было накормлено
-        Inventory->animalFeedAdd(1); // Добавление корма в инвентарь
-        return false;                // Возврат false, так как животное уже сыто
+bool Animal::eatGrain(Inventory* Inventory) {
+    if (hungryStatus >= 3) {
+        if (notifPanel) notifPanel->addMessage("Животное уже сыто");
+        Inventory->animalFeedAdd(1);
+        return false;
     }
-    else
-    {
-        set_hungryStatus(get_hungryStatus() + 1); // Увеличение статуса голода
-        std::cout << "Животное накормлено, до полного насыщения нужно "
-            << 3 - (get_hungryStatus()) << " порций корма" << std::endl;
-        return true; // Возврат true после кормления животного
+    else {
+        set_hungryStatus(get_hungryStatus() + 1);
+        if (notifPanel) {
+            notifPanel->addMessage("до полного насыщения нужно " +
+                std::to_string(4 - get_hungryStatus()) + " корма");
+        }
+        return true;
     }
 }
 
 // Функция проверки смерти животного
-bool Animal::checkDeath()
-{
+bool Animal::checkDeath() {
     if (this->get_growthStage() >= this->get_lifespan() ||
         this->get_hungryStatus() == 0 ||
         this->get_isWatered() == 0)
     {
-        isAnimal = false; // Установка флага животного в false при смерти
-        std::cout << "Животное умерло." << std::endl;
-        return true; // Возврат true, если животное умерло
+        isAnimal = false;
+        if (notifPanel) notifPanel->addMessage("Животное умерло");
+        return true;
     }
-    else
-    {
-        return false; // Возврат false, если животное живо
-    }
+    return false;
 }
 
 // Деструктор класса Animal
@@ -56,6 +51,12 @@ Animal::~Animal()
 int Animal::get_lifespan()
 {
     return lifespan; // Возврат продолжительности жизни животного
+}
+
+// Установка панели уведомлений
+void Animal::setNotificationPanel(NotificationPanel* panel)
+{
+    notifPanel = panel;
 }
 
 // Функция установки продолжительности жизни животного

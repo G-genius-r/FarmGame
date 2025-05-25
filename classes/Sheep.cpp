@@ -12,12 +12,13 @@ Sheep::Sheep() {
     hungryStatus = 0;
     wateringLevel = 0;
     waterLevelToDisplay = -1;
+    type = "Sheep"; // Устанавливаем тип животного
 }
 
 // Производство шерсти
 void Sheep::produceWool() {
     wool = true;
-    std::cout << "Овца отрастила шерсть" << std::endl;
+    if (notifPanel) notifPanel->addMessage("Овца отрастила шерсть");
 }
 
 // Проверка наличия шерсти
@@ -48,7 +49,7 @@ bool Sheep::grow() {
     if (hungryStatus < 0) hungryStatus = 0;
 
     growthStage++;
-    std::cout << "Овца выросла до возраста: " << growthStage << std::endl;
+    if (notifPanel) notifPanel->addMessage("Овца выросла до возраста: " + std::to_string(growthStage));
     return true;
 }
 
@@ -57,6 +58,9 @@ void Sheep::water() {
     if (wateringLevel < 3) {
         wateringLevel++;
         showWaterLevel();
+    }
+    else {
+        if (notifPanel) notifPanel->addMessage("Овца уже не хочет пить");
     }
     waterLevelToDisplay = wateringLevel;
     waterDisplayClock.restart();
