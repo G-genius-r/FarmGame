@@ -11,7 +11,11 @@
 #include "headers/MoneyPanel.h"
 #include <Windows.h>
 #include "headers/MusicMenu.h"
-#include "headers/MessagePanel.h"
+#include "headers/NotificationPanel.h"
+
+// Глобальные переменные для хранения выбранной клетки
+int selectedPlotX = -1;
+int selectedPlotY = -1;
 
 int main()
 {
@@ -29,15 +33,13 @@ int main()
     HWND menuHwnd = menuWindow.getSystemHandle();
     SetWindowPos(menuHwnd, HWND_TOP, menuPosX, menuPosY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
-    // --- Передаем сюда musicOn по ссылке ---
     bool isMusicOn = true;
     if (!showMenu(menuWindow, isMusicOn))
         return 0;
 
-    menuWindow.close(); // Закрываем меню
+    menuWindow.close();
 
     sf::RenderWindow window(sf::VideoMode(800, 800), "FarmVille!", sf::Style::Titlebar | sf::Style::Close);
-    // Центрирование окна на экране
     int winWidth = 800;
     int winHeight = 800;
     int winPosX = (desktop.width - winWidth) / 2;
@@ -45,18 +47,16 @@ int main()
     HWND hwnd = window.getSystemHandle();
     SetWindowPos(hwnd, HWND_TOP, winPosX, winPosY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 
-    // Устанавливаем view на весь экран (чтобы контент занимал всё окно)
     sf::View view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
     window.setView(view);
 
-    // --- Music Setup ---
     sf::Music music;
     if (!music.openFromFile("audio/menuMusic.ogg")) {
         std::cerr << "Не удалось загрузить музыку!" << std::endl;
     }
     else {
         music.setLoop(true);
-        music.setVolume(60); // громкость по умолчанию
+        music.setVolume(60);
         if (isMusicOn)
             music.play();
         else
@@ -65,16 +65,13 @@ int main()
 
     MusicMenu musicMenu(window);
 
-    Farm farm = Farm();
-    int showInv = -1;      // Флаг отображения инвентаря (-1 - скрыт, 1 - показан)
-    int showShop = -1;     // Флаг отображения магазина
-    int showHelp = -1;     // Флаг отображения справки
-    sf::Vector2f relevantWindowSize(window.getSize());  // Актуальный размер окна
-    sf::Vector2f mousePressPos;       // Позиция нажатия мыши
-    sf::Vector2f selectedGametile;    // Выбранная клетка на поле
-    MessagePanel messagePanel;
+    Farm farm;
+    int showInv = -1;
+    int showShop = -1;
+    int showHelp = -1;
+    sf::Vector2f mousePressPos;
+    NotificationPanel notifPanel;
 
-    // Загрузка фонового изображения (делаем это один раз)
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("sprites/main.png")) {
         std::cerr << "Не удалось загрузить фон main.png!" << std::endl;
@@ -87,7 +84,6 @@ int main()
     while (window.isOpen())
     {
         sf::Event event;
-
         while (window.pollEvent(event))
         {
             musicMenu.handleEvent(event, window, music, isMusicOn);
@@ -100,7 +96,6 @@ int main()
                     window.close();
                     break;
                 }
-                // После возврата из меню обновляем музыку
                 if (isMusicOn)
                     music.play();
                 else
@@ -134,12 +129,7 @@ int main()
                 continue;
             }
 
-            if (event.type == sf::Event::MouseButtonPressed)
-            {
-                sf::Vector2f mousePosF = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                mousePressPos = mousePosF;
-            }
-
+            // Если клик по UI-панели (инвентарь, магазин, справка, меню музыки)
             if ((event.type == sf::Event::MouseButtonPressed) &&
                 (showInv == 1 || showShop == 1 || showHelp == 1 || musicMenu.isOpen())) {
                 if (showInv == 1) showInv = -1;
@@ -149,280 +139,267 @@ int main()
                 continue;
             }
 
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::I)
+            if (event.type == sf::Event::MouseButtonPressed)
             {
-                // Открытие/закрытие инвентаря по клавише I
-                showInv *= -1;
+                sf::Vector2f mousePosF = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                bool buttonClicked = farm.handlePlotOptionButtonsEvent(event, mousePosF);
+
+                if (!buttonClicked) {
+                    float tileWidth = window.getSize().x / static_cast<float>(farm.getGridLength());
+                    float tileHeight = window.getSize().y / static_cast<float>(farm.getGridLength());
+                    int tileX = static_cast<int>(mousePosF.x / tileWidth);
+                    int tileY = static_cast<int>(mousePosF.y / tileHeight);
+
+                    // Проверяем, клик по участку или нет
+                    if (!farm.selectedTileIsPlot(sf::Vector2f(tileX, tileY))) {
+                        farm.clearPlotOptionButtons();
+                        selectedPlotX = -1;
+                        selectedPlotY = -1;
+                    }
+                    else {
+                        // Если выбран новый участок - обновить выделение и перегенерировать кнопки
+                        if (selectedPlotX != tileX || selectedPlotY != tileY) {
+                            selectedPlotX = tileX;
+                            selectedPlotY = tileY;
+                        }
+                        mousePressPos = mousePosF;
+                    }
+                }
             }
 
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::I) {
+                showInv *= -1;
+            }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B) {
-                // Открытие/закрытие магазина по клавише B
                 showShop *= -1;
             }
 
             // Опции магазина (если он открыт)
             if (showShop == 1 && event.type == sf::Event::KeyPressed) {
                 if (event.key.code == sf::Keyboard::Num1) {
-                    // Покупка семян пшеницы (цена: 2)
-                    if (farm.inventory->moneyTake(2) == true) {
+                    if (farm.inventory->moneyTake(2)) {
                         farm.inventory->wheatSeedAdd(1);
-                        messagePanel.addMessage("Успешно куплено 1 семя пшеницы");
+                        notifPanel.addMessage("Успешно куплено 1 семя пшеницы");
                     }
                     else {
-                        messagePanel.addMessage("Недостаточно денег для покупки семян пшеницы");
+                        notifPanel.addMessage("Недостаточно денег для покупки семян пшеницы");
                     }
                 }
                 if (event.key.code == sf::Keyboard::Num2) {
-                    // Покупка семян ячменя (цена: 3)
-                    if (farm.inventory->moneyTake(3) == true) {
+                    if (farm.inventory->moneyTake(3)) {
                         farm.inventory->barleySeedAdd(1);
-                        messagePanel.addMessage("Успешно куплено 1 семя ячменя");
+                        notifPanel.addMessage("Успешно куплено 1 семя ячменя");
                     }
                     else {
-                        messagePanel.addMessage("Недостаточно денег для покупки семян ячменя");
+                        notifPanel.addMessage("Недостаточно денег для покупки семян ячменя");
                     }
                 }
                 if (event.key.code == sf::Keyboard::Num3) {
-                    // Покупка курицы (цена: 15)
-                    if (farm.inventory->moneyTake(15) == true) {
+                    if (farm.inventory->moneyTake(15)) {
                         farm.inventory->ChickenAdd(1);
-                        messagePanel.addMessage("Успешно куплена 1 курица");
+                        notifPanel.addMessage("Успешно куплена 1 курица");
                     }
                     else {
-                        messagePanel.addMessage("Недостаточно денег для покупки курицы");
+                        notifPanel.addMessage("Недостаточно денег для покупки курицы");
                     }
                 }
                 if (event.key.code == sf::Keyboard::Num4) {
-                    // Покупка овцы (цена: 20)
-                    if (farm.inventory->moneyTake(20) == true) {
+                    if (farm.inventory->moneyTake(20)) {
                         farm.inventory->SheepAdd(1);
-                        messagePanel.addMessage("Успешно куплена 1 овца");
+                        notifPanel.addMessage("Успешно куплена 1 овца");
                     }
                     else {
-                        messagePanel.addMessage("Недостаточно денег для покупки овцы");
+                        notifPanel.addMessage("Недостаточно денег для покупки овцы");
                     }
                 }
                 if (event.key.code == sf::Keyboard::Num5) {
-                    // Покупка корма для животных (цена: 1)
-                    if (farm.inventory->moneyTake(1) == true) {
+                    if (farm.inventory->moneyTake(1)) {
                         farm.inventory->animalFeedAdd(1);
-                        messagePanel.addMessage("Успешно куплен 1 корм для животных");
+                        notifPanel.addMessage("Успешно куплен 1 корм для животных");
                     }
                     else {
-                        messagePanel.addMessage("Недостаточно денег для покупки корма");
+                        notifPanel.addMessage("Недостаточно денег для покупки корма");
                     }
                 }
                 if (event.key.code == sf::Keyboard::Num6) {
-                    // Покупка удобрения (цена: 2)
-                    if (farm.inventory->moneyTake(2) == true) {
+                    if (farm.inventory->moneyTake(2)) {
                         farm.inventory->fertiliserAdd(1);
-                        messagePanel.addMessage("Успешно куплено 1 удобрение");
+                        notifPanel.addMessage("Успешно куплено 1 удобрение");
                     }
                     else {
-                        messagePanel.addMessage("Недостаточно денег для покупки удобрения");
+                        notifPanel.addMessage("Недостаточно денег для покупки удобрения");
                     }
                 }
                 if (event.key.code == sf::Keyboard::Num7) {
-                    // Продажа всех товаров
-                    if (farm.shop->sellGoods(farm.inventory) == true) {
-                        messagePanel.addMessage("Успешно проданы все товары");
+                    if (farm.shop->sellGoods(farm.inventory)) {
+                        notifPanel.addMessage("Успешно проданы все товары");
                     }
                     else {
-                        messagePanel.addMessage("Ошибка при продаже товаров");
+                        notifPanel.addMessage("Ошибка при продаже товаров");
                     }
                 }
             }
 
             // Действия на выбранной клетке (если магазин закрыт)
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num1 && showShop == -1)
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num1 && showShop == -1 && selectedPlotX != -1 && selectedPlotY != -1)
             {
-                // Действие по клавише 1: посадка пшеницы или полив
-                if (farm.selectedTileIsPlot(selectedGametile))
+                if (farm.selectedTileIsPlot(sf::Vector2f(selectedPlotX, selectedPlotY)))
                 {
-                    if (farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->isEmpty() == true)
+                    int px = selectedPlotX - 2, py = selectedPlotY - 3;
+                    if (farm.plots[px][py]->isEmpty())
                     {
-                        // Посадка пшеницы, если есть семена
-                        if (farm.inventory->wheatSeedTake(1) == true) {
+                        if (farm.inventory->wheatSeedTake(1)) {
                             Wheat* newWheat = new Wheat;
-                            farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->placeEntity(newWheat);
+                            farm.plots[px][py]->placeEntity(newWheat);
                         }
                         else {
-                            messagePanel.addMessage("Нельзя посадить пшеницу: нет семян.");
+                            notifPanel.addMessage("Нельзя посадить пшеницу: нет семян.");
                         }
                     }
-                    else if (farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->isEmpty() == false)
+                    else
                     {
-                        // Полив растения/животного
-                        farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->water();
+                        farm.plots[px][py]->water();
                     }
                 }
             }
 
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num2 && showShop == -1)
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num2 && showShop == -1 && selectedPlotX != -1 && selectedPlotY != -1)
             {
-                // Действие по клавише 2: посадка ячменя, удобрение или кормление
-                if (farm.selectedTileIsPlot(selectedGametile)) {
-                    if (farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->isEmpty() == true) {
-                        // Посадка ячменя, если есть семена
-                        if (farm.inventory->barleySeedTake(1) == true) {
+                if (farm.selectedTileIsPlot(sf::Vector2f(selectedPlotX, selectedPlotY))) {
+                    int px = selectedPlotX - 2, py = selectedPlotY - 3;
+                    if (farm.plots[px][py]->isEmpty()) {
+                        if (farm.inventory->barleySeedTake(1)) {
                             Barley* newBarley = new Barley;
-                            farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->placeEntity(newBarley);
+                            farm.plots[px][py]->placeEntity(newBarley);
                         }
                         else {
-                            messagePanel.addMessage("Нельзя посадить ячмень : нет семян");
+                            notifPanel.addMessage("Нельзя посадить ячмень : нет семян");
                         }
                     }
-                    else if (farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->get_isPlant() == true) {
-                        // Удобрение растения, если есть удобрения
-                        if (farm.inventory->fertiliserTake(1) == true) {
-                            farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->fertilise(farm.inventory);
+                    else if (farm.plots[px][py]->get_isPlant()) {
+                        if (farm.inventory->fertiliserTake(1)) {
+                            farm.plots[px][py]->fertilise(farm.inventory);
                         }
                         else {
-                            messagePanel.addMessage("Нельзя удобрить: нет удобрений.");
+                            notifPanel.addMessage("Нельзя удобрить: нет удобрений.");
                         }
                     }
-                    else if (farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->get_isAnimal() == true) {
-                        // Кормление животного, если есть корм
-                        if (farm.inventory->animalFeedTake(1) == true) {
-                            farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->feed(farm.inventory);
+                    else if (farm.plots[px][py]->get_isAnimal()) {
+                        if (farm.inventory->animalFeedTake(1)) {
+                            farm.plots[px][py]->feed(farm.inventory);
                         }
                         else {
-                            messagePanel.addMessage("Нельзя покормить: нет корма.");
+                            notifPanel.addMessage("Нельзя покормить: нет корма.");
                         }
                     }
                 }
             }
 
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num3 && showShop == -1)
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num3 && showShop == -1 && selectedPlotX != -1 && selectedPlotY != -1)
             {
-                // Действие по клавише 3: сбор урожая или размещение курицы
-                if (farm.selectedTileIsPlot(selectedGametile) && farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->isEmpty() == false)
+                if (farm.selectedTileIsPlot(sf::Vector2f(selectedPlotX, selectedPlotY)))
                 {
-                    // Сбор урожая
-                    farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->harvest(farm.inventory);
-                }
-                else if (farm.selectedTileIsPlot(selectedGametile) && farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->isEmpty() == true)
-                {
-                    // Размещение курицы, если она есть в инвентаре
-                    if (farm.inventory->ChickenTake(1) == true) {
-                        Chicken* newChicken = new Chicken;
-                        farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->placeEntity(newChicken);
+                    int px = selectedPlotX - 2, py = selectedPlotY - 3;
+                    if (!farm.plots[px][py]->isEmpty())
+                    {
+                        farm.plots[px][py]->harvest(farm.inventory);
                     }
-                    else {
-                        messagePanel.addMessage("Нельзя разместить курицу: нет куриц в инвентаре");
+                    else
+                    {
+                        if (farm.inventory->ChickenTake(1)) {
+                            Chicken* newChicken = new Chicken;
+                            farm.plots[px][py]->placeEntity(newChicken);
+                        }
+                        else {
+                            notifPanel.addMessage("Нельзя разместить курицу: нет куриц в инвентаре");
+                        }
                     }
                 }
             }
 
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num4 && showShop == -1)
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num4 && showShop == -1 && selectedPlotX != -1 && selectedPlotY != -1)
             {
-                // Действие по клавише 4: забить животное или разместить овцу
-                if (farm.selectedTileIsPlot(selectedGametile) && farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->get_isAnimal() == true) {
-                    // Забой животного
-                    farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->Slaughter(farm.inventory);
-                }
-                else if (farm.selectedTileIsPlot(selectedGametile) && farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->isEmpty() == true)
-                {
-                    // Размещение овцы, если она есть в инвентаре
-                    if (farm.inventory->SheepTake(1) == true) {
-                        Sheep* newSheep = new Sheep;
-                        farm.plots[(int)selectedGametile.x - 2][(int)selectedGametile.y - 3]->placeEntity(newSheep);
+                if (farm.selectedTileIsPlot(sf::Vector2f(selectedPlotX, selectedPlotY))) {
+                    int px = selectedPlotX - 2, py = selectedPlotY - 3;
+                    if (farm.plots[px][py]->get_isAnimal()) {
+                        farm.plots[px][py]->Slaughter(farm.inventory);
                     }
-                    else {
-                        messagePanel.addMessage("Нельзя разместить овцу: нет овец в инвентаре");
+                    else
+                    {
+                        if (farm.inventory->SheepTake(1)) {
+                            Sheep* newSheep = new Sheep;
+                            farm.plots[px][py]->placeEntity(newSheep);
+                        }
+                        else {
+                            notifPanel.addMessage("Нельзя разместить овцу: нет овец в инвентаре");
+                        }
                     }
                 }
-            }            
+            }
 
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
-            {
-                // Пропуск времени по клавише P
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P) {
                 farm.passTime(&window);
             }
-
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::H) {
-                // Открытие/закрытие справки по клавише H
                 showHelp *= -1;
             }
 
-            // Сохранение данных инвентаря в файл (клавиша S)
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S)
             {
                 if (farm.inventory->saveDataToFile("InventoryData.txt"))
-                {
-                    messagePanel.addMessage("Данные инвентаря успешно сохранены.");
-                }
+                    notifPanel.addMessage("Данные инвентаря успешно сохранены.");
                 else
-                {
-                    messagePanel.addMessage("Ошибка сохранения данных инвентаря.");
-                }
+                    notifPanel.addMessage("Ошибка сохранения данных инвентаря.");
             }
 
-            // Загрузка данных инвентаря из файла (клавиша L)
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::L)
             {
                 if (farm.inventory->loadDataFromFile("InventoryData.txt"))
-                {
-                    messagePanel.addMessage("Данные инвентаря успешно загружены.");
-                }
+                    notifPanel.addMessage("Данные инвентаря успешно загружены.");
                 else
-                {
-                    messagePanel.addMessage("Ошибка загрузки данных инвентаря.");
-                }
+                    notifPanel.addMessage("Ошибка загрузки данных инвентаря.");
             }
         }
 
-        // Получение позиции выбранной клетки на основе позиции мыши
-        selectedGametile.x = (int)mousePressPos.x / 80;
-        selectedGametile.y = (int)mousePressPos.y / 80;
+        // === ВЫЗЫВАТЬ createPlotOptionButtons КАЖДЫЙ КАДР ===
+        if (selectedPlotX != -1 && selectedPlotY != -1 && farm.selectedTileIsPlot(sf::Vector2f(selectedPlotX, selectedPlotY))) {
+            int px = selectedPlotX - 2;
+            int py = selectedPlotY - 3;
+            farm.createPlotOptionButtons(px, py, &notifPanel);
+        }
 
         window.clear();
-
-        // Отрисовка фона
         window.draw(background);
+        notifPanel.draw(window);
 
         MoneyPanel moneyPanel;
-
         if (!moneyPanel.loadResources()) {
             std::cerr << "Ошибка загрузки ресурсов MoneyPanel!" << std::endl;
         }
-        moneyPanel.setPosition(610, 7); // Позиция на экране
-        moneyPanel.setInventory(farm.inventory); // Начальное количество денег
+        moneyPanel.setPosition(610, 7);
+        moneyPanel.setInventory(farm.inventory);
         moneyPanel.draw(window);
 
         farm.drawDayCounter(&window);
-               
-        // Отображение подсказки о справке
         farm.displayFarmText(&window, "Нажмите H для открытия справки!", 0, 0);
 
-        // Отрисовка всех клеток фермы
         farm.drawPlots(&window);
-
         farm.drawFertiliserSprites(&window);
+        farm.drawPlotOptionButtons(&window);
 
-        // Отображение опций для выбранной клетки
-        if (farm.selectedTileIsPlot(selectedGametile))
-        {
-            farm.getPlotOptions(&window, (float)selectedGametile.x, (float)selectedGametile.y);
-            farm.tiles[(int)selectedGametile.x][(int)selectedGametile.y]->drawSelectionBox(&window);
+        // Подсветка выбранного участка и кнопки вокруг него
+        if (selectedPlotX != -1 && selectedPlotY != -1 && farm.selectedTileIsPlot(sf::Vector2f(selectedPlotX, selectedPlotY))) {
+            farm.tiles[selectedPlotX][selectedPlotY]->drawSelectionBox(&window);
         }
 
         musicMenu.draw(window, isMusicOn);
 
-        // Отображение инвентаря (если открыт)
         if (showInv == 1)
             farm.inventory->show(&window);
-
-        // Отображение магазина (если открыт)
         if (showShop == 1)
             farm.shop->shopOpen(&window, farm.inventory->getMoney());
-
-        // Отображение справки (если открыта)
-        if (showHelp == 1) {
+        if (showHelp == 1)
             farm.get_Help(&window);
-        }
-
-        messagePanel.draw(window);
 
         window.display();
     }

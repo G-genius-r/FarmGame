@@ -44,7 +44,7 @@ bool Plant::checkDeath() {
 
 std::string Plant::getFertiliserSprite() const {
     if (!isFertilised)
-        return "sprites/inventorySprite/fertiliserSprite.png";
+        return "sprites/fertilizer.png";
     else
         return "";
 }

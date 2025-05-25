@@ -12,6 +12,9 @@
 #include "Inventory.h"
 #include "Plot.h"
 #include "Shop.h"
+#include <memory>
+#include "Button.h"
+#include "NotificationPanel.h"
 
 /* Класс Farm представляет виртуальную ферму.
 Он служит центральной сущностью, которая инкапсулирует различные функции, связанные с фермой:
@@ -37,25 +40,24 @@ private:
     //текстуры и спрайты для меню помощи
     sf::Texture Help_texture;
     sf::Sprite Help_sprite;
-    //координаты меню помощи
-    int help_x;
-    int help_y;
 
-public:
-    //* Указатель на инвентарь игрока в игре.
-    Inventory* inventory;
-
-    //* Указатель на внутриигровой магазин для покупки предметов.
-    Shop* shop;
-
-    //* 2D вектор для хранения тайлов сетки фермы.
-    std::vector<std::vector<GameTile*> > tiles;
-
-    //* 2D вектор для хранения грядок на ферме.
-    std::vector<std::vector<Plot*> > plots;
-
-    //* Конструктор для инициализации объекта фермы.
+public:    
     Farm();
+
+    Shop* shop;
+    Inventory* inventory;
+    int help_x, help_y;
+
+    std::vector<std::vector<class Plot*>> plots;
+    std::vector<std::vector<class GameTile*>> tiles;
+
+    std::vector<std::unique_ptr<Button>> plotOptionButtons;
+
+    void createPlotOptionButtons(int plotX, int plotY, NotificationPanel* notifPanel);
+    void drawPlotOptionButtons(sf::RenderWindow* window);
+
+    void clearPlotOptionButtons();
+    int getGridLength() const;
 
     //* Отображает доступные действия для выбранной грядки на ферме.
     //* Входные параметры: window - окно SFML для отрисовки опций грядки.
@@ -83,6 +85,8 @@ public:
     //*                    textureFilename - имя файла новой текстуры для тайла.
     //* Выходное значение: True, если спрайт успешно изменен, false в противном случае.
     bool changeBackSprite(int x, int y, std::string textureFilename);
+
+    bool handlePlotOptionButtonsEvent(const sf::Event& event, const sf::Vector2f& mousePos);
 
     //* Отображает текст, связанный с фермой, в игровом окне.
     //* Входные параметры: window - окно SFML для отображения текста.

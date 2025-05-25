@@ -108,7 +108,7 @@ bool Inventory::show(sf::RenderWindow* window)
         int* value;
     } items[] = {
         {"деньги:", "sprites/inventorySprite/moneySprite.png", &money},
-        {"удобрение:", "sprites/inventorySprite/fertiliserSprite.png", &fertiliser},
+        {"удобрение:", "sprites/fertilizer.png", &fertiliser},
         {"корм дл€ животных:", "sprites/inventorySprite/animalFeed.png", &animalFeed},
         {"зерно пшеницы:", "sprites/wheatSprite/wheatItem.png", &wheatGrain},
         {"зерно €чмен€:", "sprites/barleySprite/barleyItem.png", &barleyGrain},

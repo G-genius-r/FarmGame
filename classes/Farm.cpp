@@ -4,8 +4,13 @@
 #include <SFML/System.hpp>
 #include "../headers/Farm.h"
 #include <vector>
-#include "../headers/Barley.h"
+#include "../headers/NotificationPanel.h"
+#include "../headers/Button.h"
 #include "../headers/Wheat.h"
+#include "../headers/Barley.h"
+#include "../headers/Chicken.h"
+#include "../headers/Sheep.h"
+#include <cmath>
 
 // Конструктор класса Farm
 Farm::Farm()
@@ -245,6 +250,14 @@ bool Farm::selectedTileIsPlot(sf::Vector2f selectedGametile)
     return (tile_x >= 2 && tile_x <= 7 && tile_y >= 3 && tile_y <= 6);
 }
 
+void Farm::clearPlotOptionButtons() {
+    plotOptionButtons.clear();
+}
+
+int Farm::getGridLength() const {
+    return gridLength;
+}
+
 // Отображение текста на ферме
 void Farm::displayFarmText(sf::RenderWindow* window, std::string text, int x, int y)
 {
@@ -377,4 +390,78 @@ void Farm::drawFertiliserSprites(sf::RenderWindow* window) {
             }
         }
     }
+}
+
+void Farm::createPlotOptionButtons(int plotX, int plotY, NotificationPanel* notifPanel) {
+    plotOptionButtons.clear();
+    float btnRadius = 70; // радиус круга вокруг тайла
+    float btnSize = 48; // ширина и высота кнопки
+    float centerX = (plotX + 2) * 80 + 40; // центр выбранного тайла (с учётом смещения plotX+2)
+    float centerY = (plotY + 3) * 80 + 40;
+
+    std::vector<std::pair<std::string, std::function<void()>>> actions;
+
+    if (plots[plotX][plotY]->isEmpty()) {
+        actions = {
+            {"sprites/ui/plant_wheat.png", [=]() {
+                if (inventory->wheatSeedTake(1)) { plots[plotX][plotY]->placeEntity(new Wheat()); notifPanel->addMessage("Посажена пшеница!"); }
+                else notifPanel->addMessage("Нет семян пшеницы!");
+            }},
+            {"sprites/ui/plant_barley.png", [=]() {
+                if (inventory->barleySeedTake(1)) { plots[plotX][plotY]->placeEntity(new Barley()); notifPanel->addMessage("Посажен ячмень!"); }
+                else notifPanel->addMessage("Нет семян ячменя!");
+            }},
+            {"sprites/ui/add_chicken.png", [=]() {
+                if (inventory->ChickenTake(1)) { plots[plotX][plotY]->placeEntity(new Chicken()); notifPanel->addMessage("Курица размещена!"); }
+                else notifPanel->addMessage("Нет куриц в инвентаре!");
+            }},
+            {"sprites/ui/add_sheep.png", [=]() {
+                if (inventory->SheepTake(1)) { plots[plotX][plotY]->placeEntity(new Sheep()); notifPanel->addMessage("Овца размещена!"); }
+                else notifPanel->addMessage("Нет овец в инвентаре!");
+            }},
+        };
+    }
+    else if (plots[plotX][plotY]->get_isPlant()) {
+        actions = {
+            {"sprites/ui/watering_can.png", [=]() { plots[plotX][plotY]->water();}},
+            {"sprites/fertilizer.png", [=]() {
+                if (inventory->fertiliserTake(1)) { plots[plotX][plotY]->fertilise(inventory); notifPanel->addMessage("Удобрено!"); }
+                else notifPanel->addMessage("Нет удобрений!");
+            }},
+            {"sprites/ui/harvest.png", [=]() { plots[plotX][plotY]->harvest(inventory); notifPanel->addMessage("Урожай собран!"); }},
+        };
+    }
+    else if (plots[plotX][plotY]->get_isAnimal()) {
+        actions = {
+            {"sprites/ui/water_bucket.png", [=]() { plots[plotX][plotY]->water(); notifPanel->addMessage("Дано воды!"); }},
+            {"sprites/ui/feed.png", [=]() {
+                if (inventory->animalFeedTake(1)) { plots[plotX][plotY]->feed(inventory); notifPanel->addMessage("Покормлено!"); }
+                else notifPanel->addMessage("Нет корма!");
+            }},
+            {"sprites/ui/animal_product.png", [=]() { plots[plotX][plotY]->harvest(inventory); notifPanel->addMessage("Собрано!"); }},
+            {"sprites/ui/slaughter.png", [=]() { plots[plotX][plotY]->Slaughter(inventory); notifPanel->addMessage("Забито!"); }},
+        };
+    }
+
+    size_t n = actions.size();
+    float angleStep = 2 * 3.1415926535f / n;
+
+    for (size_t i = 0; i < n; ++i) {
+        float angle = i * angleStep - 3.1415926535f / 2; // старт сверху
+        float bx = centerX + btnRadius * cos(angle) - btnSize / 2;
+        float by = centerY + btnRadius * sin(angle) - btnSize / 2;
+        plotOptionButtons.emplace_back(std::make_unique<Button>(actions[i].first, bx, by, btnSize, btnSize, actions[i].second));
+    }
+}
+
+bool Farm::handlePlotOptionButtonsEvent(const sf::Event& event, const sf::Vector2f& mousePos) {
+    bool clicked = false;
+    for (auto& btn : plotOptionButtons)
+        if (btn->handleEvent(event, mousePos))
+            clicked = true;
+    return clicked;
+}
+
+void Farm::drawPlotOptionButtons(sf::RenderWindow* window) {
+    for (auto& btn : plotOptionButtons) btn->draw(*window);
 }
