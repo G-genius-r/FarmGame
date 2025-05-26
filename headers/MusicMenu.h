@@ -21,6 +21,9 @@ private:
     State state;
     Action pendingAction;
 
+    sf::Text saveGameText;
+    sf::FloatRect saveGameBtnRect;
+
     sf::Texture iconTexture;
     sf::Sprite iconSprite;
 
