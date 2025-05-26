@@ -45,7 +45,9 @@ public:
     Inventory();
 
     /*Сохранение и загрузка из файла*/
+    bool save(std::ostream& out) const;    // Сохранить 
     bool saveDataToFile(const std::string& filename);    // Сохранить данные в файл
+    bool load(std::istream& in);    // Загрузить
     bool loadDataFromFile(const std::string& filename);  // Загрузить данные из файла
 
     /*Функции для доступа и изменения приватных членов инвентаря*/

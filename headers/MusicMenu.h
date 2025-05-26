@@ -11,7 +11,7 @@ public:
 
     MusicMenu(sf::RenderWindow& window);
     void updatePositions(sf::RenderWindow& window);
-    void handleEvent(const sf::Event& event, sf::RenderWindow& window, sf::Music& music, bool& isMusicOn, Inventory& inventory);
+    void handleEvent(const sf::Event& event, sf::RenderWindow& window, sf::Music& music, bool& isMusicOn, Farm& farm);
     void draw(sf::RenderWindow& window, bool isMusicOn);
     void close();
     bool isOpen() const { return state == OPEN; }

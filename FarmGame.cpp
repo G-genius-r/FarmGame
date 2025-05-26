@@ -88,7 +88,7 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            musicMenu.handleEvent(event, window, music, isMusicOn, *(farm.inventory));
+            musicMenu.handleEvent(event, window, music, isMusicOn, farm);
 
             MusicMenu::Action musicAction = musicMenu.pollAction();
             if (musicAction == MusicMenu::MAIN_MENU) {
@@ -348,18 +348,18 @@ int main()
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S)
             {
-                if (farm.inventory->saveDataToFile("InventoryData.txt"))
-                    notifPanel.addMessage("Данные инвентаря успешно сохранены.");
+                if (farm.saveToFiles("GameData.txt", "InventoryData.txt"))
+                    notifPanel.addMessage("Данные игры успешно сохранены.");
                 else
-                    notifPanel.addMessage("Ошибка сохранения данных инвентаря.");
+                    notifPanel.addMessage("Ошибка сохранения данных игры.");
             }
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::L)
             {
-                if (farm.inventory->loadDataFromFile("InventoryData.txt"))
-                    notifPanel.addMessage("Данные инвентаря успешно загружены.");
+                if (farm.loadFromFiles("GameData.txt", "InventoryData.txt"))
+                    notifPanel.addMessage("Данные игры успешно загружены.");
                 else
-                    notifPanel.addMessage("Ошибка загрузки данных инвентаря.");
+                    notifPanel.addMessage("Ошибка загрузки данных игры.");
             }
         }
 
