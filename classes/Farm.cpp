@@ -25,6 +25,68 @@ Farm::Farm()
     help_y = 0;      // Позиция меню помощи по Y
 }
 
+bool Farm::saveToFiles(const std::string& gameDataFilename, const std::string& inventoryFilename)
+{
+    std::ofstream gameDataFile(gameDataFilename);
+    if (!gameDataFile.is_open()) {
+        std::cerr << "Не могу открыть файл для сохранения игры" << std::endl;
+        return false;
+    }
+    // Сохраняем день
+    gameDataFile << dayCounter << std::endl;
+
+    // TODO: сохранить карту, грядки и прочее
+    gameDataFile.close();
+
+    // Сохраняем инвентарь
+    std::ofstream inventoryFile(inventoryFilename);
+    if (!inventoryFile.is_open()) {
+        std::cerr << "Не могу открыть файл для сохранения инвентаря" << std::endl;
+        return false;
+    }
+    if (!inventory->save(inventoryFile)) {
+        std::cerr << "Ошибка сохранения инвентаря" << std::endl;
+        return false;
+    }
+    inventoryFile.close();
+
+    return true;
+}
+
+bool Farm::loadFromFiles(const std::string& gameDataFilename, const std::string& inventoryFilename)
+{
+    std::ifstream gameDataFile(gameDataFilename);
+    if (!gameDataFile.is_open()) {
+        std::cerr << "Не могу открыть файл для загрузки игры" << std::endl;
+        return false;
+    }
+
+    int loadedDay;
+    gameDataFile >> loadedDay;
+    if (gameDataFile.fail()) {
+        std::cerr << "Ошибка чтения дня из файла" << std::endl;
+        return false;
+    }
+    std::cout << "Загружен день: " << loadedDay << std::endl;
+    dayCounter = loadedDay;
+
+    // TODO: загрузить карту, грядки и прочее
+    gameDataFile.close();
+
+    std::ifstream inventoryFile(inventoryFilename);
+    if (!inventoryFile.is_open()) {
+        std::cerr << "Не могу открыть файл для загрузки инвентаря" << std::endl;
+        return false;
+    }
+    if (!inventory->load(inventoryFile)) {
+        std::cerr << "Ошибка загрузки инвентаря" << std::endl;
+        return false;
+    }
+    inventoryFile.close();
+
+    return true;
+}
+
 // Создание участков земли
 void Farm::setPlots()
 {

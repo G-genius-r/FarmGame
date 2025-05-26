@@ -21,60 +21,53 @@ Inventory::Inventory()
     inventoryPos_y = 0;
 }
 
+bool Inventory::save(std::ostream& out) const
+{
+    out << money << std::endl;
+    out << fertiliser << std::endl;
+    out << animalFeed << std::endl;
+    out << wheatGrain << std::endl;
+    out << barleyGrain << std::endl;
+    out << wheatSeed << std::endl;
+    out << barleySeed << std::endl;
+    out << wool << std::endl;
+    out << eggs << std::endl;
+    out << chickens << std::endl;
+    out << sheep << std::endl;
+    out << meat << std::endl;
+    return !out.fail();
+}
+
+bool Inventory::load(std::istream& in)
+{
+    in >> money;
+    in >> fertiliser;
+    in >> animalFeed;
+    in >> wheatGrain;
+    in >> barleyGrain;
+    in >> wheatSeed;
+    in >> barleySeed;
+    in >> wool;
+    in >> eggs;
+    in >> chickens;
+    in >> sheep;
+    in >> meat;
+    return !in.fail();
+}
+
 // Сохраняет данные инвентаря в файл
 bool Inventory::saveDataToFile(const std::string& filename)
 {
     std::ofstream outFile(filename);
-    if (!outFile.is_open())
-    {
-        std::cerr << "Ошибка открытия файла: " << filename << std::endl;
-        return false;
-    }
-
-    // Запись данных инвентаря в файл
-    outFile << money << std::endl;
-    outFile << fertiliser << std::endl;
-    outFile << animalFeed << std::endl;
-    outFile << wheatGrain << std::endl;
-    outFile << barleyGrain << std::endl;
-    outFile << wheatSeed << std::endl;
-    outFile << barleySeed << std::endl;
-    outFile << wool << std::endl;
-    outFile << eggs << std::endl;
-    outFile << chickens << std::endl;
-    outFile << sheep << std::endl;
-    outFile << meat << std::endl;
-
-    outFile.close();
-    return true;
+    if (!outFile.is_open()) return false;
+    return save(outFile);
 }
 
-// Загружает данные инвентаря из файла
 bool Inventory::loadDataFromFile(const std::string& filename)
 {
     std::ifstream inFile(filename);
-    if (!inFile.is_open())
-    {
-        std::cerr << "Ошибка открытия файла: " << filename << std::endl;
-        return false;
-    }
-
-    // Чтение данных инвентаря из файла
-    inFile >> money;
-    inFile >> fertiliser;
-    inFile >> animalFeed;
-    inFile >> wheatGrain;
-    inFile >> barleyGrain;
-    inFile >> wheatSeed;
-    inFile >> barleySeed;
-    inFile >> wool;
-    inFile >> eggs;
-    inFile >> chickens;
-    inFile >> sheep;
-    inFile >> meat;
-
-    inFile.close();
-    return true;
+    if (!inFile.is_open()) return false;
+    return load(inFile);
 }
 
 // Отображает инвентарь на экране

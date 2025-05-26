@@ -1,5 +1,5 @@
 ﻿#include "../headers/MusicMenu.h"
-#include "../headers/Inventory.h"
+#include "../headers/Farm.h"
 #include "../headers/ConfirmationDialog.h"
 #include <iostream>
 
@@ -78,7 +78,7 @@ void MusicMenu::updatePositions(sf::RenderWindow& window) {
     exitGameBtnRect = sf::FloatRect(window.getSize().x - 170, startY + 2 * step, 160, 25);
 }
 
-void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf::Music& music, bool& isMusicOn, Inventory& inventory) {
+void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf::Music& music, bool& isMusicOn, Farm& farm) {
     if (event.type == sf::Event::Resized) {
         updatePositions(window);
     }
@@ -107,7 +107,7 @@ void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf
                     ConfirmationDialog saveDialog(window, font, "Вы хотите перезаписать сохранение перед выходом в главное меню?");
                     bool confirmedSave = saveDialog.show();
 
-                    if (confirmedSave && inventory.saveDataToFile("InventoryData.txt")) {
+                    if (confirmed && farm.saveToFiles("GameData.txt", "InventoryData.txt")) {
                         std::cout << "Данные инвентаря успешно сохранены." << std::endl;
                     }
                     else {
@@ -124,13 +124,13 @@ void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf
                 if (confirmedExit) {
                     ConfirmationDialog saveExitDialog(window, font, "Вы хотите перезаписать сохранение перед выходом?");
                     bool confirmedSaveExit = saveExitDialog.show();
-
-                    if (confirmedSaveExit && inventory.saveDataToFile("InventoryData.txt")) {
+                    if (confirmedExit && farm.loadFromFiles("GameData.txt", "InventoryData.txt")) {
                         std::cout << "Данные инвентаря успешно сохранены." << std::endl;
                     }
                     else {
                         std::cerr << "Ошибка сохранения данных инвентаря!" << std::endl;
                     }
+
 
                     pendingAction = EXIT_GAME;
                     window.close();

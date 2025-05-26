@@ -16,7 +16,7 @@ bool loadDefaultInventoryData(const std::string& filename, Farm& farm, Notificat
 
 // Функция загрузки сохраненных данных инвентаря
 bool loadInventoryDataFromFile(const std::string& filename, Farm& farm, NotificationPanel& notifPanel) {
-    if (farm.inventory->loadDataFromFile(filename)) {
+    if (farm.loadFromFiles("GameData.txt", "InventoryData.txt")) {
         notifPanel.addMessage("С возвращением, фермер");
         notifPanel.addMessage("Данные инвентаря успешно загружены.");
         return true;

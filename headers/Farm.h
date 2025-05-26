@@ -15,6 +15,7 @@
 #include <memory>
 #include "Button.h"
 #include "NotificationPanel.h"
+#include "GameState.h"
 
 /* Класс Farm представляет виртуальную ферму.
 Он служит центральной сущностью, которая инкапсулирует различные функции, связанные с фермой:
@@ -46,6 +47,9 @@ public:
 
     void setNotificationPanel(NotificationPanel* panel);
 
+    void setDay(int d) { dayCounter = d; }
+    int getDay() const { return dayCounter; }
+
     Shop* shop;
     Inventory* inventory;
     int help_x, help_y;
@@ -62,6 +66,9 @@ public:
 
     void clearPlotOptionButtons();
     int getGridLength() const;
+
+    bool saveToFiles(const std::string& gameDataFilename, const std::string& inventoryFilename);
+    bool loadFromFiles(const std::string& gameDataFilename, const std::string& inventoryFilename);
 
     //* Отображает доступные действия для выбранной грядки на ферме.
     //* Входные параметры: window - окно SFML для отрисовки опций грядки.
