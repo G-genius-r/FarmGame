@@ -100,30 +100,43 @@ void MusicMenu::handleEvent(const sf::Event& event, sf::RenderWindow& window, sf
                 isMusicOn ? music.play() : music.pause();
             }
             else if (mainMenuBtnRect.contains(mousePosF)) {
-                ConfirmationDialog confirmDialog(window, font, "Вы хотите перезаписать сохранение перед выходом в главное меню?");
+                ConfirmationDialog confirmDialog(window, font, "Вы действительно хотите выйти в главное меню?");
                 bool confirmed = confirmDialog.show();
 
-                if (confirmed && inventory.saveDataToFile("InventoryData.txt")) {
-                    std::cout << "Данные инвентаря успешно сохранены." << std::endl;
-                } else {
-                    std::cerr << "Ошибка сохранения данных инвентаря!" << std::endl;
-                }
+                if (confirmed) {
+                    ConfirmationDialog saveDialog(window, font, "Вы хотите перезаписать сохранение перед выходом в главное меню?");
+                    bool confirmedSave = saveDialog.show();
 
-                pendingAction = MAIN_MENU;
+                    if (confirmedSave && inventory.saveDataToFile("InventoryData.txt")) {
+                        std::cout << "Данные инвентаря успешно сохранены." << std::endl;
+                    }
+                    else {
+                        std::cerr << "Ошибка сохранения данных инвентаря!" << std::endl;
+                    }
+
+                    pendingAction = MAIN_MENU;
+                }
             }
             else if (exitGameBtnRect.contains(mousePosF)) {
-                ConfirmationDialog confirmExitDialog(window, font, "Вы хотите перезаписать сохранение перед выходом из игры?");
+                ConfirmationDialog confirmExitDialog(window, font, "Вы действительно хотите выйти из приложения?");
                 bool confirmedExit = confirmExitDialog.show();
 
-                if (confirmedExit && inventory.saveDataToFile("InventoryData.txt")) {
-                    std::cout << "Данные инвентаря успешно сохранены." << std::endl;
-                } else {
-                    std::cerr << "Ошибка сохранения данных инвентаря!" << std::endl;
-                }
+                if (confirmedExit) {
+                    ConfirmationDialog saveExitDialog(window, font, "Вы хотите перезаписать сохранение перед выходом?");
+                    bool confirmedSaveExit = saveExitDialog.show();
 
-                pendingAction = EXIT_GAME;
-                window.close();
+                    if (confirmedSaveExit && inventory.saveDataToFile("InventoryData.txt")) {
+                        std::cout << "Данные инвентаря успешно сохранены." << std::endl;
+                    }
+                    else {
+                        std::cerr << "Ошибка сохранения данных инвентаря!" << std::endl;
+                    }
+
+                    pendingAction = EXIT_GAME;
+                    window.close();
+                }
             }
+
             else {
                 close();
             }

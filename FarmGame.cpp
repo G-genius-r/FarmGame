@@ -30,7 +30,7 @@ int main()
     int menuPosX = (desktop.width - menuWidth) / 2;
     int menuPosY = (desktop.height - menuHeight) / 2;
 
-    sf::RenderWindow menuWindow(sf::VideoMode(menuWidth, menuHeight), "FarmVille!", sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow menuWindow(sf::VideoMode(menuWidth, menuHeight), L"Фермеркие будни!", sf::Style::Titlebar | sf::Style::Close);
 
     HWND menuHwnd = menuWindow.getSystemHandle();
     SetWindowPos(menuHwnd, HWND_TOP, menuPosX, menuPosY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
@@ -41,7 +41,7 @@ int main()
 
     menuWindow.close();
 
-    sf::RenderWindow window(sf::VideoMode(800, 800), "FarmVille!", sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(800, 800), L"Фермеркие будни!", sf::Style::Titlebar | sf::Style::Close);
     int winWidth = 800;
     int winHeight = 800;
     int winPosX = (desktop.width - winWidth) / 2;
@@ -381,7 +381,7 @@ int main()
         moneyPanel.draw(window);
 
         farm.drawDayCounter(&window);
-        farm.displayFarmText(&window, "Нажмите H для открытия справки!", 0, 0);
+        farm.displayFarmText(&window, "Нажмите H для открытия правил!", 0, 0);
 
         farm.drawPlots(&window);
         farm.drawFertiliserSprites(&window);

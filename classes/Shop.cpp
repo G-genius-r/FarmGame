@@ -1,4 +1,5 @@
-#include "../headers/Shop.h"
+п»ї#include "../headers/Shop.h"
+
 
 bool Shop::shopOpen(sf::RenderWindow* window, int money)
 {
@@ -12,7 +13,7 @@ bool Shop::shopOpen(sf::RenderWindow* window, int money)
     std::string texture_filename = "sprites/Shop_background.png";
     if (!Backdrop_texture.loadFromFile(texture_filename))
     {
-        std::cout << "Ошибка загрузки файла: " << texture_filename << std::endl;
+        std::cout << "РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё С„Р°Р№Р»Р°: " << texture_filename << std::endl;
         return false;
     }
     Backdrop_sprite.setTexture(Backdrop_texture);
@@ -23,36 +24,36 @@ bool Shop::shopOpen(sf::RenderWindow* window, int money)
     );
     window->draw(Backdrop_sprite);
 
-    // "МАГАЗИН" — слева сверху, смещено на 10px правее
-    displayShopText(window, "МАГАЗИН", shop_pos_x + 80, shop_pos_y + 40, 48, sf::Color(30, 30, 30));
-    displayShopText(window, "Деньги: ", shop_pos_x + shopW - 210, shop_pos_y + 54, 28, sf::Color(40, 40, 40));
+    // "РњРђР“РђР—РРќ" вЂ” СЃР»РµРІР° СЃРІРµСЂС…Сѓ, СЃРјРµС‰РµРЅРѕ РЅР° 10px РїСЂР°РІРµРµ
+    displayShopText(window, "РњРђР“РђР—РРќ", shop_pos_x + 80, shop_pos_y + 40, 48, sf::Color(30, 30, 30));
+    displayShopText(window, "Р”РµРЅСЊРіРё: ", shop_pos_x + shopW - 210, shop_pos_y + 54, 28, sf::Color(40, 40, 40));
     displayShopText(window, std::to_string(money), shop_pos_x + shopW - 110, shop_pos_y + 54, 28, sf::Color(40, 40, 40));
 
-    // Список товаров — $ выравнены по одной вертикали, смещено на 20px правее (было -150, стало -130)
+    // РЎРїРёСЃРѕРє С‚РѕРІР°СЂРѕРІ вЂ” $ РІС‹СЂР°РІРЅРµРЅС‹ РїРѕ РѕРґРЅРѕР№ РІРµСЂС‚РёРєР°Р»Рё, СЃРјРµС‰РµРЅРѕ РЅР° 20px РїСЂР°РІРµРµ (Р±С‹Р»Рѕ -150, СЃС‚Р°Р»Рѕ -130)
     int itemStartY = shop_pos_y + 170;
     int itemStep = 80;
     int labelX = shop_pos_x + 80;
-    int priceX = shop_pos_x + shopW - 130; // Было -150, теперь еще правее на 20px
+    int priceX = shop_pos_x + shopW - 130; // Р‘С‹Р»Рѕ -150, С‚РµРїРµСЂСЊ РµС‰Рµ РїСЂР°РІРµРµ РЅР° 20px
 
-    displayShopText(window, "1. Купить семена пшеницы", labelX, itemStartY + itemStep * 0, 36, sf::Color::Black);
-    displayShopText(window, "$2", priceX, itemStartY + itemStep * 0, 36, sf::Color::Black);
+    displayShopText(window, "1. РљСѓРїРёС‚СЊ СЃРµРјРµРЅР° РїС€РµРЅРёС†С‹", labelX, itemStartY + itemStep * 0, 36, sf::Color::Black);
+    displayShopText(window, "2 СЂ.", priceX, itemStartY + itemStep * 0, 36, sf::Color::Black);
 
-    displayShopText(window, "2. Купить семена ячменя", labelX, itemStartY + itemStep * 1, 36, sf::Color::Black);
-    displayShopText(window, "$3", priceX, itemStartY + itemStep * 1, 36, sf::Color::Black);
+    displayShopText(window, "2. РљСѓРїРёС‚СЊ СЃРµРјРµРЅР° СЏС‡РјРµРЅСЏ", labelX, itemStartY + itemStep * 1, 36, sf::Color::Black);
+    displayShopText(window, "3 СЂ.", priceX, itemStartY + itemStep * 1, 36, sf::Color::Black);
 
-    displayShopText(window, "3. Купить курицу", labelX, itemStartY + itemStep * 2, 36, sf::Color::Black);
-    displayShopText(window, "$15", priceX, itemStartY + itemStep * 2, 36, sf::Color::Black);
+    displayShopText(window, "3. РљСѓРїРёС‚СЊ РєСѓСЂРёС†Сѓ", labelX, itemStartY + itemStep * 2, 36, sf::Color::Black);
+    displayShopText(window, "15 СЂ.", priceX, itemStartY + itemStep * 2, 36, sf::Color::Black);
 
-    displayShopText(window, "4. Купить овцу", labelX, itemStartY + itemStep * 3, 36, sf::Color::Black);
-    displayShopText(window, "$20", priceX, itemStartY + itemStep * 3, 36, sf::Color::Black);
+    displayShopText(window, "4. РљСѓРїРёС‚СЊ РѕРІС†Сѓ", labelX, itemStartY + itemStep * 3, 36, sf::Color::Black);
+    displayShopText(window, "20", priceX, itemStartY + itemStep * 3, 36, sf::Color::Black);
 
-    displayShopText(window, "5. Купить корм для животных", labelX, itemStartY + itemStep * 4, 36, sf::Color::Black);
-    displayShopText(window, "$1", priceX, itemStartY + itemStep * 4, 36, sf::Color::Black);
+    displayShopText(window, "5. РљСѓРїРёС‚СЊ РєРѕСЂРј РґР»СЏ Р¶РёРІРѕС‚РЅС‹С…", labelX, itemStartY + itemStep * 4, 36, sf::Color::Black);
+    displayShopText(window, "1 СЂ.", priceX, itemStartY + itemStep * 4, 36, sf::Color::Black);
 
-    displayShopText(window, "6. Купить удобрения", labelX, itemStartY + itemStep * 5, 36, sf::Color::Black);
-    displayShopText(window, "$2", priceX, itemStartY + itemStep * 5, 36, sf::Color::Black);
+    displayShopText(window, "6. РљСѓРїРёС‚СЊ СѓРґРѕР±СЂРµРЅРёСЏ", labelX, itemStartY + itemStep * 5, 36, sf::Color::Black);
+    displayShopText(window, "2 СЂ.", priceX, itemStartY + itemStep * 5, 36, sf::Color::Black);
 
-    displayShopText(window, "7. Продать товары", labelX, itemStartY + itemStep * 6, 36, sf::Color::Black);
+    displayShopText(window, "7. РџСЂРѕРґР°С‚СЊ С‚РѕРІР°СЂС‹", labelX, itemStartY + itemStep * 6, 36, sf::Color::Black);
 
     return true;
 }
