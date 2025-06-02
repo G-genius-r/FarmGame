@@ -32,10 +32,47 @@ bool Farm::saveToFiles(const std::string& gameDataFilename, const std::string& i
         std::cerr << "Не могу открыть файл для сохранения игры" << std::endl;
         return false;
     }
+
     // Сохраняем день
     gameDataFile << dayCounter << std::endl;
 
-    // TODO: сохранить карту, грядки и прочее
+    // Сохраняем информацию об участках
+    gameDataFile << plots.size() << " " << (plots.empty() ? 0 : plots[0].size()) << std::endl;
+
+    for (size_t x = 0; x < plots.size(); ++x) {
+        for (size_t y = 0; y < plots[x].size(); ++y) {
+            Plot* plot = plots[x][y];
+
+            // Сохраняем базовую информацию об участке
+            gameDataFile << x << " " << y << " ";
+
+            if (plot->isEmpty()) {
+                gameDataFile << "0 "; // 0 означает пустой участок
+            }
+            else {
+                Entity* entity = plot->getEntity();
+
+                // Сохраняем тип сущности (1-пшеница, 2-ячмень, 3-курица, 4-овца)
+                gameDataFile << entity->get_type() << " ";
+
+                // Сохраняем специфические данные в зависимости от типа
+                if (entity->get_isPlant()) {
+                    Plant* plant = dynamic_cast<Plant*>(entity);
+                    gameDataFile << plant->get_growthStage() << " "
+                      
+                        << plant->get_isWatered() << " ";
+                }
+                else if (entity->get_isAnimal()) {
+                    Animal* animal = dynamic_cast<Animal*>(entity);
+                    gameDataFile << animal->get_hungryStatus() << " "
+                        << animal->getEggs() << " "
+                        << animal->getWool() << " ";
+                }
+            }
+            gameDataFile << std::endl;
+        }
+    }
+
     gameDataFile.close();
 
     // Сохраняем инвентарь
@@ -61,18 +98,112 @@ bool Farm::loadFromFiles(const std::string& gameDataFilename, const std::string&
         return false;
     }
 
+    // 1. Загрузка текущего дня (первое значение в файле)
     int loadedDay;
     gameDataFile >> loadedDay;
     if (gameDataFile.fail()) {
         std::cerr << "Ошибка чтения дня из файла" << std::endl;
         return false;
     }
-    std::cout << "Загружен день: " << loadedDay << std::endl;
     dayCounter = loadedDay;
 
-    // TODO: загрузить карту, грядки и прочее
+    // 2. Загрузка размеров участков из файла
+    int filePlotsRows, filePlotsCols;
+    gameDataFile >> filePlotsRows >> filePlotsCols;
+    if (gameDataFile.fail()) {
+        std::cerr << "Ошибка чтения размеров участков" << std::endl;
+        return false;
+    }
+
+    // 3. Получаем текущие размеры участков (из setPlots())
+    int currentPlotsRows = plots.size();
+    int currentPlotsCols = currentPlotsRows > 0 ? plots[0].size() : 0;
+
+    // 4. Очищаем текущие участки (если нужно)
+    // (В вашем случае setPlots() уже очищает plots перед созданием новых)
+
+    // 5. Загружаем участки из файла
+    for (int i = 0; i < filePlotsRows * filePlotsCols; ++i) {
+        int plotX, plotY, entityType;
+        gameDataFile >> plotX >> plotY >> entityType;
+
+        // Проверяем, находятся ли координаты в пределах текущей сетки участков
+        if (plotX >= 0 && plotX < currentPlotsRows &&
+            plotY >= 0 && plotY < currentPlotsCols) {
+
+            Plot* plot = plots[plotX][plotY];
+
+            // Если участок не пустой
+            if (entityType != 0) {
+                Entity* entity = nullptr;
+
+                // Создаем соответствующую сущность
+                switch (entityType) {
+                case 1: { // Пшеница
+                    int growthStage, waterLevel, isWatered;
+                    gameDataFile >> growthStage >> waterLevel >> isWatered;
+                    entity = new Wheat();
+                    Plant* plant = dynamic_cast<Plant*>(entity);
+                    plant->set_growthStage(growthStage);
+                    plant->set_isWatered(isWatered);
+                    break;
+                }
+                case 2: { // Ячмень
+                    int growthStage, waterLevel, isWatered;
+                    gameDataFile >> growthStage >> waterLevel >> isWatered;
+                    entity = new Barley();
+                    Plant* plant = dynamic_cast<Plant*>(entity);
+                    plant->set_growthStage(growthStage);
+                    plant->set_isWatered(isWatered);
+                    break;
+                }
+                case 3: { // Курица
+                    int hungryStatus, eggs, wool;
+                    gameDataFile >> hungryStatus >> eggs >> wool;
+                    entity = new Chicken();
+                    Animal* animal = dynamic_cast<Animal*>(entity);
+                    animal->set_hungryStatus(hungryStatus);
+                    animal->setEggs(eggs);
+                    break;
+                }
+                case 4: { // Овца
+                    int hungryStatus, eggs, wool;
+                    gameDataFile >> hungryStatus >> eggs >> wool;
+                    entity = new Sheep();
+                    Animal* animal = dynamic_cast<Animal*>(entity);
+                    animal->set_hungryStatus(hungryStatus);
+                    animal->setWool(wool);
+                    break;
+                }
+                }
+
+                // Размещаем сущность на участке
+                if (entity) {
+                    plot->placeEntity(entity);
+                    plot->updateSprite();
+                }
+            }
+        }
+        else {
+            // Координаты вне текущей сетки - пропускаем, но читаем остальные параметры
+            switch (entityType) {
+            case 1: case 2: { // Растения
+                int growthStage, waterLevel, isWatered;
+                gameDataFile >> growthStage >> waterLevel >> isWatered;
+                break;
+            }
+            case 3: case 4: { // Животные
+                int hungryStatus, eggs, wool;
+                gameDataFile >> hungryStatus >> eggs >> wool;
+                break;
+            }
+            }
+        }
+    }
+
     gameDataFile.close();
 
+    // Загрузка инвентаря (без изменений)
     std::ifstream inventoryFile(inventoryFilename);
     if (!inventoryFile.is_open()) {
         std::cerr << "Не могу открыть файл для загрузки инвентаря" << std::endl;
