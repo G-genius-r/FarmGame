@@ -26,6 +26,7 @@
 class Farm
 {
 private:
+ 
     //* Вспомогательная функция для установки фоновых тайлов фермы.
     void setBackTiles();
 
@@ -44,6 +45,8 @@ private:
 
 public:    
     Farm();
+
+    bool startNewGame();
 
     void setNotificationPanel(NotificationPanel* panel);
 

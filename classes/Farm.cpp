@@ -25,6 +25,51 @@ Farm::Farm()
     help_y = 0;      // Позиция меню помощи по Y
 }
 
+bool Farm::startNewGame()
+{
+    // Сброс дня
+    dayCounter = 1;
+
+    // Очистка участков
+    for (auto& row : plots) {
+        for (auto& plot : row) {
+            delete plot; // удаляем старые объекты Plot
+        }
+        row.clear();
+    }
+    plots.clear();
+
+    // Очистка фоновых клеток
+    for (auto& row : tiles) {
+        for (auto& tile : row) {
+            delete tile; // удаляем старые GameTile
+        }
+        row.clear();
+    }
+    tiles.clear();
+
+    // Очистка и переинициализация инвентаря
+    if (inventory) {
+        delete inventory;
+    }
+    inventory = new Inventory();
+
+    // Очистка и переинициализация магазина (если требуется)
+    if (shop) {
+        delete shop;
+    }
+    shop = new Shop();
+
+    // Переинициализация всех клеток
+    setBackTiles();
+    setPlots();
+
+    std::cout << "Новая игра запущена." << std::endl;
+
+    // Возвращаем true — успешное выполнение
+    return true;
+}
+
 bool Farm::saveToFiles(const std::string& gameDataFilename, const std::string& inventoryFilename)
 {
     std::ofstream gameDataFile(gameDataFilename);

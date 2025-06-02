@@ -4,12 +4,12 @@
 
 // Функция загрузки начальных данных инвентаря
 bool loadDefaultInventoryData(const std::string& filename, Farm& farm, NotificationPanel& notifPanel) {
-    if (farm.inventory->loadDataFromFile(filename)) {
+    if (farm.startNewGame()) {
         notifPanel.addMessage("Приветствую, фермер");
         return true;
     }
     else {
-        notifPanel.addMessage("Ошибка загрузки начальных данных инвентаря.");
+        notifPanel.addMessage("Ошибка запуска новой игры.");
         return false;
     }
 }
