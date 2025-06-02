@@ -47,21 +47,33 @@ install(FILES ${CMAKE_SOURCE_DIR}/dir/sfml-audio-2.dll DESTINATION .)
 install(FILES ${CMAKE_SOURCE_DIR}/dir/sfml-network-2.dll DESTINATION .)
 install(FILES ${CMAKE_SOURCE_DIR}/dir/sfml-system-2.dll DESTINATION .)
 install(FILES ${CMAKE_SOURCE_DIR}/dir/sfml-window-2.dll DESTINATION .)
+install(FILES ${CMAKE_SOURCE_DIR}/sprites/icon.ico DESTINATION .)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/sprites DESTINATION .)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/audio DESTINATION .)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/diagrams/Silkscreen DESTINATION .)
 
 # Настройка CPack
-set(CPACK_PACKAGE_NAME "Фермерские будни")
+set(CPACK_PACKAGE_NAME "FarmGame")
 set(CPACK_PACKAGE_VENDOR "Mandrik Valeriya")
 set(CPACK_PACKAGE_VERSION "1.0")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Farm life simulator")
-set(CPACK_PACKAGE_EXECUTABLES "FarmGame" "FarmGame")
+set(CPACK_PACKAGE_EXECUTABLES "FarmGame" "Фермерские будни")  # Имя ярлыка
 set(CPACK_CREATE_DESKTOP_LINKS "FarmGame")
 set(CPACK_NSIS_MODIFY_PATH ON)
-set(CPACK_NSIS_DISPLAY_NAME "Фермерские будни")
+set(CPACK_NSIS_DISPLAY_NAME "FarmGame")
 set(CPACK_NSIS_INSTALLED_ICON_NAME "FarmGame.exe")
 set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/sprites/icon.ico")
 set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/sprites/icon.ico")
+
+# Указываем, что нужно добавить рабочий каталог в ярлыки
+set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")
+set(CPACK_NSIS_START_MENU_DIRECTORY "Фермерские будни")
+set(CPACK_NSIS_FORCE_SET_NSIS_FLAGS ON)
+
+# Указываем, что ярлыки должны запускаться из папки установки
+set(CPACK_NSIS_ADDITIONAL_COMMANDS "
+  CreateShortCut '$DESKTOP\\Фермерские будни.lnk' '$INSTDIR\\FarmGame.exe' '' '$INSTDIR\\icon.ico' 0 
+  CreateShortCut '$SMPROGRAMS\\$STARTMENU_FOLDER\\Фермерские будни.lnk' '$INSTDIR\\FarmGame.exe' '' '$INSTDIR\\icon.ico' 0
+")
 
 include(CPack)
