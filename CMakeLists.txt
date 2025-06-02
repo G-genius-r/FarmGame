@@ -14,6 +14,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # Add source to this project's executable.
 add_executable (FarmGame "FarmGame.cpp"  "classes/Farm.cpp" "headers/Farm.h" "classes/GameTile.cpp" "headers/GameTile.h" "headers/Inventory.h" "headers/Plot.h" "headers/Animal.h" "headers/Barley.h" "headers/Chicken.h" "headers/Entity.h" "headers/Plant.h" "headers/Sheep.h" "headers/Shop.h" "headers/Wheat.h" "classes/Animal.cpp" "classes/Barley.cpp" "classes/Chicken.cpp" "classes/Entity.cpp" "classes/Inventory.cpp" "classes/Plant.cpp" "classes/Plot.cpp" "classes/Sheep.cpp" "classes/Shop.cpp" "classes/Wheat.cpp" "classes/menu.cpp" "headers/menu.h" "classes/MoneyPanel.cpp" "headers/MoneyPanel.h" "classes/MessagePanel.cpp" "headers/MessagePanel.h" "headers/MusicMenu.h" "classes/MusicMenu.cpp" "classes/Button.cpp" "headers/Button.h" "classes/NotificationPanel.cpp" "headers/NotificationPanel.h" "headers/ConfirmationDialog.h" "classes/ConfirmationDialog.cpp" "classes/GameState.cpp")
 
+if(WIN32)
+    # Убираем консольное окно для Windows
+    set_target_properties(FarmGame PROPERTIES
+        WIN32_EXECUTABLE TRUE
+        LINK_FLAGS "/ENTRY:mainCRTStartup"
+    )
+endif()
+
 # Подключение SFML
 target_link_libraries(FarmGame 
     D:/C++Project/FarmGame/library/sfml-graphics.lib
@@ -71,9 +79,9 @@ set(CPACK_NSIS_START_MENU_DIRECTORY "Фермерские будни")
 set(CPACK_NSIS_FORCE_SET_NSIS_FLAGS ON)
 
 # Указываем, что ярлыки должны запускаться из папки установки
-set(CPACK_NSIS_ADDITIONAL_COMMANDS "
-  CreateShortCut '$DESKTOP\\Фермерские будни.lnk' '$INSTDIR\\FarmGame.exe' '' '$INSTDIR\\icon.ico' 0 
-  CreateShortCut '$SMPROGRAMS\\$STARTMENU_FOLDER\\Фермерские будни.lnk' '$INSTDIR\\FarmGame.exe' '' '$INSTDIR\\icon.ico' 0
-")
+  set(CPACK_NSIS_CREATE_ICONS_EXTRA "
+    CreateShortCut '$DESKTOP\\\\Фермерские будни.lnk' '$INSTDIR\\\\FarmGame.exe' '' '$INSTDIR\\\\icon.ico'
+    CreateShortCut '$SMPROGRAMS\\\\$START_MENU_FOLDER\\\\Фермерские будни.lnk' '$INSTDIR\\\\FarmGame.exe' '' '$INSTDIR\\\\icon.ico'
+  ")
 
 include(CPack)

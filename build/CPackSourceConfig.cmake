@@ -31,10 +31,10 @@ set(CPACK_INSTALLED_DIRECTORIES "D:/C++Project/FarmGame;/")
 set(CPACK_INSTALL_CMAKE_PROJECTS "")
 set(CPACK_INSTALL_PREFIX "C:/Program Files (x86)/FarmGame")
 set(CPACK_MODULE_PATH "")
-set(CPACK_NSIS_ADDITIONAL_COMMANDS "
-  CreateShortCut '$DESKTOP\Фермерские будни.lnk' '$INSTDIR\FarmGame.exe' '' '$INSTDIR\icon.ico' 0 
-  CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\Фермерские будни.lnk' '$INSTDIR\FarmGame.exe' '' '$INSTDIR\icon.ico' 0
-")
+set(CPACK_NSIS_CREATE_ICONS_EXTRA "
+    CreateShortCut '$DESKTOP\\Фермерские будни.lnk' '$INSTDIR\\FarmGame.exe' '' '$INSTDIR\\icon.ico'
+    CreateShortCut '$SMPROGRAMS\\$START_MENU_FOLDER\\Фермерские будни.lnk' '$INSTDIR\\FarmGame.exe' '' '$INSTDIR\\icon.ico'
+  ")
 set(CPACK_NSIS_DISPLAY_NAME "FarmGame")
 set(CPACK_NSIS_DISPLAY_NAME_SET "TRUE")
 set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")

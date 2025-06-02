@@ -716,6 +716,9 @@ Section "-Core installation"
     CreateShortCut "$DESKTOP\Фермерские будни.lnk" "$INSTDIR\.\FarmGame.exe"
 
 
+    CreateShortCut '$DESKTOP\Фермерские будни.lnk' '$INSTDIR\FarmGame.exe' '' '$INSTDIR\icon.ico'
+    CreateShortCut '$SMPROGRAMS\$START_MENU_FOLDER\Фермерские будни.lnk' '$INSTDIR\FarmGame.exe' '' '$INSTDIR\icon.ico'
+  
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
 
   ;Read a value from an InstallOptions INI file
