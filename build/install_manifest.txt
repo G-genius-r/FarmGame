@@ -1,0 +1,100 @@
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./FarmGame.exe
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sfml-graphics-2.dll
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sfml-audio-2.dll
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sfml-network-2.dll
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sfml-system-2.dll
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sfml-window-2.dll
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/.DS_Store
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/barleySprite/barley0.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/barleySprite/barley0watered.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/barleySprite/barley1.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/barleySprite/barley1watered.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/barleySprite/barley2.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/barleySprite/barley2watered.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/barleySprite/barley3.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/barleySprite/barleyItem.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/barleySprite/barleySeed.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/chickenSprite/chickenAnimated.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/chickenSprite/chickenSprite1.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/chickenSprite/eggIcon.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/fertilizer.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Grass1.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/HungerStatus/feed.jpg
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/HungerStatus/feed_high.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/HungerStatus/feed_low.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/HungerStatus/feed_medium.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/icon.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/inventorySprite/animalFeed.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/inventorySprite/fertiliserSprite.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/inventorySprite/Inventory_backdrop.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/inventorySprite/meatIcon.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/inventorySprite/moneySprite.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/inventorySprite/waterSprite.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/inventorySprite/woolIcon.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Inventory_backdrop.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/main.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/menuBackground.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/money_background.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/music_icon.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/selectionBox.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/sheepSprite/sheepShornSprite.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/sheepSprite/sheepSprite.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Shop_background.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/.DS_Store
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Characters/Basic Charakter Actions.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Characters/Basic Charakter Spritesheet.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Characters/Egg_And_Nest.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Characters/Free Chicken Sprites.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Characters/Free Cow Sprites.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Characters/Tools.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/close_button.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Objects/Basic Furniture.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Objects/Basic Grass Biom things 1.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Objects/Basic Plants.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Objects/Basic tools and meterials.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Objects/Chest.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Objects/Egg item.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Objects/Free_Chicken_House.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Objects/Paths.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Objects/Simple Milk and grass item.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Objects/Wood Bridge.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/read_me.txt
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Sprout Lands color pallet/Sprout Lands defautlt palette snip.PNG
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Sprout Lands color pallet/Sprout Lands defautlt palette.aseprite
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Sprout Lands color pallet/Sprout Lands defautlt palette.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Tilesets/Fences.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Tilesets/Grass.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Tilesets/Hills.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Tilesets/Tilled Dirt.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Tilesets/Water.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Sprout Lands - Sprites - Basic pack/Tilesets/Wooden House.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/Transparent.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/ui/add_chicken.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/ui/add_sheep.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/ui/animal_product.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/ui/feed.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/ui/fertilizer.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/ui/harvest.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/ui/plant_barley.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/ui/plant_wheat.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/ui/slaughter.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/ui/watering_can.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/ui/water_bucket.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/wheatSprite/wheat0.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/wheatSprite/wheat0watered.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/wheatSprite/wheat1.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/wheatSprite/wheat1watered.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/wheatSprite/wheat2.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/wheatSprite/wheat2watered.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/wheatSprite/wheat3.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/wheatSprite/wheatItem.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./sprites/wheatSprite/wheatSeed.png
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./audio/menuMusic.ogg
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./Silkscreen/.DS_Store
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./Silkscreen/arialmt.ttf
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./Silkscreen/arial_bolditalicmt.ttf
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./Silkscreen/BaskervillCyril.ttf
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./Silkscreen/BaskervillCyrilB.ttf
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./Silkscreen/CyrilicOld.TTF
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./Silkscreen/PonomarUnicode.otf
+D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64/./Silkscreen/PonomarUnicode.ttf
