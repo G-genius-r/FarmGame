@@ -5,7 +5,7 @@
 
   !define VERSION "1.0"
   !define PATCH  "1"
-  !define INST_DIR "D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64"
+  !define INST_DIR "D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Фермерские будни-1.0-win64"
 
 ;--------------------------------
 ;Variables
@@ -25,14 +25,14 @@
   !include "MUI.nsh"
 
   ;Default installation folder
-  InstallDir "$PROGRAMFILES64\Everyday Life of a Farmer 1.0"
+  InstallDir "$PROGRAMFILES64\Фермерские будни 1.0"
 
 ;--------------------------------
 ;General
 
   ;Name and file
-  Name "Everyday Life of a Farmer"
-  OutFile "D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Everyday Life of a Farmer-1.0-win64.exe"
+  Name "Фермерские будни"
+  OutFile "D:/C++Project/FarmGame/build/_CPack_Packages/win64/NSIS/Фермерские будни-1.0-win64.exe"
 
   ;Set compression
   SetCompressor lzma
@@ -79,7 +79,7 @@ Var AR_RegFlags
 
   ClearErrors
   ;Reading component status from registry
-  ReadRegDWORD $AR_RegFlags HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Everyday Life of a Farmer 1.0\Components\${SecName}" "Installed"
+  ReadRegDWORD $AR_RegFlags HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Фермерские будни 1.0\Components\${SecName}" "Installed"
   IfErrors "default_${SecName}"
     ;Status will stay default if registry value not found
     ;(component was never installed)
@@ -112,13 +112,13 @@ Var AR_RegFlags
     ;Section is not selected:
     ;Calling Section uninstall macro and writing zero installed flag
     !insertmacro "Remove_${${SecName}}"
-    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Everyday Life of a Farmer 1.0\Components\${SecName}" \
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Фермерские будни 1.0\Components\${SecName}" \
   "Installed" 0
     Goto "exit_${SecName}"
 
  "leave_${SecName}:"
     ;Section is selected:
-    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Everyday Life of a Farmer 1.0\Components\${SecName}" \
+    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Фермерские будни 1.0\Components\${SecName}" \
   "Installed" 1
 
  "exit_${SecName}:"
@@ -491,7 +491,7 @@ Function ConditionalAddToRegistry
   Pop $0
   Pop $1
   StrCmp "$0" "" ConditionalAddToRegistry_EmptyString
-    WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\Everyday Life of a Farmer 1.0" \
+    WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\Фермерские будни 1.0" \
     "$1" "$0"
     ;MessageBox MB_OK "Set Registry: '$1' to '$0'"
     DetailPrint "Set install registry entry: '$1' to '$0'"
@@ -527,6 +527,8 @@ FunctionEnd
 
 ;--------------------------------
 ; Define some macro setting for the gui
+!define MUI_ICON "D:/C++Project/FarmGame/sprites/icon.ico"
+!define MUI_UNICON "D:/C++Project/FarmGame/sprites/icon.ico"
 
 
 
@@ -546,7 +548,7 @@ FunctionEnd
 
   ;Start Menu Folder Page Configuration
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "SHCTX"
-  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Mandrik Valeriya\Everyday Life of a Farmer 1.0"
+  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Mandrik Valeriya\Фермерские будни 1.0"
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
   !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER
 
@@ -660,12 +662,12 @@ Section "-Core installation"
   File /r "${INST_DIR}\*.*"
 
   ;Store installation folder
-  WriteRegStr SHCTX "Software\Mandrik Valeriya\Everyday Life of a Farmer 1.0" "" $INSTDIR
+  WriteRegStr SHCTX "Software\Mandrik Valeriya\Фермерские будни 1.0" "" $INSTDIR
 
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
   Push "DisplayName"
-  Push "Everyday Life of a Farmer"
+  Push "Фермерские будни"
   Call ConditionalAddToRegistry
   Push "DisplayVersion"
   Push "1.0"
@@ -709,9 +711,9 @@ Section "-Core installation"
 
   ;Create shortcuts
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Everyday Life of a Farmer.lnk" "$INSTDIR\bin\FarmGame.exe"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\FarmGame.lnk" "$INSTDIR\bin\FarmGame.exe"
   StrCmp "$INSTALL_DESKTOP" "1" 0 +2
-    CreateShortCut "$DESKTOP\Everyday Life of a Farmer.lnk" "$INSTDIR\bin\FarmGame.exe"
+    CreateShortCut "$DESKTOP\FarmGame.lnk" "$INSTDIR\bin\FarmGame.exe"
 
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
@@ -755,7 +757,7 @@ SectionEnd
 ;--------------------------------
 ; Create custom pages
 Function InstallOptionsPage
-  !insertmacro MUI_HEADER_TEXT "Install Options" "Choose options for installing Everyday Life of a Farmer"
+  !insertmacro MUI_HEADER_TEXT "Install Options" "Choose options for installing Фермерские будни"
   !insertmacro MUI_INSTALLOPTIONS_DISPLAY "NSIS.InstallOptions.ini"
 
 FunctionEnd
@@ -827,17 +829,17 @@ FunctionEnd
 
 Section "Uninstall"
   ReadRegStr $START_MENU SHCTX \
-   "Software\Microsoft\Windows\CurrentVersion\Uninstall\Everyday Life of a Farmer 1.0" "StartMenu"
+   "Software\Microsoft\Windows\CurrentVersion\Uninstall\Фермерские будни 1.0" "StartMenu"
   ;MessageBox MB_OK "Start menu is in: $START_MENU"
   ReadRegStr $DO_NOT_ADD_TO_PATH SHCTX \
-    "Software\Microsoft\Windows\CurrentVersion\Uninstall\Everyday Life of a Farmer 1.0" "DoNotAddToPath"
+    "Software\Microsoft\Windows\CurrentVersion\Uninstall\Фермерские будни 1.0" "DoNotAddToPath"
   ReadRegStr $ADD_TO_PATH_ALL_USERS SHCTX \
-    "Software\Microsoft\Windows\CurrentVersion\Uninstall\Everyday Life of a Farmer 1.0" "AddToPathAllUsers"
+    "Software\Microsoft\Windows\CurrentVersion\Uninstall\Фермерские будни 1.0" "AddToPathAllUsers"
   ReadRegStr $ADD_TO_PATH_CURRENT_USER SHCTX \
-    "Software\Microsoft\Windows\CurrentVersion\Uninstall\Everyday Life of a Farmer 1.0" "AddToPathCurrentUser"
+    "Software\Microsoft\Windows\CurrentVersion\Uninstall\Фермерские будни 1.0" "AddToPathCurrentUser"
   ;MessageBox MB_OK "Add to path: $DO_NOT_ADD_TO_PATH all users: $ADD_TO_PATH_ALL_USERS"
   ReadRegStr $INSTALL_DESKTOP SHCTX \
-    "Software\Microsoft\Windows\CurrentVersion\Uninstall\Everyday Life of a Farmer 1.0" "InstallToDesktop"
+    "Software\Microsoft\Windows\CurrentVersion\Uninstall\Фермерские будни 1.0" "InstallToDesktop"
   ;MessageBox MB_OK "Install to desktop: $INSTALL_DESKTOP "
 
 
@@ -884,6 +886,7 @@ Section "Uninstall"
   Delete "$INSTDIR\sprites\HungerStatus\feed_high.png"
   Delete "$INSTDIR\sprites\HungerStatus\feed_low.png"
   Delete "$INSTDIR\sprites\HungerStatus\feed_medium.png"
+  Delete "$INSTDIR\sprites\icon.ico"
   Delete "$INSTDIR\sprites\icon.png"
   Delete "$INSTDIR\sprites\inventorySprite"
   Delete "$INSTDIR\sprites\inventorySprite\animalFeed.png"
@@ -984,13 +987,13 @@ Section "Uninstall"
 
   ;Remove the uninstaller itself.
   Delete "$INSTDIR\Uninstall.exe"
-  DeleteRegKey SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\Everyday Life of a Farmer 1.0"
+  DeleteRegKey SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\Фермерские будни 1.0"
 
   ;Remove the installation directory if it is empty.
   RMDir "$INSTDIR"
 
   ; Remove the registry entries.
-  DeleteRegKey SHCTX "Software\Mandrik Valeriya\Everyday Life of a Farmer 1.0"
+  DeleteRegKey SHCTX "Software\Mandrik Valeriya\Фермерские будни 1.0"
 
   ; Removes all optional components
   !insertmacro SectionList "RemoveSection_CPack"
@@ -998,9 +1001,9 @@ Section "Uninstall"
   !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
 
   Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
-  Delete "$SMPROGRAMS\$MUI_TEMP\Everyday Life of a Farmer.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\FarmGame.lnk"
   StrCmp "$INSTALL_DESKTOP" "1" 0 +2
-    Delete "$DESKTOP\Everyday Life of a Farmer.lnk"
+    Delete "$DESKTOP\FarmGame.lnk"
 
 
 
@@ -1036,7 +1039,7 @@ Section "Uninstall"
     StrCmp "$MUI_TEMP" "$SMPROGRAMS" secondStartMenuDeleteLoopDone secondStartMenuDeleteLoop
   secondStartMenuDeleteLoopDone:
 
-  DeleteRegKey /ifempty SHCTX "Software\Mandrik Valeriya\Everyday Life of a Farmer 1.0"
+  DeleteRegKey /ifempty SHCTX "Software\Mandrik Valeriya\Фермерские будни 1.0"
 
   Push $INSTDIR\bin
   StrCmp $DO_NOT_ADD_TO_PATH_ "1" doNotRemoveFromPath 0
@@ -1057,11 +1060,11 @@ SectionEnd
 Function .onInit
   StrCmp "" "ON" 0 inst
 
-  ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Everyday Life of a Farmer 1.0" "UninstallString"
+  ReadRegStr $0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Фермерские будни 1.0" "UninstallString"
   StrCmp $0 "" inst
 
   MessageBox MB_YESNOCANCEL|MB_ICONEXCLAMATION \
-  "Everyday Life of a Farmer is already installed. $\n$\nDo you want to uninstall the old version before installing the new one?" \
+  "Фермерские будни is already installed. $\n$\nDo you want to uninstall the old version before installing the new one?" \
   /SD IDYES IDYES uninst IDNO inst
   Abort
 
@@ -1098,14 +1101,14 @@ inst:
   ; install directory that is expected to be the
   ; default
   StrCpy $IS_DEFAULT_INSTALLDIR 0
-  StrCmp "$INSTDIR" "$PROGRAMFILES64\Everyday Life of a Farmer 1.0" 0 +2
+  StrCmp "$INSTDIR" "$PROGRAMFILES64\Фермерские будни 1.0" 0 +2
     StrCpy $IS_DEFAULT_INSTALLDIR 1
 
   StrCpy $SV_ALLUSERS "JustMe"
   ; if default install dir then change the default
   ; if it is installed for JustMe
   StrCmp "$IS_DEFAULT_INSTALLDIR" "1" 0 +2
-    StrCpy $INSTDIR "$DOCUMENTS\Everyday Life of a Farmer 1.0"
+    StrCpy $INSTDIR "$DOCUMENTS\Фермерские будни 1.0"
 
   ClearErrors
   UserInfo::GetName
@@ -1131,7 +1134,7 @@ inst:
   done:
   StrCmp $SV_ALLUSERS "AllUsers" 0 +3
     StrCmp "$IS_DEFAULT_INSTALLDIR" "1" 0 +2
-      StrCpy $INSTDIR "$PROGRAMFILES64\Everyday Life of a Farmer 1.0"
+      StrCpy $INSTDIR "$PROGRAMFILES64\Фермерские будни 1.0"
 
   StrCmp "ON" "ON" 0 noOptionsPage
     !insertmacro MUI_INSTALLOPTIONS_EXTRACT "NSIS.InstallOptions.ini"

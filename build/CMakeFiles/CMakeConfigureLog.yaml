@@ -24,7 +24,7 @@ events:
       The output was:
       0
       MSBuild version 17.3.1+2badb37d1 for .NET Framework
-      Сборка начата 02.06.2025 20:57:14.
+      Сборка начата 02.06.2025 21:18:01.
       Проект "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\3.31.7\\CompilerIdC\\CompilerIdC.vcxproj" в узле 1 (целевые объекты по умолчанию).
       PrepareForBuild:
         Создание каталога "Debug\\".
@@ -50,7 +50,7 @@ events:
           Предупреждений: 0
           Ошибок: 0
       
-      Прошло времени 00:00:01.30
+      Прошло времени 00:00:01.23
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -76,7 +76,7 @@ events:
       The output was:
       0
       MSBuild version 17.3.1+2badb37d1 for .NET Framework
-      Сборка начата 02.06.2025 20:57:15.
+      Сборка начата 02.06.2025 21:18:03.
       Проект "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\3.31.7\\CompilerIdCXX\\CompilerIdCXX.vcxproj" в узле 1 (целевые объекты по умолчанию).
       PrepareForBuild:
         Создание каталога "Debug\\".
@@ -102,7 +102,7 @@ events:
           Предупреждений: 0
           Ошибок: 0
       
-      Прошло времени 00:00:01.19
+      Прошло времени 00:00:01.15
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -121,8 +121,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-aeou83"
-      binary: "D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-aeou83"
+      source: "D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-rv8k4l"
+      binary: "D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-rv8k4l"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
       CMAKE_C_FLAGS_DEBUG: "/MDd /Ob0 /Od /RTC1"
@@ -132,31 +132,31 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-aeou83'
+        Change Dir: 'D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-rv8k4l'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_d4643.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_7359c.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.3.1+2badb37d1 for .NET Framework
-        Сборка начата 02.06.2025 20:57:17.
-        Проект "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-aeou83\\cmTC_d4643.vcxproj" в узле 1 (целевые объекты по умолчанию).
+        Сборка начата 02.06.2025 21:18:04.
+        Проект "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-rv8k4l\\cmTC_7359c.vcxproj" в узле 1 (целевые объекты по умолчанию).
         PrepareForBuild:
-          Создание каталога "cmTC_d4643.dir\\Debug\\".
-          Создание каталога "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-aeou83\\Debug\\".
-          Создание каталога "cmTC_d4643.dir\\Debug\\cmTC_d4643.tlog\\".
+          Создание каталога "cmTC_7359c.dir\\Debug\\".
+          Создание каталога "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-rv8k4l\\Debug\\".
+          Создание каталога "cmTC_7359c.dir\\Debug\\cmTC_7359c.tlog\\".
         InitializeBuildStatus:
-          Создание "cmTC_d4643.dir\\Debug\\cmTC_d4643.tlog\\unsuccessfulbuild", так как было задано "AlwaysCreate".
+          Создание "cmTC_7359c.dir\\Debug\\cmTC_7359c.tlog\\unsuccessfulbuild", так как было задано "AlwaysCreate".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.33.31629\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d4643.dir\\Debug\\\\" /Fd"cmTC_d4643.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.33.31629\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_7359c.dir\\Debug\\\\" /Fd"cmTC_7359c.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
           Оптимизирующий компилятор Microsoft (R) C/C++ версии 19.33.31630 для x64
           (C) Корпорация Майкрософт (Microsoft Corporation).  Все права защищены.
           CMakeCCompilerABI.c
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_d4643.dir\\Debug\\\\" /Fd"cmTC_d4643.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_7359c.dir\\Debug\\\\" /Fd"cmTC_7359c.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.33.31629\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-aeou83\\Debug\\cmTC_d4643.exe" /INCREMENTAL /ILK:"cmTC_d4643.dir\\Debug\\cmTC_d4643.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-aeou83/Debug/cmTC_d4643.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-aeou83/Debug/cmTC_d4643.lib" /MACHINE:X64  /machine:x64 cmTC_d4643.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_d4643.vcxproj -> D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-aeou83\\Debug\\cmTC_d4643.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.33.31629\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-rv8k4l\\Debug\\cmTC_7359c.exe" /INCREMENTAL /ILK:"cmTC_7359c.dir\\Debug\\cmTC_7359c.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-rv8k4l/Debug/cmTC_7359c.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-rv8k4l/Debug/cmTC_7359c.lib" /MACHINE:X64  /machine:x64 cmTC_7359c.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_7359c.vcxproj -> D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-rv8k4l\\Debug\\cmTC_7359c.exe
         FinalizeBuildStatus:
-          Файл "cmTC_d4643.dir\\Debug\\cmTC_d4643.tlog\\unsuccessfulbuild" удаляется.
-          Обращение к "cmTC_d4643.dir\\Debug\\cmTC_d4643.tlog\\cmTC_d4643.lastbuildstate".
-        Сборка проекта "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-aeou83\\cmTC_d4643.vcxproj" завершена (целевые объекты по умолчанию).
+          Файл "cmTC_7359c.dir\\Debug\\cmTC_7359c.tlog\\unsuccessfulbuild" удаляется.
+          Обращение к "cmTC_7359c.dir\\Debug\\cmTC_7359c.tlog\\cmTC_7359c.lastbuildstate".
+        Сборка проекта "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-rv8k4l\\cmTC_7359c.vcxproj" завершена (целевые объекты по умолчанию).
         
         Сборка успешно завершена.
             Предупреждений: 0
@@ -202,8 +202,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-hy6ex8"
-      binary: "D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-hy6ex8"
+      source: "D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-chnss6"
+      binary: "D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-chnss6"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/MDd /Ob0 /Od /RTC1"
@@ -214,37 +214,37 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-hy6ex8'
+        Change Dir: 'D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-chnss6'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_ddbcb.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_05522.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.3.1+2badb37d1 for .NET Framework
-        Сборка начата 02.06.2025 20:57:18.
-        Проект "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hy6ex8\\cmTC_ddbcb.vcxproj" в узле 1 (целевые объекты по умолчанию).
+        Сборка начата 02.06.2025 21:18:06.
+        Проект "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-chnss6\\cmTC_05522.vcxproj" в узле 1 (целевые объекты по умолчанию).
         PrepareForBuild:
-          Создание каталога "cmTC_ddbcb.dir\\Debug\\".
-          Создание каталога "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hy6ex8\\Debug\\".
-          Создание каталога "cmTC_ddbcb.dir\\Debug\\cmTC_ddbcb.tlog\\".
+          Создание каталога "cmTC_05522.dir\\Debug\\".
+          Создание каталога "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-chnss6\\Debug\\".
+          Создание каталога "cmTC_05522.dir\\Debug\\cmTC_05522.tlog\\".
         InitializeBuildStatus:
-          Создание "cmTC_ddbcb.dir\\Debug\\cmTC_ddbcb.tlog\\unsuccessfulbuild", так как было задано "AlwaysCreate".
+          Создание "cmTC_05522.dir\\Debug\\cmTC_05522.tlog\\unsuccessfulbuild", так как было задано "AlwaysCreate".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.33.31629\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_ddbcb.dir\\Debug\\\\" /Fd"cmTC_ddbcb.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.33.31629\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_05522.dir\\Debug\\\\" /Fd"cmTC_05522.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
           Оптимизирующий компилятор Microsoft (R) C/C++ версии 19.33.31630 для x64
           (C) Корпорация Майкрософт (Microsoft Corporation).  Все права защищены.
           CMakeCXXCompilerABI.cpp
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_ddbcb.dir\\Debug\\\\" /Fd"cmTC_ddbcb.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_05522.dir\\Debug\\\\" /Fd"cmTC_05522.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.33.31629\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hy6ex8\\Debug\\cmTC_ddbcb.exe" /INCREMENTAL /ILK:"cmTC_ddbcb.dir\\Debug\\cmTC_ddbcb.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-hy6ex8/Debug/cmTC_ddbcb.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-hy6ex8/Debug/cmTC_ddbcb.lib" /MACHINE:X64  /machine:x64 cmTC_ddbcb.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_ddbcb.vcxproj -> D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hy6ex8\\Debug\\cmTC_ddbcb.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.33.31629\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-chnss6\\Debug\\cmTC_05522.exe" /INCREMENTAL /ILK:"cmTC_05522.dir\\Debug\\cmTC_05522.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-chnss6/Debug/cmTC_05522.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/C++Project/FarmGame/build/CMakeFiles/CMakeScratch/TryCompile-chnss6/Debug/cmTC_05522.lib" /MACHINE:X64  /machine:x64 cmTC_05522.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_05522.vcxproj -> D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-chnss6\\Debug\\cmTC_05522.exe
         FinalizeBuildStatus:
-          Файл "cmTC_ddbcb.dir\\Debug\\cmTC_ddbcb.tlog\\unsuccessfulbuild" удаляется.
-          Обращение к "cmTC_ddbcb.dir\\Debug\\cmTC_ddbcb.tlog\\cmTC_ddbcb.lastbuildstate".
-        Сборка проекта "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-hy6ex8\\cmTC_ddbcb.vcxproj" завершена (целевые объекты по умолчанию).
+          Файл "cmTC_05522.dir\\Debug\\cmTC_05522.tlog\\unsuccessfulbuild" удаляется.
+          Обращение к "cmTC_05522.dir\\Debug\\cmTC_05522.tlog\\cmTC_05522.lastbuildstate".
+        Сборка проекта "D:\\C++Project\\FarmGame\\build\\CMakeFiles\\CMakeScratch\\TryCompile-chnss6\\cmTC_05522.vcxproj" завершена (целевые объекты по умолчанию).
         
         Сборка успешно завершена.
             Предупреждений: 0
             Ошибок: 0
         
-        Прошло времени 00:00:01.13
+        Прошло времени 00:00:01.11
         
       exitCode: 0
   -
