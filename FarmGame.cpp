@@ -30,7 +30,15 @@ int main()
     int menuPosX = (desktop.width - menuWidth) / 2;
     int menuPosY = (desktop.height - menuHeight) / 2;
 
+    // Создаем окно меню
     sf::RenderWindow menuWindow(sf::VideoMode(menuWidth, menuHeight), L"Фермеркие будни!", sf::Style::Titlebar | sf::Style::Close);
+
+    // Устанавливаем иконку для окна меню
+    sf::Image icon;
+    if (!icon.loadFromFile("sprites/icon.png")) {
+        std::cerr << "Не удалось загрузить иконку!" << std::endl;
+    }
+    menuWindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
     HWND menuHwnd = menuWindow.getSystemHandle();
     SetWindowPos(menuHwnd, HWND_TOP, menuPosX, menuPosY, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
@@ -41,7 +49,12 @@ int main()
 
     menuWindow.close();
 
+    // Создаем основное окно игры
     sf::RenderWindow window(sf::VideoMode(800, 800), L"Фермеркие будни!", sf::Style::Titlebar | sf::Style::Close);
+
+    // Устанавливаем иконку для основного окна
+    window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
     int winWidth = 800;
     int winHeight = 800;
     int winPosX = (desktop.width - winWidth) / 2;

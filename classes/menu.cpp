@@ -1,6 +1,5 @@
 #include "../headers/menu.h"
 #include <SFML/Audio.hpp>
-#include <SFML/Audio.hpp>
 #include <fstream>
 
 // Функция загрузки начальных данных инвентаря
@@ -28,9 +27,8 @@ bool loadInventoryDataFromFile(const std::string& filename, Farm& farm, Notifica
     }
 }
 
-/// Функция для отображения диалога подтверждения
+// Функция для отображения диалога подтверждения
 bool showConfirmationDialog(sf::RenderWindow& window, const sf::Font& font, const std::string& message) {
-    // Создаем диалоговое окно
     sf::RectangleShape dialogBox(sf::Vector2f(600, 200));
     dialogBox.setFillColor(sf::Color(50, 50, 50));
     dialogBox.setOutlineColor(sf::Color::White);
@@ -38,7 +36,6 @@ bool showConfirmationDialog(sf::RenderWindow& window, const sf::Font& font, cons
     dialogBox.setPosition(window.getSize().x / 2 - dialogBox.getSize().x / 2,
         window.getSize().y / 2 - dialogBox.getSize().y / 2);
 
-    // Текст сообщения 
     sf::Text messageText(message, font, 28);
     messageText.setFillColor(sf::Color::White);
 
@@ -52,14 +49,12 @@ bool showConfirmationDialog(sf::RenderWindow& window, const sf::Font& font, cons
     }
     lines.push_back(message.substr(prev_pos));
 
-    // Кнопки
     sf::Text yesButton("Да", font, 32);
     yesButton.setFillColor(sf::Color::White);
 
     sf::Text noButton("Нет", font, 32);
     noButton.setFillColor(sf::Color::White);
 
-    // Центрируем текст и кнопки
     float textY = dialogBox.getPosition().y + 30;
     for (const auto& line : lines) {
         messageText.setString(line);
@@ -68,7 +63,6 @@ bool showConfirmationDialog(sf::RenderWindow& window, const sf::Font& font, cons
         textY += messageText.getGlobalBounds().height + 10;
     }
 
-    // Позиционируем кнопки
     float buttonY = dialogBox.getPosition().y + dialogBox.getSize().y - 60;
     yesButton.setPosition(dialogBox.getPosition().x + dialogBox.getSize().x / 4 - yesButton.getGlobalBounds().width / 2,
         buttonY);
@@ -97,7 +91,6 @@ bool showConfirmationDialog(sf::RenderWindow& window, const sf::Font& font, cons
 
         window.draw(dialogBox);
 
-        // Рисуем каждую строку текста
         textY = dialogBox.getPosition().y + 30;
         for (const auto& line : lines) {
             messageText.setString(line);
@@ -114,6 +107,100 @@ bool showConfirmationDialog(sf::RenderWindow& window, const sf::Font& font, cons
     return false;
 }
 
+// Функция для отображения окна с правилами игры
+void showRulesWindow(sf::RenderWindow& window, const sf::Font& font) {
+    // Создаем окно правил (90% размера основного окна)
+    sf::RectangleShape rulesWindow(sf::Vector2f(window.getSize().x * 0.9f, window.getSize().y * 0.9f));
+    rulesWindow.setFillColor(sf::Color(50, 50, 50));
+    rulesWindow.setOutlineColor(sf::Color::White);
+    rulesWindow.setOutlineThickness(2);
+    rulesWindow.setPosition(window.getSize().x * 0.05f, window.getSize().y * 0.05f);
+
+    // Заголовок
+    sf::Text title("ПРАВИЛА ИГРЫ", font, 40);
+    title.setFillColor(sf::Color::Yellow);
+    title.setStyle(sf::Text::Bold);
+    title.setPosition(
+        rulesWindow.getPosition().x + rulesWindow.getSize().x / 2 - title.getGlobalBounds().width / 2,
+        rulesWindow.getPosition().y + 20
+    );
+
+    // Правила игры (разбиваем на отдельные строки)
+    std::vector<std::string> rules = {
+        "Нажмите 'B' для открытия магазина",
+        "Нажмите 'I' для открытия инвентаря",
+        "Нажмите 'P' для перехода на следующий день",
+        "Растения нужно поливать каждый день,",
+        "удобрять только один раз за жизнь.",
+        "Животных нужно поить и кормить ежедневно.",
+        "Для сбора яиц или шерсти",
+        "используйте опцию 'Собрать'.",
+        "Если растение или животное",
+        "не получает воды или еды - оно погибнет.",
+        "Куры живут 10 дней, овцы - 15 дней.",
+        "Ваша задача заработать 1000 монет.",
+        "Удачи в фермерстве!"
+    };
+
+    // Создаем текстовые объекты для правил
+    std::vector<sf::Text> ruleTexts;
+    float yOffset = 80.0f;
+    const float lineHeight = 40.0f;
+
+    for (const auto& rule : rules) {
+        sf::Text text(rule, font, 28);
+        text.setFillColor(sf::Color::White);
+        text.setPosition(
+            rulesWindow.getPosition().x + 30.0f,
+            rulesWindow.getPosition().y + yOffset
+        );
+        ruleTexts.push_back(text);
+        yOffset += lineHeight;
+    }
+
+    // Кнопка закрытия
+    sf::Text closeButton("Закрыть (Esc)", font, 32);
+    closeButton.setFillColor(sf::Color::White);
+    closeButton.setPosition(
+        rulesWindow.getPosition().x + rulesWindow.getSize().x / 2 - closeButton.getGlobalBounds().width / 2,
+        rulesWindow.getPosition().y + rulesWindow.getSize().y - 60.0f
+    );
+
+    // Основной цикл окна правил
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return;
+            }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+                return;
+            }
+            if (event.type == sf::Event::MouseButtonPressed) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                sf::Vector2f worldPos = window.mapPixelToCoords(mousePos);
+
+                if (closeButton.getGlobalBounds().contains(worldPos)) {
+                    return;
+                }
+            }
+        }
+
+        window.clear();
+        window.draw(rulesWindow);
+        window.draw(title);
+
+        for (auto& text : ruleTexts) {
+            window.draw(text);
+        }
+
+        window.draw(closeButton);
+        window.display();
+    }
+}
+
+// Основная функция меню
 bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationPanel& notifPanel) {
     sf::Font font;
     if (!font.loadFromFile("Silkscreen/CyrilicOld.ttf")) {
@@ -140,6 +227,7 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
     if (musicOn) music.play();
     else music.pause();
 
+    // Лямбда-функция для отрисовки текста с обводкой
     auto drawTextWithOutline = [&](sf::Text& text) {
         sf::Text outline = text;
         outline.setFillColor(sf::Color(81, 39, 5, 255));
@@ -156,11 +244,15 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
     const unsigned int menuFontSize = 48;
     bool hasSavedData = std::ifstream("InventoryData.txt").good();
 
+    // Создаем кнопки меню
     sf::Text newGameButton("Новая игра", font, menuFontSize);
     newGameButton.setFillColor(sf::Color::White);
 
     sf::Text playButton(hasSavedData ? "Продолжить игру" : "Начать новую игру", font, menuFontSize);
     playButton.setFillColor(sf::Color::White);
+
+    sf::Text rulesButton("Правила игры", font, menuFontSize);
+    rulesButton.setFillColor(sf::Color::White);
 
     sf::Text musicButton("", font, menuFontSize);
     musicButton.setFillColor(sf::Color::White);
@@ -168,6 +260,7 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
     sf::Text exitButton("Выйти", font, menuFontSize);
     exitButton.setFillColor(sf::Color::White);
 
+    // Функция для центрирования кнопок
     auto centerButtons = [&]() {
         float w = window.getSize().x;
         float startY = 300.0f;
@@ -176,12 +269,15 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
         newGameButton.setPosition(w / 2.0f - newGameButton.getGlobalBounds().width / 2.0f, startY);
         playButton.setPosition(w / 2.0f - playButton.getGlobalBounds().width / 2.0f,
             newGameButton.getPosition().y + newGameButton.getGlobalBounds().height + spacing);
-        musicButton.setPosition(w / 2.0f - musicButton.getGlobalBounds().width / 2.0f,
+        rulesButton.setPosition(w / 2.0f - rulesButton.getGlobalBounds().width / 2.0f,
             playButton.getPosition().y + playButton.getGlobalBounds().height + spacing);
+        musicButton.setPosition(w / 2.0f - musicButton.getGlobalBounds().width / 2.0f,
+            rulesButton.getPosition().y + rulesButton.getGlobalBounds().height + spacing);
         exitButton.setPosition(w / 2.0f - exitButton.getGlobalBounds().width / 2.0f,
             musicButton.getPosition().y + musicButton.getGlobalBounds().height + spacing);
         };
 
+    // Функция для обновления текста кнопки музыки
     auto updateMusicButton = [&]() {
         musicButton.setString(musicOn ? "Музыка: Вкл" : "Музыка: Выкл");
         centerButtons();
@@ -189,6 +285,7 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
 
     updateMusicButton();
 
+    // Основной цикл меню
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -212,15 +309,18 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
                     music.stop();
                     return loadInventoryDataFromFile("InventoryData.txt", farm, notifPanel);
                 }
-                else if (exitButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
-                    window.close();
-                    return false;
+                else if (rulesButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+                    showRulesWindow(window, font);
                 }
                 else if (musicButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
                     musicOn = !musicOn;
                     if (musicOn) music.play();
                     else music.pause();
                     updateMusicButton();
+                }
+                else if (exitButton.getGlobalBounds().contains(worldPos.x, worldPos.y)) {
+                    window.close();
+                    return false;
                 }
             }
         }
@@ -229,6 +329,7 @@ bool showMenu(sf::RenderWindow& window, bool& musicOn, Farm& farm, NotificationP
         window.draw(background);
         drawTextWithOutline(newGameButton);
         drawTextWithOutline(playButton);
+        drawTextWithOutline(rulesButton);
         drawTextWithOutline(musicButton);
         drawTextWithOutline(exitButton);
         window.display();
