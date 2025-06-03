@@ -417,7 +417,6 @@ int main()
 
         notifPanel.draw(window);
 
-
         window.display();
     }
 }
