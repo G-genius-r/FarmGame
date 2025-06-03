@@ -1,5 +1,0 @@
-D:/C++Project/FarmGame/build/CMakeFiles/FarmGame.dir
-D:/C++Project/FarmGame/build/CMakeFiles/PACKAGE.dir
-D:/C++Project/FarmGame/build/CMakeFiles/INSTALL.dir
-D:/C++Project/FarmGame/build/CMakeFiles/ALL_BUILD.dir
-D:/C++Project/FarmGame/build/CMakeFiles/ZERO_CHECK.dir
